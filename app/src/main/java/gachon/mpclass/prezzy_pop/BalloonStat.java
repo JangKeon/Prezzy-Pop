@@ -10,12 +10,14 @@ public class BalloonStat {      //상속용
     private String achievement;
     private String date;
     private Image present;
+    private String parent_key;
 
     BalloonStat() {}
 
-    BalloonStat(String achievement, String date, int set_time) {
+    BalloonStat(String achievement, String date, int set_time, String parent_key) {
         this.achievement = achievement;
         this.date = date;
+        this.parent_key = parent_key;
 //        this.present = present;
         this.set_time = set_time;
     }
@@ -51,4 +53,8 @@ public class BalloonStat {      //상속용
     public void setSet_time(int set_time) {
         this.set_time = set_time;
     }
+
+    public String getParent() { return parent_key; }
+
+    public void setParent(String parent_key) { this.parent_key = parent_key; }
 }

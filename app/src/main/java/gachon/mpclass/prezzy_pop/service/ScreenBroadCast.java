@@ -18,19 +18,9 @@ import gachon.mpclass.prezzy_pop.DB_Reference;
 
 public class ScreenBroadCast extends BroadcastReceiver {
     private int time=0;
-    private FirebaseAuth mAuth;
-    FirebaseUser user = mAuth.getCurrentUser();
-    String email = user.getEmail();
-    String key = email.split("@")[0];
-
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-
-
-        DatabaseReference childRef = DB_Reference.childRef.child(key);
-
-
         if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             Date date = new Date();
             SharedPreferences pref = context.getSharedPreferences("Time", Context.MODE_PRIVATE);
