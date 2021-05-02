@@ -24,7 +24,6 @@ public class PasswordResetActivity extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance();
 
-
         findViewById(R.id.btn_signup).setOnClickListener(onClickListener);
         findViewById(R.id.text_login).setOnClickListener(onClickListener);
     }

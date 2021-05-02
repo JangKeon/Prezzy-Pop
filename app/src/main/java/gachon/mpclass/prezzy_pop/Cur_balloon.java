@@ -5,8 +5,8 @@ public class Cur_balloon extends BalloonStat{
 
     public Cur_balloon() {}
 
-    Cur_balloon(String achievement, String date, int set_time, int cur_time) {
-        super(achievement,date, set_time);
+    Cur_balloon(String achievement, String date, int set_time, int cur_time, String parent_key) {
+        super(achievement,date, set_time, parent_key);
         this.cur_time = cur_time;
     }
 

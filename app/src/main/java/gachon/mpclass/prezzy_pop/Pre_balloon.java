@@ -5,8 +5,8 @@ public class Pre_balloon extends BalloonStat{
 
     Pre_balloon(){}
 
-    Pre_balloon(String achievement, String date, int set_time, int result) {
-        super(achievement, date, set_time);
+    Pre_balloon(String achievement, String date, int set_time, int result, String parent_key) {
+        super(achievement, date, set_time, parent_key);
         this.result = result;
     }
 

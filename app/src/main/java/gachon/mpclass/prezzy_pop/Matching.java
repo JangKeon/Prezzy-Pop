@@ -49,7 +49,7 @@ public class Matching extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Log.e("", "Error getting data", task.getException());
                         } else {
-                            Log.d("doowon", "In on click : " + String.valueOf(task.getResult().getValue()));
+                            Log.d("doowon", "In on click : " + task.getResult().getValue());
                             Child child = task.getResult().getValue(Child.class);
                             showPopUp(child);
                         }
@@ -121,10 +121,8 @@ public class Matching extends AppCompatActivity {
             });
 
             //기본 풍선 만들기(child)
-            Cur_balloon cur_balloon = new Cur_balloon("풍선을 만들어 보아요", strNow, 600, 300);
-            childRef.child("group_list").child(parent_key).child("Current").setValue(cur_balloon);
-
-//            childRef.child("group_list").get
+            Cur_balloon cur_balloon = new Cur_balloon("풍선을 만들어 보아요", strNow, 600, 300, parent_key);
+            childRef.child("group_list").child("Current").setValue(cur_balloon);
 
         } else {
             Log.e("doowon", "Failed make group");
@@ -139,9 +137,8 @@ public class Matching extends AppCompatActivity {
         DatabaseReference parentRef = DB_Reference.parentRef.child(parent_key);
 
         int child_num = (int) task.getResult().getChildrenCount();
-        Iterator<DataSnapshot> childRefIter = task.getResult().getChildren().iterator();
-        while (childRefIter.hasNext()) {
-            if(childRefIter.next().getValue().equals(child_key)) {
+        for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+            if (dataSnapshot.getValue().equals(child_key)) {
                 return false;
             }
         }
