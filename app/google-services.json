@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "258141571091",
+    "project_id": "prezzy-pop-9fef0",
+    "storage_bucket": "prezzy-pop-9fef0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258141571091:android:edb477e8c7d7ab8bc5d7e6",
+        "android_client_info": {
+          "package_name": "gachon.mpclass.prezzy_pop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258141571091-oeahv70j0jl2opcriu9ujltojurcl9m0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjM0M51WgpcQGVlbQ025WmP5dLxUkafdg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258141571091-oeahv70j0jl2opcriu9ujltojurcl9m0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

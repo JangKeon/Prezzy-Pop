@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/</item>
+        <item>@font/advent_pro_semibold</item>
+        <item>@font/armata</item>
+        <item>@font/doppio_one</item>
+        <item>@font/duru_sans</item>
+        <item>@font/heebo</item>
+        <item>@font/josefin_sans_semibold</item>
+        <item>@font/overpass_bold</item>
+    </array>
+</resources>
