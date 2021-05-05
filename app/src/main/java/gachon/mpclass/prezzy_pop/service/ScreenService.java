@@ -5,26 +5,32 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+
+import gachon.mpclass.prezzy_pop.DB_Reference;
 import gachon.mpclass.prezzy_pop.MainActivity;
 import gachon.mpclass.prezzy_pop.R;
 
 public class ScreenService extends Service {
 
     private ScreenBroadCast currentReceiver; // 현재 리시버
-    private Intent currentIntent;
 
     @Nullable
     @Override
@@ -43,7 +49,6 @@ public class ScreenService extends Service {
                     NotificationManager.IMPORTANCE_DEFAULT);
             channel.setShowBadge(false);
 
-
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
 
             Intent notificationIntent=new Intent(this,MainActivity.class);
@@ -58,13 +63,11 @@ public class ScreenService extends Service {
 
             startForeground(2, notification);
         }
-
     }
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         try {
-            currentIntent=intent;
             String getState = intent.getExtras().getString("state");
             assert getState != null;
             switch (getState) {
@@ -84,15 +87,8 @@ public class ScreenService extends Service {
         }
 
         if (startId == 1) {
-            final ScreenBroadCast receiver = new ScreenBroadCast();
-            IntentFilter filter = new IntentFilter("android.intent.action.SCREEN_ON");
-            filter.addAction("android.intent.action.SCREEN_OFF");
-            registerReceiver(receiver, filter);
-            setReceiver(receiver);
+            start_checking(FirebaseAuth.getInstance().getCurrentUser().getEmail().split("@")[0]);
         }
-
-
-
         return START_REDELIVER_INTENT;
     }
 
@@ -102,10 +98,6 @@ public class ScreenService extends Service {
         Toast.makeText(this, "Stop Checking", Toast.LENGTH_LONG).show();
         int time=this.currentReceiver.getTime();
         printTime(time,this);
-
-        //Intent timeIntent=new Intent(getApplicationContext(), MainActivity.class);
-        //timeIntent.putExtra("time",time);
-        //startActivity(timeIntent);
     }
 
     public void setReceiver(ScreenBroadCast rcv){
@@ -133,5 +125,25 @@ public class ScreenService extends Service {
         }
     }
 
+    public void start_checking(String key) {
+        DatabaseReference childRef = DB_Reference.childRef.child(key).child("group_list").child("Current").child("cur_time");
 
+        childRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("", "Error getting data", task.getException());
+                } else {
+                    int cur_time = task.getResult().getValue(Integer.TYPE);
+                    Log.d("doowon", "init time : " + cur_time);
+
+                    final ScreenBroadCast receiver = new ScreenBroadCast(cur_time);
+                    IntentFilter filter = new IntentFilter("android.intent.action.SCREEN_ON");
+                    filter.addAction("android.intent.action.SCREEN_OFF");
+                    registerReceiver(receiver, filter);
+                    setReceiver(receiver);
+                }
+            }
+        });
+    }
 }
