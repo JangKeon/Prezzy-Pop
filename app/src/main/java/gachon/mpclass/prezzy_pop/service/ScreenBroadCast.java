@@ -4,29 +4,36 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.Date;
-import java.util.Iterator;
 
 import gachon.mpclass.prezzy_pop.DB_Reference;
 
 public class ScreenBroadCast extends BroadcastReceiver {
-    private int time=0;
-
     private FirebaseAuth mAuth= FirebaseAuth.getInstance();
     FirebaseUser user = mAuth.getCurrentUser();
     String email = user.getEmail();
     String key = email.split("@")[0];
 
+    private int time = 0;
+
+    ScreenBroadCast (int time) {
+        this.time = time;
+    }
+
     @Override
     public void onReceive(final Context context, Intent intent) {
-
 
         if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             Date date = new Date();
@@ -76,5 +83,4 @@ public class ScreenBroadCast extends BroadcastReceiver {
     public int getTime(){
         return time;
     }
-
 }
