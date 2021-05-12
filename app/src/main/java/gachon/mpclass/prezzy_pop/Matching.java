@@ -103,8 +103,7 @@ public class Matching extends AppCompatActivity {
             DatabaseReference parentRef = DB_Reference.parentRef.child(parent_key);
 
             Date now = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd/hh-mm-ss");
-            String strNow = sdf.format(now);
+            String strNow = DateString.DateToString(now);
 
             parentRef.child("child_list").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {       //child data 읽어오기
                 @Override
