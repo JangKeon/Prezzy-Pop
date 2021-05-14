@@ -101,6 +101,7 @@ public class Matching extends AppCompatActivity {
 
             DatabaseReference childRef = DB_Reference.childRef.child(child_key);
             DatabaseReference parentRef = DB_Reference.parentRef.child(parent_key);
+            DatabaseReference balloonUserRef = DB_Reference.balloonRef.child(child_key);
 
             Date now = new Date();
             String strNow = DateString.DateToString(now);
@@ -120,8 +121,10 @@ public class Matching extends AppCompatActivity {
             });
 
             //기본 풍선 만들기(child)
-            Cur_balloon cur_balloon = new Cur_balloon("풍선을 만들어 보아요", strNow, 600, 300, parent_key);
-            childRef.child("group_list").child("Current").setValue(cur_balloon);
+            BalloonStat newBalloon = new BalloonStat(child_key, "풍선을 만들어 보아요", strNow, 600, 300, parent_key, "init");
+            DatabaseReference newBalloonRef = balloonUserRef.push();
+
+            SetBalloon.setCurrentBalloon(child_key, newBalloon, true);
 
         } else {
             Log.e("doowon", "Failed make group");
@@ -135,7 +138,7 @@ public class Matching extends AppCompatActivity {
         String parent_key = parent_email.split("@")[0];   //key에 @는 저장이 안되므로 앞에 ID만 분리
         DatabaseReference parentRef = DB_Reference.parentRef.child(parent_key);
 
-        int child_num = (int) task.getResult().getChildrenCount();
+        int child_num = (int) task.getResult().getChildrenCount();          // 주의 : child 추가를 너무 빨리하면 key를 못받아 올 수도 있음
         for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
             if (dataSnapshot.getValue().equals(child_key)) {
                 return false;

@@ -45,8 +45,20 @@ public class ScreenBroadCast extends BroadcastReceiver {
             time+=sec;
             printTime(sec,context);
 
-            DatabaseReference childRef = DB_Reference.childRef.child(key).child("group_list").child("Current").child("cur_time");
-            childRef.setValue(time);
+            DatabaseReference childRef = DB_Reference.childRef.child(key).child("Current_Balloon");
+
+            childRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    String balloonAdr = task.getResult().getValue(String.class);
+                    if (balloonAdr != null) {
+                        DB_Reference.balloonRef.child(key).child(balloonAdr).child("cur_time").setValue(time);
+                    }
+                    else {
+                        Log.e("ScreenBroadCast", "get cur_time error from balloon");
+                    }
+                }
+            });
         }
         else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             Date date = new Date();

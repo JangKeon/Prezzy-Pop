@@ -126,23 +126,32 @@ public class ScreenService extends Service {
     }
 
     public void start_checking(String key) {
-        DatabaseReference childRef = DB_Reference.childRef.child(key).child("group_list").child("Current").child("cur_time");
+        DatabaseReference childRef = DB_Reference.childRef.child(key).child("Current_Balloon");
 
         childRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("", "Error getting data", task.getException());
-                } else {
-                    int cur_time = task.getResult().getValue(Integer.TYPE);
-                    Log.d("doowon", "init time : " + cur_time);
+                String balloonAdr = task.getResult().getValue(String.class);
 
-                    final ScreenBroadCast receiver = new ScreenBroadCast(cur_time);
-                    IntentFilter filter = new IntentFilter("android.intent.action.SCREEN_ON");
-                    filter.addAction("android.intent.action.SCREEN_OFF");
-                    registerReceiver(receiver, filter);
-                    setReceiver(receiver);
-                }
+                DatabaseReference balloonRef = DB_Reference.balloonRef.child(key).child(balloonAdr).child("cur_time");
+
+                balloonRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("", "Error getting data", task.getException());
+                        } else {
+                            int cur_time = task.getResult().getValue(Integer.TYPE);
+                            Log.d("doowon", "init time : " + cur_time);
+
+                            final ScreenBroadCast receiver = new ScreenBroadCast(cur_time);
+                            IntentFilter filter = new IntentFilter("android.intent.action.SCREEN_ON");
+                            filter.addAction("android.intent.action.SCREEN_OFF");
+                            registerReceiver(receiver, filter);
+                            setReceiver(receiver);
+                        }
+                    }
+                });
             }
         });
     }
