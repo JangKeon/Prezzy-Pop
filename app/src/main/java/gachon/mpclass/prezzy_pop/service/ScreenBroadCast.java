@@ -55,7 +55,7 @@ public class ScreenBroadCast extends BroadcastReceiver {
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                     String balloonAdr = task.getResult().getValue(String.class);
                     if (balloonAdr != null) {
-                        DB_Reference.balloonRef.child(key).child(balloonAdr).child("cur_time").setValue(score);
+                        DB_Reference.balloonRef.child(key).child(balloonAdr).child("cur_time").setValue(time);
                     }
                     else {
                         Log.e("ScreenBroadCast", "get cur_time error from balloon");
