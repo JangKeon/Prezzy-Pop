@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class Child extends User{
     private HashMap<String, String> Balloon_list;
-    private HashMap<String, String> Current_Balloon;
+    private String Current_Balloon;
 
     private HashMap<String, String> Parent_list;
     Child(){}
@@ -29,11 +29,11 @@ public class Child extends User{
         Parent_list = parent_list;
     }
 
-    public HashMap<String, String> getCurrent_Balloon() {
+    public String getCurrent_Balloon() {
         return Current_Balloon;
     }
 
-    public void setCurrent_Balloon(HashMap<String, String> current_Balloon) {
+    public void setCurrent_Balloon(String current_Balloon) {
         Current_Balloon = current_Balloon;
     }
 }
