@@ -7,12 +7,12 @@ public class TimeAlgorithm {
 
     TimeAlgorithm(){};
 
-    TimeAlgorithm(int sec){
-        this.sec=sec;
+    public TimeAlgorithm(long sec){
+        this.sec=(double)sec;
         algorithm();
     }
 
-    public double getPenaltyTime(){
+    public int getPenaltyTime(){
         int penaltyTime=Integer.parseInt(String.valueOf(Math.round(penaltySec)));
         return penaltyTime;
     }
