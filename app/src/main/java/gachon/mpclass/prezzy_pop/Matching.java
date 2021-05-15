@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -101,6 +102,7 @@ public class Matching extends AppCompatActivity {
 
             DatabaseReference childRef = DB_Reference.childRef.child(child_key);
             DatabaseReference parentRef = DB_Reference.parentRef.child(parent_key);
+            DatabaseReference balloonUserRef = DB_Reference.balloonRef.child(child_key);
 
             Date now = new Date();
             String strNow = DateString.DateToString(now);
@@ -115,13 +117,16 @@ public class Matching extends AppCompatActivity {
                             Log.e("doowon", "이미 존재하는 child");
                             startToast("이미 매칭된 자녀입니다.");
                         }
+                        else {                      //새로 매칭된 자녀이면
+                            //기본 풍선 만들기(child)
+                            BalloonStat newBalloon = new BalloonStat(child_key, "풍선을 만들어 보아요", strNow, 600, 300, parent_key, "init");
+                            DatabaseReference newBalloonRef = balloonUserRef.push();
+
+                            SetBalloon.setCurrentBalloon(child_key, newBalloon, true);
+                        }
                     }
                 }
             });
-
-            //기본 풍선 만들기(child)
-            Cur_balloon cur_balloon = new Cur_balloon("풍선을 만들어 보아요", strNow, 600, 300, parent_key);
-            childRef.child("group_list").child("Current").setValue(cur_balloon);
 
         } else {
             Log.e("doowon", "Failed make group");
@@ -134,14 +139,17 @@ public class Matching extends AppCompatActivity {
         String parent_email = cur_user.getEmail();
         String parent_key = parent_email.split("@")[0];   //key에 @는 저장이 안되므로 앞에 ID만 분리
         DatabaseReference parentRef = DB_Reference.parentRef.child(parent_key);
+//        DatabaseReference childParent_listRef = DB_Reference.childRef.child(child_key).child("parent_list");
 
-        int child_num = (int) task.getResult().getChildrenCount();
         for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
             if (dataSnapshot.getValue().equals(child_key)) {
                 return false;
             }
         }
-        parentRef.child("child_list").child(Integer.toString(child_num+1)).setValue(child_key);
+        parentRef.child("child_list").push().setValue(child_key);
+
+
+
         return true;
     }
 
