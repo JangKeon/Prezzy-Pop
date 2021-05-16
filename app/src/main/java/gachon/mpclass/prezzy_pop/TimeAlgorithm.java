@@ -7,8 +7,8 @@ public class TimeAlgorithm {
 
     TimeAlgorithm(){};
 
-    TimeAlgorithm(int sec){
-        this.sec=sec;
+    public TimeAlgorithm(long sec){
+        this.sec=(double)sec;
         algorithm();
     }
 
