@@ -12,7 +12,7 @@ public class TimeAlgorithm {
         algorithm();
     }
 
-    public double getPenaltyTime(){
+    public int getPenaltyTime(){
         int penaltyTime=Integer.parseInt(String.valueOf(Math.round(penaltySec)));
         return penaltyTime;
     }
