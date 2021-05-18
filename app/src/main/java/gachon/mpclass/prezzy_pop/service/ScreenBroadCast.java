@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.Date;
 
 import gachon.mpclass.prezzy_pop.DB_Reference;
+import gachon.mpclass.prezzy_pop.TimeAlgorithm;
 
 public class ScreenBroadCast extends BroadcastReceiver {
     private FirebaseAuth mAuth= FirebaseAuth.getInstance();
@@ -28,13 +29,13 @@ public class ScreenBroadCast extends BroadcastReceiver {
 
     private int time = 0;
 
+
     ScreenBroadCast (int time) {
         this.time = time;
     }
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-
         if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             Date date = new Date();
             SharedPreferences pref = context.getSharedPreferences("Time", Context.MODE_PRIVATE);
@@ -42,8 +43,10 @@ public class ScreenBroadCast extends BroadcastReceiver {
             Long offTime = pref.getLong("offTime", onTime);
             long diff = onTime - offTime;
             long sec = diff / 1000;
-            time+=sec;
-            printTime(sec,context);
+            int score = new TimeAlgorithm(sec).getPenaltyTime();
+            time+=score;
+
+            printTime(score,context);
 
             DatabaseReference childRef = DB_Reference.childRef.child(key).child("Current_Balloon");
 
