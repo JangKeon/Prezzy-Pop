@@ -57,10 +57,10 @@ public class MainActivity extends AppCompatActivity {
                     startMyActivity(LoginActivity.class);
                     break;
                 case R.id.btn_present:
-                    startMyActivity(PresentActivity.class);
+                    startMyActivity(P_SetPresentActivity.class);
                     break;
                 case R.id.btn_time:
-                    startMyActivity(TimeActivity.class);
+                    startMyActivity(P_SetBallonActivity.class);
                     break;
                 case R.id.btn_startCheck:
                     startTimeCheck();

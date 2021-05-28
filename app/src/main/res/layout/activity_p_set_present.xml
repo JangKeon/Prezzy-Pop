@@ -54,6 +54,7 @@
         android:layout_marginBottom="224dp"
         android:hint="선물이름 입력"
         android:textColor="#4A4A4A"
+        android:textColorHint="#4A4A4A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
