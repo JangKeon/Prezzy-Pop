@@ -123,6 +123,8 @@ public class Matching extends AppCompatActivity {
                             DatabaseReference newBalloonRef = balloonUserRef.push();
 
                             SetBalloon.setCurrentBalloon(child_key, newBalloon, true);
+                            startToast("매칭이 완료되었습니다");
+                            startMyActivity(P_HomeActivity.class);
                         }
                     }
                 }
@@ -152,7 +154,10 @@ public class Matching extends AppCompatActivity {
 
         return true;
     }
-
+    private void startMyActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivity(intent);
+    }
     private void startToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
