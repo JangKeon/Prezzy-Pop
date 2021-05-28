@@ -11,15 +11,13 @@
     app:umanoPanelHeight="30dp"
     tools:context=".MainActivity"
     sothree:umanoShadowHeight="0dp"
-    sothree:umanoOverlay="false"
-    >
+    sothree:umanoOverlay="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
         android:orientation="vertical">
-
 
         <ImageView
             android:id="@+id/imageView"
