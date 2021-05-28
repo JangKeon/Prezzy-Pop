@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class P_SetBallonActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -71,7 +72,8 @@ public class P_SetBallonActivity extends AppCompatActivity {
                     Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.logout){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    Toast.makeText(context, title + ": 로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
                 }
 
                 return true;

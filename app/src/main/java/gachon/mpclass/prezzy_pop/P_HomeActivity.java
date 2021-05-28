@@ -2,6 +2,7 @@ package gachon.mpclass.prezzy_pop;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,6 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -19,19 +23,36 @@ public class P_HomeActivity extends AppCompatActivity {
 
         EditText edit_mission;
         Button btn_addMission;
+        Button btn_logout;
+        Button btn_setBalloon;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+            setContentView(R.layout.activity_p_home);
 
             edit_mission = findViewById(R.id.edit_mission);
             btn_addMission = findViewById(R.id.btn_addMission);
+            btn_logout = findViewById(R.id.btn_logout);
+            btn_setBalloon=findViewById(R.id.btn_setballoon);
 
             list_mission = new ArrayList<String>();
             list_mission.add("설거지 도와드리기");
 
-
+            btn_setBalloon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 풍선 설정
+                }
+            });
+            btn_logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FirebaseAuth.getInstance().signOut();
+                    startToast("로그아웃 되었습니다");
+                    startMyActivity(LoginActivity.class);
+                }
+            });
             btn_addMission.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -58,4 +79,16 @@ public class P_HomeActivity extends AppCompatActivity {
             });
 
         }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
+    private void startMyActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivity(intent);
+    }
+
+    private void startToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
 }
