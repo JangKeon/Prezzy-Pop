@@ -16,6 +16,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.ByteArrayOutputStream;
 
@@ -50,8 +51,12 @@ public class TimeActivity extends AppCompatActivity {
                     Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                 } else if (id == R.id.setting) {
                     Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                } else if (id == R.id.logout) {
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+
+                }
+                else if(id == R.id.logout){
+                    FirebaseAuth.getInstance().signOut();
+                    startToast("로그아웃되었습니다");
+
                 }
 
                 return true;
