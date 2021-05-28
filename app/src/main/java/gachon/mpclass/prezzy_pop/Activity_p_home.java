@@ -1,10 +1,8 @@
 package gachon.mpclass.prezzy_pop;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -15,13 +13,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class PresentActivity extends AppCompatActivity {
+public class Activity_p_home extends AppCompatActivity {
+
     private DrawerLayout mDrawerLayout;
     private Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_present);
+        setContentView(R.layout.activity_p_home);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,7 +41,7 @@ public class PresentActivity extends AppCompatActivity {
 
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
-
+                // 아이템 눌렸을 때 행동 지정
                 if(id == R.id.account){
                     Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -56,6 +56,7 @@ public class PresentActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -66,13 +67,4 @@ public class PresentActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    private void startActivity(Class c){
-        Intent intent = new Intent(this,c);
-        startActivity(intent);
-    }
-    private void startToast(String msg){
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
-    }
-
-
 }

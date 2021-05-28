@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".Matching"></activity>
+        <activity android:name=".P_SetPresentActivity"></activity>
+        <activity android:name=".P_SetBallonActivity" />
+        <activity android:name=".P_HomeActivity" />
+        <activity android:name=".Matching" />
 
         <service
             android:name=".service.BootReceiver"
