@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,22 +7,37 @@
     android:background="#FFFFFF"
     android:orientation="vertical">
 
+
     <Button
         android:id="@+id/btn_logtout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="241dp"
+        android:layout_marginLeft="241dp"
+        android:layout_marginTop="532dp"
         android:layout_marginBottom="60dp"
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.164"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.175"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/btn_startCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="249dp"
+        android:layout_marginLeft="249dp"
+        android:layout_marginTop="599dp"
         android:layout_marginBottom="60dp"
         android:text="Start Check"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,6 +50,12 @@
         android:id="@+id/btn_stopCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="247dp"
+        android:layout_marginLeft="247dp"
+        android:layout_marginTop="655dp"
         android:layout_marginBottom="16dp"
         android:text="Stop Check"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,11 +64,16 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
-
     <Button
         android:id="@+id/btn_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="62dp"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="630dp"
         android:layout_marginBottom="140dp"
         android:text="time"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,7 +85,13 @@
     <Button
         android:id="@+id/btn_present"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="51dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="58dp"
+        android:layout_marginLeft="58dp"
+        android:layout_marginTop="552dp"
         android:layout_marginBottom="140dp"
         android:text="present"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -71,11 +103,16 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="450dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginVertical="10dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="18dp"
+
         android:layout_weight="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +126,13 @@
         android:id="@+id/btn_setBalloon"
         android:layout_width="75dp"
         android:layout_height="67dp"
-        android:layout_marginTop="184dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="165dp"
+        android:layout_marginLeft="165dp"
+        android:layout_marginTop="209dp"
         android:background="@drawable/plusicon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -99,6 +142,13 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="131dp"
+        android:layout_marginLeft="131dp"
+        android:layout_marginTop="436dp"
         android:layout_marginBottom="256dp"
         android:fontFamily="@font/duru_sans"
         android:text="연결 완료~"
@@ -109,4 +159,4 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
