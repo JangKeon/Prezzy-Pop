@@ -11,15 +11,13 @@
     app:umanoPanelHeight="30dp"
     tools:context=".MainActivity"
     sothree:umanoShadowHeight="0dp"
-    sothree:umanoOverlay="false"
-    >
+    sothree:umanoOverlay="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
         android:orientation="vertical">
-
 
         <ImageView
             android:id="@+id/imageView"
@@ -32,23 +30,11 @@
             android:layout_weight="3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.334"
             app:srcCompat="@drawable/cloud" />
-
-        <ImageButton
-            android:id="@+id/btn_menu"
-            android:layout_width="36dp"
-            android:layout_height="57dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@color/white"
-            android:scaleType="fitCenter"
-            android:src="@drawable/menuicon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView2"
@@ -58,6 +44,9 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="32dp"
             android:layout_weight="1"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:text="끌어올려 풍선 터뜨리기"
             android:textColor="#4A4A4A"
             android:textSize="13sp"
@@ -71,6 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:text="현재자녀의 달성률 : "
             android:textColor="#4A4A4A"
             android:textSize="20sp"
@@ -84,6 +76,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="88dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:text="0%"
             android:textColor="#4A4A4A"
             android:textSize="20sp"
@@ -99,6 +94,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
             android:layout_marginTop="126dp"
             android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -114,6 +110,9 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_marginTop="126dp"
             android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -130,6 +129,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="168dp"
             android:layout_weight="3.2"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -148,18 +149,27 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true">
 
             <EditText
                 android:id="@+id/edit_mission"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
                 android:hint="임무를 추가해주세요"
                 android:ems="13"/>
 
             <Button
                 android:id="@+id/btn_addMission"
                 android:text="ADD"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -168,7 +178,11 @@
         <ListView
             android:id="@+id/listView_mission"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></ListView>
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true">
+        </ListView>
 
     </LinearLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
