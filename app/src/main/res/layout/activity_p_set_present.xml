@@ -42,13 +42,13 @@
             android:text="어떤 선물인가요?"
             android:textColor="#4A4A4A"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            app:layout_constraintBottom_toTopOf="@+id/imageViewPresentBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageViewPresentBackground"
             android:layout_width="434dp"
             android:layout_height="470dp"
             android:layout_alignParentStart="true"
@@ -78,10 +78,10 @@
             android:layout_marginTop="112dp"
             android:background="@android:color/transparent"
             android:src="@drawable/album_icon"
-            app:layout_constraintEnd_toEndOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="@+id/imageViewPresentBackground"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView" />
+            app:layout_constraintTop_toTopOf="@+id/imageViewPresentBackground" />
 
         <EditText
             android:id="@+id/edit_presentName"
@@ -92,11 +92,10 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="149dp"
             android:layout_marginLeft="149dp"
-            android:layout_marginBottom="252dp"
             android:hint="선물이름 입력"
             android:textColor="#4A4A4A"
             android:textColorHint="#4A4A4A"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewPresentBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.026"
             app:layout_constraintStart_toStartOf="parent" />

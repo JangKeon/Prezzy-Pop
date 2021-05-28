@@ -8,105 +8,179 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <ScrollView
         android:id="@+id/ScrollView1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="-234dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/toolbar"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:ignore="MissingConstraints">
+            android:layout_height="match_parent">
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/imageViewBalloonBackground"
+                tools:ignore="MissingConstraints">
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="" />
+            </androidx.appcompat.widget.Toolbar>
+
+            <ImageView
+                android:id="@+id/imageViewBalloonBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginVertical="10dp"
+                android:layout_weight="3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/toolbar"
+                app:srcCompat="@drawable/cloud" />
+
 
             <TextView
-                android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="" />
-        </androidx.appcompat.widget.Toolbar>
+                android:layout_marginBottom="40dp"
+                android:text="풍선의 크기를 정해주세요"
+                android:textColor="#4A4A4A"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/imageViewBalloonBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/img_balloon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+            <SeekBar
+                android:id="@+id/bar_setBalloon"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="250dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+            <TextView
+                android:id="@+id/text_totalRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="275dp"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+            <Button
+                android:id="@+id/btn_setBalloon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="완료"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageViewPresentBackground" />
+
+            <!--            //////////////// present-->
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="133dp"
+                android:layout_marginLeft="133dp"
+                android:layout_marginTop="50dp"
+                android:text="어떤 선물인가요?"
+                android:textColor="#4A4A4A"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewBalloonBackground" />
+
+            <!--            app:layout_constraintTop_toTopOf="parent"-->
+
+            <ImageView
+                android:id="@+id/imageViewPresentBackground"
+                android:layout_width="434dp"
+                android:layout_height="470dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginVertical="10dp"
+                android:layout_marginStart="-24dp"
+                android:layout_marginLeft="-24dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8"
+                app:srcCompat="@drawable/cloud" />
+
+            <ImageView
+            android:id="@+id/imgView_present"
+            android:layout_width="119dp"
+            android:layout_height="125dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="153dp"
+            android:layout_marginLeft="153dp"
+            android:layout_marginTop="112dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/album_icon"
+            app:layout_constraintEnd_toEndOf="@+id/imageViewPresentBackground"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageViewPresentBackground" />
+
+        <EditText
+            android:id="@+id/edit_presentName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginVertical="10dp"
-            android:layout_weight="3"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.386"
-            app:srcCompat="@drawable/cloud" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:text="풍선의 크기를 정해주세요"
+            android:layout_marginStart="149dp"
+            android:layout_marginLeft="149dp"
+            android:hint="선물이름 입력"
             android:textColor="#4A4A4A"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            android:textColorHint="#4A4A4A"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewPresentBackground"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.026"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:id="@+id/img_balloon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <SeekBar
-            android:id="@+id/bar_setBalloon"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="224dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/text_totalRate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="160dp"
-            android:text="0"
-            android:textColor="@color/black"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/btn_setBalloon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="68dp"
-            android:text="완료"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
-        >>>>>>> a9e22655eb81095e5f4925d805041c50dc399151
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
