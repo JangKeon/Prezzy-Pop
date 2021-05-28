@@ -2,6 +2,9 @@ package gachon.mpclass.prezzy_pop;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -15,9 +18,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.ByteArrayOutputStream;
+
 public class TimeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,25 +47,27 @@ public class TimeActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if(id == R.id.account){
+                if (id == R.id.account) {
                     Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                }
-                else if(id == R.id.setting){
+                } else if (id == R.id.setting) {
                     Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+
                 }
                 else if(id == R.id.logout){
                     FirebaseAuth.getInstance().signOut();
                     startToast("로그아웃되었습니다");
+
                 }
 
                 return true;
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{
+        switch (item.getItemId()) {
+            case android.R.id.home: {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             }
@@ -68,13 +76,13 @@ public class TimeActivity extends AppCompatActivity {
     }
 
 
-    private void startActivity(Class c){
-        Intent intent = new Intent(this,c);
+    private void startActivity(Class c) {
+        Intent intent = new Intent(this, c);
         startActivity(intent);
     }
-    private void startToast(String msg){
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+
+    private void startToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+
     }
-
-
 }

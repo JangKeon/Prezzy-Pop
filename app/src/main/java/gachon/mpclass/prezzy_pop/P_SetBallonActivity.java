@@ -46,6 +46,29 @@ public class P_SetBallonActivity extends AppCompatActivity {
         seekBar.setMax(1000);
         seekBar.setMin(100);
         totalRate = 100;
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // onProgressChange - Seekbar 값 변경될때마다 호출
+                seekBarValue.setText(String.valueOf(seekBar.getProgress()));
+                int resizeWidth = 300 + (seekBar.getProgress() / 10);
+                bitmap_resize(bitmap_balloon,resizeWidth);
+                imgview_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizeWidth));
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // onStartTeackingTouch - SeekBar 값 변경위해 첫 눌림에 호출
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // onStopTrackingTouch - SeekBar 값 변경 끝나고 드래그 떼면 호출
+                seekBarValue.setText(String.valueOf(seekBar.getProgress()));
+                totalRate = seekBar.getProgress();
+                //Log.v("rate",String.valueOf(totalRate));
+            }
+        });
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -79,28 +102,16 @@ public class P_SetBallonActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // onProgressChange - Seekbar 값 변경될때마다 호출
-                seekBarValue.setText(String.valueOf(seekBar.getProgress()));
-                int resizeWidth = 300 + (seekBar.getProgress() / 10);
-                bitmap_resize(bitmap_balloon,resizeWidth);
-                imgview_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizeWidth));
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
             }
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // onStartTeackingTouch - SeekBar 값 변경위해 첫 눌림에 호출
-            }
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // onStopTrackingTouch - SeekBar 값 변경 끝나고 드래그 떼면 호출
-                seekBarValue.setText(String.valueOf(seekBar.getProgress()));
-                totalRate = seekBar.getProgress();
-                //Log.v("rate",String.valueOf(totalRate));
-            }
-        });
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // 이미지 비율 유지하면서 size 변경
@@ -109,16 +120,5 @@ public class P_SetBallonActivity extends AppCompatActivity {
         int targetHeight = (int) (resizeWidth * aspectRatio);
         Bitmap result = Bitmap.createScaledBitmap(bitmap, resizeWidth, targetHeight, false);
         return result;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {   //Navigation Item Selected
-        switch (item.getItemId()){
-            case android.R.id.home:{
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
