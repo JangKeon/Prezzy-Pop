@@ -43,6 +43,7 @@ public class P_HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     // 풍선 설정
+                    startMyActivity(P_SetBallonActivity.class);
                 }
             });
             btn_logout.setOnClickListener(new View.OnClickListener() {
