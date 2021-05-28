@@ -50,11 +50,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="128dp"
+            android:layout_marginBottom="428dp"
             android:fontFamily="@font/duru_sans"
             android:gravity='center'
-            android:text="Let's Pop!"
+            android:text="I'm waiting for my parents."
             android:textColor="#5C5C5C"
             android:textSize="36sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -114,59 +113,18 @@
             app:layout_constraintTop_toBottomOf="@+id/textView"
             app:srcCompat="@drawable/pointup" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="165dp"
-            android:layout_height="396dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="128dp"
-            android:layout_marginEnd="123dp"
-            android:layout_marginRight="123dp"
-            android:layout_marginBottom="168dp"
-            android:layout_weight="3.2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.676"
-            app:srcCompat="@drawable/ballon" />
-
         <Button
             android:id="@+id/btn_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
+            android:layout_above="@+id/textView2"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginStart="161dp"
-            android:layout_marginLeft="161dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="162dp"
-            android:layout_marginRight="162dp"
-            android:text="logout" />
+            android:layout_marginEnd="159dp"
+            android:layout_marginRight="159dp"
+            android:layout_marginBottom="178dp"
+            android:text="Logout" />
 
-        <Button
-            android:id="@+id/btn_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView"
-            android:layout_marginTop="-126dp"
-            android:text="Start" />
-
-        <Button
-            android:id="@+id/btn_stop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textView"
-            android:layout_marginStart="230dp"
-            android:layout_marginLeft="230dp"
-            android:layout_marginTop="-96dp"
-            android:layout_toEndOf="@+id/btn_start"
-            android:layout_toRightOf="@+id/btn_start"
-            android:text="Stop" />
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
