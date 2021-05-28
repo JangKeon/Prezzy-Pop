@@ -10,12 +10,19 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+
+import java.util.HashMap;
+import java.util.Map;
 
 import gachon.mpclass.prezzy_pop.service.ScreenService;
 
@@ -34,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             startMyActivity(LoginActivity.class);
         }
         else{
+            //refreshToken();
             isMatched();
         }
 
@@ -86,6 +94,26 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    private void refreshToken(){
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("Token", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        // store to db
+                        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                        DatabaseReference tokenRef=rootRef.child("Tokens").child("token");
+                        tokenRef.setValue(token);
+                        DatabaseReference key=rootRef.child("Tokens").child("token");
+                    }
+                });
     }
 
     private void startMyActivity(Class c) {
