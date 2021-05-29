@@ -19,7 +19,6 @@ import gachon.mpclass.prezzy_pop.MainActivity;
 public class SendMessage {
     private static final String TAG = "Send Message";
     List<String> userList = new ArrayList<>();
-    FirebaseAuth auth;
     String title;
     String message;
 
@@ -30,7 +29,7 @@ public class SendMessage {
     }
 
     private void findChild() {// extract token list to Users
-        String email=auth.getCurrentUser().getEmail();
+        String email=FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String parentKey = email.split("@")[0];
 
         DatabaseReference userRef = DB_Reference.parentRef.child(parentKey);
@@ -68,7 +67,4 @@ public class SendMessage {
 
     }
 
-    private void addTokenList(String newToken){
-        userList.add(newToken);
-    }
 }
