@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,6 +62,7 @@ public class P_HomeActivity extends AppCompatActivity {
     Button btn_logout;
     Button btn_setBalloon;
     ImageView imgView_balloon;
+    TextView text_rate;
 
     Animation cloud1_anim;
     Animation cloud2_anim;
@@ -221,10 +223,10 @@ public class P_HomeActivity extends AppCompatActivity {
     }
 
     // SetTime에 따라 비율유지하면서 풍선 크기 변경
-    private Bitmap bitmap_resize(Bitmap bitmap, int resizeWidth){
+    private Bitmap bitmap_resize(Bitmap bitmap, double resizeWidth){
         double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
         int targetHeight = (int) (resizeWidth * aspectRatio);
-        Bitmap result = Bitmap.createScaledBitmap(bitmap, resizeWidth, targetHeight, false);
+        Bitmap result = Bitmap.createScaledBitmap(bitmap, (int)resizeWidth, targetHeight, false);
         return result;
     }
 
@@ -254,6 +256,7 @@ public class P_HomeActivity extends AppCompatActivity {
     private void setBalloonCur_timeChangeListener(String child_key, String curBalloonID) {
         this.curBalloonID = curBalloonID;
         DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
+        text_rate = findViewById(R.id.text_rate);
 
         cur_balloonCur_timeRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -264,9 +267,11 @@ public class P_HomeActivity extends AppCompatActivity {
 
                     // 데이터 변화 있을 때마다 풍선크기 resize
                     Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
-                    int resizewidth = 100 + (400 * (cur_time/set_time));// 풍선 최소 크기 100, 최대300
+                    double rate=(double)cur_time/set_time;
+                    double resizewidth = 100 + (400 * rate);// 풍선 최소 크기 100, 최대500
                     imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
-
+                    String rateText=Integer.toString((int)(rate*100))+"%";
+                    text_rate.setText(rateText);
                     Log.e("doowon", "onChildChange : " + snapshot.getValue().toString());
                 }
                 else {
