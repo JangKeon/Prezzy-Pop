@@ -41,7 +41,8 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="113dp" />
+            tools:layout_editor_absoluteY="113dp"
+            tools:ignore="MissingConstraints" />
 
         <ImageView
             android:id="@+id/imageViewPresentBackground"
@@ -75,7 +76,8 @@
             android:background="@android:color/transparent"
             android:src="@drawable/album_icon"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="332dp" />
+            tools:layout_editor_absoluteY="332dp"
+            tools:ignore="MissingConstraints" />
 
         <EditText
             android:id="@+id/edit_presentName"
