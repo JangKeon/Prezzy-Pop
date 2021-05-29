@@ -30,10 +30,10 @@
             android:layout_weight="3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.334"
+            app:layout_constraintVertical_bias="0.344"
             app:srcCompat="@drawable/cloud" />
 
         <TextView
@@ -59,31 +59,31 @@
             android:id="@+id/text_ach"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_marginBottom="36dp"
             android:text="현재자녀의 달성률 : "
             android:textColor="#4A4A4A"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/img_balloon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.407"
+            app:layout_constraintHorizontal_bias="0.524"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/text_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="88dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_marginTop="92dp"
             android:text="0%"
             android:textColor="#4A4A4A"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.094"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/text_ach"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -125,17 +125,17 @@
             android:id="@+id/img_balloon"
             android:layout_width="165dp"
             android:layout_height="396dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="168dp"
             android:layout_weight="3.2"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.916"
+            app:layout_constraintVertical_bias="0.86"
             app:srcCompat="@drawable/ballon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

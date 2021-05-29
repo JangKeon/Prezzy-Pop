@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,12 +44,15 @@ public class P_SetPresentActivity extends AppCompatActivity {
     Button btn_set_present; // 선물 정해지면 누르는 완료버튼
     EditText text_presentName;
     int REQUEST_IMAGE_CODE = 101;
-
+    Animation cloudAmimation;
+    ImageView cloud;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_p_set_present);
-
+        cloudAmimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim);
+        cloud = findViewById(R.id.cloudView);
+        cloud.startAnimation(cloudAmimation);
         text_presentName = findViewById(R.id.edit_presentName);
         imgView_present = findViewById(R.id.imgView_present);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
