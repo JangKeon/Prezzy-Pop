@@ -268,7 +268,7 @@ public class P_HomeActivity extends AppCompatActivity {
                     // 데이터 변화 있을 때마다 풍선크기 resize
                     Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
                     double rate=(double)cur_time/set_time;
-                    double resizewidth = 100 + (400 * rate);// 풍선 최소 크기 100, 최대500
+                    double resizewidth = 100 + (600 * rate);// 풍선 최소 크기 100, 최대500
                     imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
                     String rateText=Integer.toString((int)(rate*100))+"%";
                     text_rate.setText(rateText);
