@@ -1,6 +1,7 @@
 package gachon.mpclass.prezzy_pop;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,17 +14,31 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
 
 import gachon.mpclass.prezzy_pop.service.ScreenService;
 
 public class C_HomeActivity extends AppCompatActivity {
+    private FirebaseUser cur_user;
+    private String email;
+    private String key;
+    private String curBalloonID;
+
+    private int cur_time;
+    private int set_time;
 
     Animation cloud1_anim;
     Animation cloud2_anim;
@@ -39,26 +54,47 @@ public class C_HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_c_home);
 
+        cur_user = FirebaseAuth.getInstance().getCurrentUser();
+        email = cur_user.getEmail();
+        key = email.split("@")[0];
+
         findViewById(R.id.btn_logout).setOnClickListener(onClickListener);
         findViewById(R.id.btn_start).setOnClickListener(onClickListener);
         findViewById(R.id.btn_stop).setOnClickListener(onClickListener);
-        cloud1_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.cloudanim1);
+        cloud1_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim1);
         cloud1_view = findViewById(R.id.cloud1);
-        cloud2_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.cloudanim2);
+        cloud2_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim2);
         cloud2_view = findViewById(R.id.cloud2);
-        cloud3_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.cloudanim3);
+        cloud3_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim3);
         cloud3_view = findViewById(R.id.cloud3);
-        balloon_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake);
-        balloon_view = findViewById(R.id.img_balloon);
+        balloon_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
+        balloon_view = findViewById(R.id.imageView4);
 
         cloud1_view.startAnimation(cloud1_anim);
         cloud2_view.startAnimation(cloud2_anim);
         cloud3_view.startAnimation(cloud3_anim);
         balloon_view.startAnimation(balloon_anim);
     }
-    View.OnClickListener onClickListener= (v)->{
 
-        switch(v.getId()){
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        DatabaseReference childBalloonIdRef = DB_Reference.childRef.child(key).child("current_balloon_id");
+
+        childBalloonIdRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                String curBalloonID = task.getResult().getValue(String.class);
+                setBalloonCur_timeChangeListener(curBalloonID);
+                getSet_timeFromDB(curBalloonID);
+            }
+        });
+    }
+
+    View.OnClickListener onClickListener = (v) -> {
+
+        switch (v.getId()) {
             case R.id.btn_logout:
                 stopTimeCheck();
                 FirebaseAuth.getInstance().signOut();
@@ -73,6 +109,51 @@ public class C_HomeActivity extends AppCompatActivity {
                 break;
         }
     };
+
+    private void getSet_timeFromDB(String curBalloonID) {
+        DatabaseReference cur_balloonSet_timeRef = DB_Reference.balloonRef.child(key).child(curBalloonID).child("set_time");
+
+        cur_balloonSet_timeRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                int set_time = task.getResult().getValue(Integer.TYPE);
+                setSet_time(set_time);
+            }
+        });
+    }
+
+    private void setSet_time(int set_time) {
+        this.set_time = set_time;
+    }
+
+    private void setBalloonCur_timeChangeListener(String curBalloonID) {
+        this.curBalloonID = curBalloonID;
+        DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(key).child(curBalloonID).child("cur_time");
+
+        cur_balloonCur_timeRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {}
+
+            @Override
+            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+                int cur_time = snapshot.getValue(Integer.TYPE);
+                setCur_time(cur_time);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {}
+
+            @Override
+            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {}
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+        });
+    }
+
+    private void setCur_time(int cur_time) {
+        this.cur_time = cur_time;
+    }
 
     private void startTimeCheck() {
         Intent serviceIntent = new Intent(this, ScreenService.class);
@@ -116,6 +197,7 @@ public class C_HomeActivity extends AppCompatActivity {
         }
         return total;
     }
+
     public void selectFirebase(int index) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseDatabase.getReference("reviews/" + index).addValueEventListener(new ValueEventListener() {
@@ -131,6 +213,7 @@ public class C_HomeActivity extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
