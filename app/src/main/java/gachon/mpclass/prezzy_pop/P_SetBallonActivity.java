@@ -20,9 +20,12 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,9 +65,12 @@ public class P_SetBallonActivity extends AppCompatActivity {
     EditText text_presentName;
     int REQUEST_IMAGE_CODE = 101;
 
+    ScrollView scrollView;
+
     private FirebaseUser cur_user;
 
     private String string_img;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -105,6 +111,31 @@ public class P_SetBallonActivity extends AppCompatActivity {
                         startMyActivity(MainActivity.class);
                     }
                 });
+            }
+        });
+        ImageView pointDown = findViewById(R.id.img_pointdown);
+
+        AlphaAnimation anim = new AlphaAnimation(0, 1);
+        anim.setDuration(500);        // 에니메이션 동작 주기
+        anim.setRepeatCount(-1);    // 에니메이션 반복 회수
+        anim.setRepeatMode(Animation.REVERSE);// 반복하는 방법
+        pointDown.startAnimation(anim);
+
+
+        TextView text = findViewById(R.id.textView8);
+        scrollView = findViewById(R.id.scrollView_setBalloon);
+        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                Log.d("scroll",String.valueOf(scrollY));
+                Log.d("height",String.valueOf(v.getMeasuredHeight()));
+                Log.d("min",String.valueOf(v.getMinimumHeight()));
+
+                float bottomvalue = ((float)scrollY/v.getMeasuredHeight());
+                float topvalue = (1 - (float)scrollY/v.getMeasuredHeight());
+                pointDown.setAlpha(topvalue);
+                seekBarValue.setAlpha(topvalue);
+                text.setAlpha(bottomvalue);
             }
         });
 
