@@ -119,10 +119,11 @@ public class Matching extends AppCompatActivity {
                         }
                         else {                      //새로 매칭된 자녀이면
                             //기본 풍선 만들기(child)
-                            BalloonStat newBalloon = new BalloonStat(child_key, "풍선을 만들어 보아요", strNow, 600, 300, parent_key, "init");
-                            DatabaseReference newBalloonRef = balloonUserRef.push();
+//                            String child_key, int set_time, String achievement, String date, String parent_key, int cur_time, String state, String image
+                            BalloonStat newBalloon = new BalloonStat(child_key, 600, "풍선을 만들어 보아요", strNow, parent_key, 300, "init", "");
 
-                            SetBalloon.setCurrentBalloon(child_key, newBalloon, true);
+                            SetBalloon.setCurrentBalloon(child_key, newBalloon);
+
                             startToast("매칭이 완료되었습니다");
                             startMyActivity(P_HomeActivity.class);
                         }
@@ -141,7 +142,6 @@ public class Matching extends AppCompatActivity {
         String parent_email = cur_user.getEmail();
         String parent_key = parent_email.split("@")[0];   //key에 @는 저장이 안되므로 앞에 ID만 분리
         DatabaseReference parentRef = DB_Reference.parentRef.child(parent_key);
-//        DatabaseReference childParent_listRef = DB_Reference.childRef.child(child_key).child("parent_list");
 
         for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
             if (dataSnapshot.getValue().equals(child_key)) {
@@ -149,8 +149,6 @@ public class Matching extends AppCompatActivity {
             }
         }
         parentRef.child("child_list").push().setValue(child_key);
-
-
 
         return true;
     }

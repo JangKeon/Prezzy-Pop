@@ -50,7 +50,7 @@ public class C_UnmatchedActivity extends AppCompatActivity {
                     if (task.getResult().exists()) {
                         Log.d("DB", "User identity (자식)");
                         Child child = task.getResult().getValue(Child.class);
-                        if(child.getCurrent_Balloon() == null) {
+                        if(child.getCurrent_balloon_id() == null) {
                             // do nothing
                         }
                         else {
