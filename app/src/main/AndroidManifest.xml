@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".P_UnmatchedActivity"></activity>
+        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".P_UnmatchedActivity" />
         <activity android:name=".C_UnmatchedActivity" />
         <activity android:name=".C_HomeActivity" />
         <activity android:name=".P_SetPresentActivity" />
