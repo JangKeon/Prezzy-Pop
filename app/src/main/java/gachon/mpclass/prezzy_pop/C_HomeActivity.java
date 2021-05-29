@@ -1,8 +1,10 @@
 package gachon.mpclass.prezzy_pop;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.ByteArrayInputStream;
 
 import gachon.mpclass.prezzy_pop.service.ScreenService;
 
@@ -64,7 +72,6 @@ public class C_HomeActivity extends AppCompatActivity {
                 stopTimeCheck();
                 break;
         }
-
     };
 
     private void startTimeCheck() {
@@ -85,6 +92,49 @@ public class C_HomeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
+    }
+
+
+    //DB에서 가져오기------------------------------------------------
+    // 스트링을 바이너리 바이트 배열로
+    public static byte[] binaryStringToByteArray(String s) {
+        int count = s.length() / 8;
+        byte[] b = new byte[count];
+        for (int i = 1; i < count; ++i) {
+            String t = s.substring((i - 1) * 8, i * 8);
+            b[i - 1] = binaryStringToByte(t);
+        }
+        return b;
+    }
+
+    // 스트링을 바이너리 바이트로
+    public static byte binaryStringToByte(String s) {
+        byte ret = 0, total = 0;
+        for (int i = 0; i < 8; ++i) {
+            ret = (s.charAt(7 - i) == '1') ? (byte) (1 << i) : 0;
+            total = (byte) (ret | total);
+        }
+        return total;
+    }
+    public void selectFirebase(int index) {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.getReference("reviews/" + index).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    if (dataSnapshot.getKey().equals("image")) {
+                        String image = dataSnapshot.getValue().toString();
+                        byte[] b = binaryStringToByteArray(image);
+                        ByteArrayInputStream is = new ByteArrayInputStream(b);
+                        Drawable reviewImage = Drawable.createFromStream(is, "reviewImage");
+//                        imgview_balloon.setImageDrawable(reviewImage);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     private void startMyActivity(Class c) {

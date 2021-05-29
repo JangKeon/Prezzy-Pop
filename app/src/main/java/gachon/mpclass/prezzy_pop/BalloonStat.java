@@ -6,28 +6,27 @@ import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 
-public class BalloonStat {      //상속용
+public class BalloonStat {
     private String child_key;
     private int set_time;
     private String achievement;
     private String date;
-    private Image present;
     private String parent_key;
     private int cur_time;
     private String state;
+    private String image;
 
     BalloonStat() {}
 
-    BalloonStat(String child_key, String achievement, String date, int set_time, int cur_time, String parent_key, String state) {
+    public BalloonStat(String child_key, int set_time, String achievement, String date, String parent_key, int cur_time, String state, String image) {
         this.child_key = child_key;
+        this.set_time = set_time;
         this.achievement = achievement;
         this.date = date;
         this.parent_key = parent_key;
-//        this.present = present;
-        this.set_time = set_time;
         this.cur_time = cur_time;
         this.state = state;
-
+        this.image = image;
     }
 
     public String getAchievement() {
@@ -36,14 +35,6 @@ public class BalloonStat {      //상속용
 
     public String getDate() {
         return date;
-    }
-
-    public Image getPresent() {
-        return present;
-    }
-
-    public void setPresent(Image present) {
-        this.present = present;
     }
 
     public int getSet_time() {
@@ -94,6 +85,14 @@ public class BalloonStat {      //상속용
         this.state = state;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public void setInit() {
         Date now = new Date();
         String strNow = DateString.DateToString(now);
@@ -117,6 +116,7 @@ public class BalloonStat {      //상속용
         newHashMap.put("cur_time", this.getCur_time());
         newHashMap.put("parent_key", this.getParent_key());
         newHashMap.put("state", this.getState());
+        newHashMap.put("image", this.getImage());
 
         return newHashMap;
     }
