@@ -2,10 +2,19 @@ package gachon.mpclass.prezzy_pop;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,6 +28,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -38,6 +48,9 @@ public class P_HomeActivity extends AppCompatActivity {
     private String cur_key;
     private String curBalloonID;
 
+    private DrawerLayout mDrawerLayout;
+    private Context context = this;
+
     private int cur_time;
     private int set_time;
 
@@ -48,6 +61,7 @@ public class P_HomeActivity extends AppCompatActivity {
     Button btn_addMission;
     Button btn_logout;
     Button btn_setBalloon;
+    ImageView imgView_balloon;
 
     Animation cloud1_anim;
     Animation cloud2_anim;
@@ -62,7 +76,38 @@ public class P_HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_p_home);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
+        actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
+        actionBar.setHomeAsUpIndicator(R.drawable.drawer_menu); //뒤로가기 버튼 이미지 지정
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                menuItem.setChecked(true);
+                mDrawerLayout.closeDrawers();
+
+                int id = menuItem.getItemId();
+                String title = menuItem.getTitle().toString();
+
+                if(id == R.id.account){
+                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                }
+                else if(id == R.id.setting){
+                    Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                }
+                else if(id == R.id.logout){
+                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                }
+
+                return true;
+            }
+        });
         cur_user = FirebaseAuth.getInstance().getCurrentUser();
         cur_email = cur_user.getEmail();
         cur_key = cur_email.split("@")[0];
@@ -81,6 +126,7 @@ public class P_HomeActivity extends AppCompatActivity {
         cloud2_view.startAnimation(cloud2_anim);
         cloud3_view.startAnimation(cloud3_anim);
         balloon_view.startAnimation(balloon_anim);
+        imgView_balloon = findViewById(R.id.img_balloon);
 
         edit_mission = findViewById(R.id.edit_mission);
         btn_addMission = findViewById(R.id.btn_addMission);
@@ -89,6 +135,7 @@ public class P_HomeActivity extends AppCompatActivity {
 
         list_mission = new ArrayList<String>();
         list_mission.add("설거지 도와드리기");
+
 
         btn_setBalloon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +177,16 @@ public class P_HomeActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onStart() {
@@ -164,9 +221,25 @@ public class P_HomeActivity extends AppCompatActivity {
         });
     }
 
-
+    // SetTime에 따른 풍선 크기 변경
+    private Bitmap bitmap_resize(Bitmap bitmap, int resizeWidth){
+        double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
+        int targetHeight = (int) (resizeWidth * aspectRatio);
+        Bitmap result = Bitmap.createScaledBitmap(bitmap, resizeWidth, targetHeight, false);
+        return result;
+    }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.ballon);
+        Log.d("set",Integer.toString(set_time));
+        Log.d("cur",Integer.toString(cur_time));
+//        int resizewidth = 100 + (300 * (cur_time/set_time));
+//        imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
+    }
+
+        @Override
     public void onBackPressed() {
         //super.onBackPressed();
     }

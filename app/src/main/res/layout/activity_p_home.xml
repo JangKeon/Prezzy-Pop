@@ -193,8 +193,8 @@
 
         <ImageView
             android:id="@+id/img_balloon"
-            android:layout_width="165dp"
-            android:layout_height="396dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
@@ -205,8 +205,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.86"
-            app:srcCompat="@drawable/ballon" />
+            app:layout_constraintVertical_bias="0.86" />
 
         <Button
             android:id="@+id/btn_logout"
