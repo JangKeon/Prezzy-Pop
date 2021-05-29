@@ -10,9 +10,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -108,7 +111,7 @@ public class C_HomeActivity extends AppCompatActivity {
         cloud3_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim3);
         cloud3_view = findViewById(R.id.cloud3);
         balloon_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
-        balloon_view = findViewById(R.id.imageView4);
+        balloon_view = findViewById(R.id.img_balloon);
 
         cloud1_view.startAnimation(cloud1_anim);
         cloud2_view.startAnimation(cloud2_anim);
@@ -187,9 +190,10 @@ public class C_HomeActivity extends AppCompatActivity {
                 int cur_time = snapshot.getValue(Integer.TYPE);
                 setCur_time(cur_time);
 
-                //요기에 함수 넣기~~~
+                Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
+                double resizewidth = 100 + (600 * ((double)cur_time/set_time));// 풍선 최소 크기 100, 최대300
+                balloon_view.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
             }
-
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
@@ -214,6 +218,14 @@ public class C_HomeActivity extends AppCompatActivity {
     private void stopTimeCheck() {
         Intent serviceIntent = new Intent(this, ScreenService.class);
         getApplicationContext().stopService(serviceIntent); // stop service
+    }
+
+    // CurTime에 따라 비율유지하면서 풍선 크기 변경
+    private Bitmap bitmap_resize(Bitmap bitmap, double resizeWidth){
+        double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
+        int targetHeight = (int) (resizeWidth * aspectRatio);
+        Bitmap result = Bitmap.createScaledBitmap(bitmap, (int)resizeWidth, targetHeight, false);
+        return result;
     }
 
     @Override
