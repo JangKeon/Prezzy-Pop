@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,9 +14,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
-
-
-import gachon.mpclass.prezzy_pop.service.ScreenService;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseReference parentRef = DB_Reference.parentRef;
@@ -74,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     if (task.getResult().exists()) {
                         Log.d("DB", "User identity (자식)");
                         Child child = task.getResult().getValue(Child.class);
-                        if(child.getCurrent_Balloon() == null) {
+                        if(child.getCurrent_balloon_id() == null) {
                             Log.d("DB", "has no parent");
                             startMyActivity(C_UnmatchedActivity.class);
                         }
