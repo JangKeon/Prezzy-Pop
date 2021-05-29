@@ -136,7 +136,7 @@ public class P_HomeActivity extends AppCompatActivity {
         super.onStart();
         DatabaseReference parentRef = DB_Reference.parentRef.child(cur_key);
 
-        DatabaseReference child_listRef = parentRef.child("current_balloon_id");
+        DatabaseReference child_listRef = parentRef.child("child_list");
 
         child_listRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -157,7 +157,7 @@ public class P_HomeActivity extends AppCompatActivity {
                     public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                         String curBalloonID = task.getResult().getValue(String.class);
                         setBalloonCur_timeChangeListener(curBalloonID);
-                        getSet_timeFromDB(curBalloonID);
+                        getSet_timeFromDB(child_key ,curBalloonID);
                     }
                 });
             }
@@ -169,8 +169,8 @@ public class P_HomeActivity extends AppCompatActivity {
         //super.onBackPressed();
     }
 
-    private void getSet_timeFromDB(String curBalloonID) {
-        DatabaseReference cur_balloonSet_timeRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("set_time");
+    private void getSet_timeFromDB(String child_key, String curBalloonID) {
+        DatabaseReference cur_balloonSet_timeRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("set_time");
 
         cur_balloonSet_timeRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
