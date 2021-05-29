@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -255,8 +256,6 @@ public class P_SetBallonActivity extends AppCompatActivity {
         String image = string_img;
 
         BalloonStat newBalloon = new BalloonStat(child_key, set_time, achievement, date, parent_key, cur_time, state, image);
-
-        Log.e("doowon", "image : " + image);
 
         SetBalloon.setCurrentBalloon(child_key, newBalloon);
     }

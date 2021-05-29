@@ -6,14 +6,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseReference parentRef = DB_Reference.parentRef;
@@ -24,14 +30,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
+        ImageView loading = findViewById(R.id.img_loading);
+        ImageView balloons = findViewById(R.id.img_balloons);
+        Glide.with(this).load(R.raw.loading).into(loading);
+        Glide.with(this).load(R.raw.balloons).into(balloons);
         // 로그인 된 상태가 아니라면
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startMyActivity(LoginActivity.class);
-        }
-        else{
+        } else {
+            refreshToken();
             isMatched();
         }
+
 
     }
 
@@ -82,6 +92,30 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    private void refreshToken(){
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("Token", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        // store to db
+                        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+                        String email=mAuth.getCurrentUser().getEmail();
+                        String key = email.split("@")[0];
+
+                        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                        DatabaseReference tokenRef=rootRef.child("Tokens").child(key);
+                        tokenRef.child("token").setValue(token);
+                        tokenRef.child("key").setValue(key);
+                    }
+                });
     }
 
     private void startMyActivity(Class c) {
