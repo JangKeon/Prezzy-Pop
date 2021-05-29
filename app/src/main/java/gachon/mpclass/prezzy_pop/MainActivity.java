@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,15 +37,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
+        ImageView loading = findViewById(R.id.img_loading);
+        ImageView balloons = findViewById(R.id.img_balloons);
+        Glide.with(this).load(R.raw.loading).into(loading);
+        Glide.with(this).load(R.raw.balloons).into(balloons);
         // 로그인 된 상태가 아니라면
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startMyActivity(LoginActivity.class);
-        }
-        else{
+        } else {
             //refreshToken();
             isMatched();
         }
+
 
     }
 
