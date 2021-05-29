@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startMyActivity(LoginActivity.class);
         } else {
-            //refreshToken();
+            refreshToken();
             isMatched();
         }
 
@@ -113,10 +113,14 @@ public class MainActivity extends AppCompatActivity {
                         String token = task.getResult();
 
                         // store to db
+                        FirebaseAuth mAuth=FirebaseAuth.getInstance();
+                        String email=mAuth.getCurrentUser().getEmail();
+                        String key = email.split("@")[0];
+
                         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-                        DatabaseReference tokenRef=rootRef.child("Tokens").child("token");
-                        tokenRef.setValue(token);
-                        DatabaseReference key=rootRef.child("Tokens").child("token");
+                        DatabaseReference tokenRef=rootRef.child("Tokens").child(key);
+                        tokenRef.child("token").setValue(token);
+                        tokenRef.child("key").setValue(key);
                     }
                 });
     }
