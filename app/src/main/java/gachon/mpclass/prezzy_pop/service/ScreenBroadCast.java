@@ -48,7 +48,7 @@ public class ScreenBroadCast extends BroadcastReceiver {
 
             printTime(score,context);
 
-            DatabaseReference childRef = DB_Reference.childRef.child(key).child("Current_Balloon");
+            DatabaseReference childRef = DB_Reference.childRef.child(key).child("current_balloon_id");
 
             childRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override

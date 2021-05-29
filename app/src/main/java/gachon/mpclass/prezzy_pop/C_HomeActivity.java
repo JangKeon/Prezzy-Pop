@@ -34,8 +34,8 @@ import gachon.mpclass.prezzy_pop.service.ScreenService;
 
 public class C_HomeActivity extends AppCompatActivity {
     private FirebaseUser cur_user;
-    private String email;
-    private String key;
+    private String cur_email;
+    private String cur_key;
     private String curBalloonID;
 
     private int cur_time;
@@ -56,8 +56,8 @@ public class C_HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_c_home);
 
         cur_user = FirebaseAuth.getInstance().getCurrentUser();
-        email = cur_user.getEmail();
-        key = email.split("@")[0];
+        cur_email = cur_user.getEmail();
+        cur_key = cur_email.split("@")[0];
 
         findViewById(R.id.btn_logout).setOnClickListener(onClickListener);
         findViewById(R.id.btn_start).setOnClickListener(onClickListener);
@@ -81,7 +81,7 @@ public class C_HomeActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        DatabaseReference childBalloonIdRef = DB_Reference.childRef.child(key).child("current_balloon_id");
+        DatabaseReference childBalloonIdRef = DB_Reference.childRef.child(cur_key).child("current_balloon_id");
 
         childBalloonIdRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -112,7 +112,7 @@ public class C_HomeActivity extends AppCompatActivity {
     };
 
     private void getSet_timeFromDB(String curBalloonID) {
-        DatabaseReference cur_balloonSet_timeRef = DB_Reference.balloonRef.child(key).child(curBalloonID).child("set_time");
+        DatabaseReference cur_balloonSet_timeRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("set_time");
 
         cur_balloonSet_timeRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -129,7 +129,7 @@ public class C_HomeActivity extends AppCompatActivity {
 
     private void setBalloonCur_timeChangeListener(String curBalloonID) {
         this.curBalloonID = curBalloonID;
-        DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(key).child(curBalloonID).child("cur_time");
+        DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("cur_time");
 
         cur_balloonCur_timeRef.addChildEventListener(new ChildEventListener() {
             @Override
