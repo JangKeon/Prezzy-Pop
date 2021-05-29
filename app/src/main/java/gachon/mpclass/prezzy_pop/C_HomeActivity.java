@@ -192,7 +192,7 @@ public class C_HomeActivity extends AppCompatActivity {
                 setCur_time(cur_time);
 
                 Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
-                double resizewidth = 100 + (400 * ((double)cur_time/set_time));// 풍선 최소 크기 100, 최대300
+                double resizewidth = 100 + (600 * ((double)cur_time/set_time));// 풍선 최소 크기 100, 최대300
                 balloon_view.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
             }
             @Override
