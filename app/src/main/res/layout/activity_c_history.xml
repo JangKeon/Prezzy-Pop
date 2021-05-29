@@ -5,8 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/cloud"
-    tools:context=".C_HistoryActivity">
+    android:background="@color/white"
+    tools:context=".C_HistoryActivity"
+    >
 
     <ImageView
         android:id="@+id/imgView_history1"
