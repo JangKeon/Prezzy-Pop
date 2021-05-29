@@ -20,10 +20,11 @@ public class C_HomeActivity extends AppCompatActivity {
     Animation cloud1_anim;
     Animation cloud2_anim;
     Animation cloud3_anim;
+    Animation balloon_anim;
     ImageView cloud1_view;
     ImageView cloud2_view;
     ImageView cloud3_view;
-
+    ImageView balloon_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +40,13 @@ public class C_HomeActivity extends AppCompatActivity {
         cloud2_view = findViewById(R.id.cloud2);
         cloud3_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.cloudanim3);
         cloud3_view = findViewById(R.id.cloud3);
+        balloon_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake);
+        balloon_view = findViewById(R.id.img_balloon);
 
         cloud1_view.startAnimation(cloud1_anim);
         cloud2_view.startAnimation(cloud2_anim);
         cloud3_view.startAnimation(cloud3_anim);
+        balloon_view.startAnimation(balloon_anim);
     }
     View.OnClickListener onClickListener= (v)->{
 

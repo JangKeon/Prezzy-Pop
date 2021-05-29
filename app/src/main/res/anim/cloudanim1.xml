@@ -5,7 +5,8 @@
         android:toXDelta="100%p"
         android:duration="18000"
         android:repeatCount="-1"
-        android:fillAfter="true" />
+        android:fillAfter="true"
+        />
 
 </set>
 
