@@ -13,11 +13,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.util.Log;
-=======
 import android.view.MenuItem;
->>>>>>> 0d3c72d25baa9f50d2d7dff54fc6edc1ac0ed8df
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
