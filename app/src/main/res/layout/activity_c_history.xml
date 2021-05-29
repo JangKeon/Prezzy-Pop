@@ -125,8 +125,8 @@
 
             <ImageView
                 android:id="@+id/imgView_history1"
-                android:layout_width="364dp"
-                android:layout_height="166dp"
+                android:layout_width="369dp"
+                android:layout_height="245dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="120dp"
@@ -136,8 +136,8 @@
 
             <ImageView
                 android:id="@+id/imgView_history2"
-                android:layout_width="362dp"
-                android:layout_height="167dp"
+                android:layout_width="366dp"
+                android:layout_height="232dp"
                 android:layout_marginTop="40dp"
                 app:layout_constraintEnd_toEndOf="@+id/imgView_history1"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -146,8 +146,8 @@
 
             <ImageView
                 android:id="@+id/imgView_history3"
-                android:layout_width="369dp"
-                android:layout_height="158dp"
+                android:layout_width="391dp"
+                android:layout_height="242dp"
                 android:layout_marginTop="56dp"
                 app:layout_constraintEnd_toEndOf="@+id/imgView_history2"
                 app:layout_constraintHorizontal_bias="0.519"
@@ -156,8 +156,8 @@
 
             <ImageView
                 android:id="@+id/imgView_history4"
-                android:layout_width="364dp"
-                android:layout_height="160dp"
+                android:layout_width="369dp"
+                android:layout_height="238dp"
                 android:layout_marginTop="48dp"
                 app:layout_constraintEnd_toEndOf="@+id/imgView_history3"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -166,8 +166,8 @@
 
             <ImageView
                 android:id="@+id/imgView_history5"
-                android:layout_width="373dp"
-                android:layout_height="153dp"
+                android:layout_width="375dp"
+                android:layout_height="259dp"
                 android:layout_marginTop="52dp"
                 app:layout_constraintEnd_toEndOf="@+id/imgView_history4"
                 app:layout_constraintHorizontal_bias="0.555"
@@ -176,10 +176,11 @@
 
             <ImageView
                 android:id="@+id/imgView_history6"
-                android:layout_width="364dp"
-                android:layout_height="129dp"
-                android:layout_marginTop="30dp"
+                android:layout_width="373dp"
+                android:layout_height="237dp"
+                android:layout_marginTop="56dp"
                 app:layout_constraintEnd_toEndOf="@+id/imgView_history5"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/imgView_history5"
                 app:layout_constraintTop_toBottomOf="@id/imgView_history5" />
 
