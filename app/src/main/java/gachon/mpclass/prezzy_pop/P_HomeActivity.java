@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,16 +23,33 @@ public class P_HomeActivity extends AppCompatActivity {
         ListView listView_mission;
         ArrayAdapter<String> adapter;
         ArrayList<String> list_mission;
-
         EditText edit_mission;
         Button btn_addMission;
         Button btn_logout;
         Button btn_setBalloon;
 
+        Animation cloud1_anim;
+        Animation cloud2_anim;
+        Animation cloud3_anim;
+        ImageView cloud1_view;
+        ImageView cloud2_view;
+        ImageView cloud3_view;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_p_home);
+
+            cloud1_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.cloudanim1);
+            cloud1_view = findViewById(R.id.cloud1);
+            cloud2_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.cloudanim2);
+            cloud2_view = findViewById(R.id.cloud2);
+            cloud3_anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.cloudanim3);
+            cloud3_view = findViewById(R.id.cloud3);
+
+            cloud1_view.startAnimation(cloud1_anim);
+            cloud2_view.startAnimation(cloud2_anim);
+            cloud3_view.startAnimation(cloud3_anim);
 
             edit_mission = findViewById(R.id.edit_mission);
             btn_addMission = findViewById(R.id.btn_addMission);
@@ -43,6 +63,7 @@ public class P_HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     // 풍선 설정
+                    startMyActivity(P_SetBallonActivity.class);
                 }
             });
             btn_logout.setOnClickListener(new View.OnClickListener() {

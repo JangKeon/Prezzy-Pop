@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,14 +44,17 @@ public class P_SetPresentActivity extends AppCompatActivity {
     Button btn_set_present; // 선물 정해지면 누르는 완료버튼
     EditText text_presentName;
     int REQUEST_IMAGE_CODE = 101;
-
+    Animation cloudAmimation;
+    ImageView cloud;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_p_set_present);
 
-        text_presentName = findViewById(R.id.edit_presentName);
-        imgView_present = findViewById(R.id.imgView_present);
+
+        initPresentButton();
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -81,15 +86,7 @@ public class P_SetPresentActivity extends AppCompatActivity {
             }
         });
 
-        imgView_present.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, REQUEST_IMAGE_CODE);
-            }
-        });
+
 
     }
 
@@ -126,6 +123,21 @@ public class P_SetPresentActivity extends AppCompatActivity {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void initPresentButton() {
+        text_presentName = findViewById(R.id.edit_presentName);
+        imgView_present = findViewById(R.id.imgView_present);
+
+        imgView_present.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, REQUEST_IMAGE_CODE);
+            }
+        });
     }
 
 //DB에 저장하기---------------------------------------------
