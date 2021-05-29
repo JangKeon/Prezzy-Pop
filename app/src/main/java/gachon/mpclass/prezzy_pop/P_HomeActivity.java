@@ -1,7 +1,6 @@
 package gachon.mpclass.prezzy_pop;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,7 +30,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -222,22 +220,12 @@ public class P_HomeActivity extends AppCompatActivity {
         });
     }
 
-    // SetTime에 따른 풍선 크기 변경
+    // SetTime에 따라 비율유지하면서 풍선 크기 변경
     private Bitmap bitmap_resize(Bitmap bitmap, int resizeWidth){
         double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
         int targetHeight = (int) (resizeWidth * aspectRatio);
         Bitmap result = Bitmap.createScaledBitmap(bitmap, resizeWidth, targetHeight, false);
         return result;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.ballon);
-        Log.d("set",Integer.toString(set_time));
-        Log.d("cur",Integer.toString(cur_time));
-//        int resizewidth = 100 + (300 * (cur_time/set_time));
-//        imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
     }
 
         @Override
@@ -274,7 +262,10 @@ public class P_HomeActivity extends AppCompatActivity {
                     int cur_time = snapshot.getValue(Integer.TYPE);
                     setCur_time(cur_time);
 
-//                    요기에~~~~~
+                    // 데이터 변화 있을 때마다 풍선크기 resize
+                    Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
+                    int resizewidth = 100 + (400 * (cur_time/set_time));// 풍선 최소 크기 100, 최대300
+                    imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
 
                     Log.e("doowon", "onChildChange : " + snapshot.getValue().toString());
                 }
