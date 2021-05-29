@@ -13,10 +13,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,15 +34,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -229,7 +223,7 @@ public class P_SetBallonActivity extends AppCompatActivity {
         seekBar = findViewById(R.id.bar_setBalloon);
         seekBarValue = findViewById(R.id.text_totalRate);
 
-        Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.ballon);
+        Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
         imgview_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,300));
 
         seekBarValue.setText("100");

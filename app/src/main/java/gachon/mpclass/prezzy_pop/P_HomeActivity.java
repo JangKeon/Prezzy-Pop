@@ -1,7 +1,6 @@
 package gachon.mpclass.prezzy_pop;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,7 +9,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -28,11 +30,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -58,6 +60,7 @@ public class P_HomeActivity extends AppCompatActivity {
     Button btn_addMission;
     Button btn_logout;
     Button btn_setBalloon;
+    ImageView imgView_balloon;
 
     Animation cloud1_anim;
     Animation cloud2_anim;
@@ -100,7 +103,6 @@ public class P_HomeActivity extends AppCompatActivity {
                 else if(id == R.id.logout){
                     Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
                 }
-
                 return true;
             }
         });
@@ -122,6 +124,7 @@ public class P_HomeActivity extends AppCompatActivity {
         cloud2_view.startAnimation(cloud2_anim);
         cloud3_view.startAnimation(cloud3_anim);
         balloon_view.startAnimation(balloon_anim);
+        imgView_balloon = findViewById(R.id.img_balloon);
 
         edit_mission = findViewById(R.id.edit_mission);
         btn_addMission = findViewById(R.id.btn_addMission);
@@ -130,6 +133,7 @@ public class P_HomeActivity extends AppCompatActivity {
 
         list_mission = new ArrayList<String>();
         list_mission.add("설거지 도와드리기");
+
 
         btn_setBalloon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,15 +211,24 @@ public class P_HomeActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                         String curBalloonID = task.getResult().getValue(String.class);
-                        setBalloonCur_timeChangeListener(curBalloonID);
+
                         getSet_timeFromDB(child_key ,curBalloonID);
+                        setBalloonCur_timeChangeListener(child_key, curBalloonID);
                     }
                 });
             }
         });
     }
 
-    @Override
+    // SetTime에 따라 비율유지하면서 풍선 크기 변경
+    private Bitmap bitmap_resize(Bitmap bitmap, int resizeWidth){
+        double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
+        int targetHeight = (int) (resizeWidth * aspectRatio);
+        Bitmap result = Bitmap.createScaledBitmap(bitmap, resizeWidth, targetHeight, false);
+        return result;
+    }
+
+        @Override
     public void onBackPressed() {
         //super.onBackPressed();
     }
@@ -228,6 +241,8 @@ public class P_HomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 int set_time = task.getResult().getValue(Integer.TYPE);
                 setSet_time(set_time);
+
+                Log.e("doowon", "get set time : " + task.getResult().getValue().toString());
             }
         });
     }
@@ -236,28 +251,32 @@ public class P_HomeActivity extends AppCompatActivity {
         this.set_time = set_time;
     }
 
-    private void setBalloonCur_timeChangeListener(String curBalloonID) {
+    private void setBalloonCur_timeChangeListener(String child_key, String curBalloonID) {
         this.curBalloonID = curBalloonID;
-        DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("cur_time");
+        DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
 
-        cur_balloonCur_timeRef.addChildEventListener(new ChildEventListener() {
+        cur_balloonCur_timeRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {}
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    int cur_time = snapshot.getValue(Integer.TYPE);
+                    setCur_time(cur_time);
 
-            @Override
-            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                int cur_time = snapshot.getValue(Integer.TYPE);
-                setCur_time(cur_time);
+                    // 데이터 변화 있을 때마다 풍선크기 resize
+                    Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
+                    int resizewidth = 100 + (400 * (cur_time/set_time));// 풍선 최소 크기 100, 최대300
+                    imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
+
+                    Log.e("doowon", "onChildChange : " + snapshot.getValue().toString());
+                }
+                else {
+                    Log.e("doowon", "Data change listener get null");
+                }
             }
-
             @Override
-            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {}
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            @Override
-            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {}
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+            }
         });
     }
 
