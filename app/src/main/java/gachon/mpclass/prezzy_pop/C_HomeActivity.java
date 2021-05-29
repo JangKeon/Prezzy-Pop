@@ -137,8 +137,8 @@ public class C_HomeActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 String curBalloonID = task.getResult().getValue(String.class);
-                setBalloonCur_timeChangeListener(curBalloonID);
                 getSet_timeFromDB(curBalloonID);
+                setBalloonCur_timeChangeListener(curBalloonID);
             }
         });
     }
@@ -181,24 +181,19 @@ public class C_HomeActivity extends AppCompatActivity {
         this.curBalloonID = curBalloonID;
         DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("cur_time");
 
-        cur_balloonCur_timeRef.addChildEventListener(new ChildEventListener() {
+        cur_balloonCur_timeRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {}
-
-            @Override
-            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 int cur_time = snapshot.getValue(Integer.TYPE);
                 setCur_time(cur_time);
+
+                //요기에 함수 넣기~~~
             }
 
             @Override
-            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {}
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            @Override
-            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {}
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+            }
         });
     }
 

@@ -32,6 +32,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
+import gachon.mpclass.prezzy_pop.pushNoti.SendMessage;
+
 
 public class Matching extends AppCompatActivity {
 
@@ -80,10 +82,9 @@ public class Matching extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener(){       //클릭시 DB에서 email로 user 데이터를 받아와 showPopUp 메소드 실행
             @Override
             public void onClick(View v) {
+                // child
                 String email=((EditText)findViewById(R.id.Email_matching)).getText().toString();
-
                 String key = email.split("@")[0];   //key에 @는 저장이 안되므로 앞에 ID만 분리
-
                 DatabaseReference childRef = DB_Reference.childRef.child(key);
 
                 childRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -134,6 +135,30 @@ public class Matching extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 makeGroup(child);
                 dialog.dismiss();
+                FirebaseUser cur_user = FirebaseAuth.getInstance().getCurrentUser();
+                String parentEmail=cur_user.getEmail();
+                String parentKey = parentEmail.split("@")[0];
+                DatabaseReference parentRef = DB_Reference.parentRef.child(parentKey);
+
+                parentRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("", "Error getting data", task.getException());
+                        } else {
+
+                            Parent parent = task.getResult().getValue(Parent.class);
+                            //setParentNick(parent.getNick());
+                            String parentNick=parent.getNick();
+                            Log.d("doowon", "click2" );
+                            Log.d("doowon", "click3"+parentNick);
+                            SendMessage sendMessage = new SendMessage("매칭이 완료되었습니다","부모님 ("+parentNick+") 계정과 매칭되었습니다.");
+                        }
+                    }
+                });
+
+
+
             }
         });
         ad.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -176,7 +201,7 @@ public class Matching extends AppCompatActivity {
                             BalloonStat newBalloon = new BalloonStat(child_key, 600, "풍선을 만들어 보아요", strNow, parent_key, 300, "init", "");
 
                             SetBalloon.setCurrentBalloon(child_key, newBalloon);
-
+                            Log.d("doowon", "click" );
                             startToast("매칭이 완료되었습니다");
                             startMyActivity(P_HomeActivity.class);
                         }
