@@ -36,8 +36,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="391dp"
-            android:layout_height="486dp"
+            android:layout_width="405dp"
+            android:layout_height="484dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
@@ -115,7 +115,7 @@
             android:layout_alignParentTop="true"
             android:text="끌어올려 풍선 터뜨리기"
             android:textColor="#4A4A4A"
-            android:textSize="13sp"
+            android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -132,10 +132,12 @@
             android:text="현재자녀의 달성률 : "
             android:textColor="#4A4A4A"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/img_balloon"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.386"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.355"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1" />
 
         <TextView
             android:id="@+id/text_rate"
@@ -144,14 +146,16 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="96dp"
+
             android:text="0%"
             android:textColor="#4A4A4A"
             android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.214"
-            app:layout_constraintStart_toEndOf="@+id/text_ach"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.732"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.087" />
 
         <ImageView
             android:id="@+id/img_leftUp"
