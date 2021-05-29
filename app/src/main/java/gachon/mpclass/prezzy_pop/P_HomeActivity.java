@@ -36,6 +36,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -104,7 +105,6 @@ public class P_HomeActivity extends AppCompatActivity {
                 else if(id == R.id.logout){
                     Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
                 }
-
                 return true;
             }
         });
@@ -213,8 +213,9 @@ public class P_HomeActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                         String curBalloonID = task.getResult().getValue(String.class);
-                        setBalloonCur_timeChangeListener(curBalloonID);
+
                         getSet_timeFromDB(child_key ,curBalloonID);
+                        setBalloonCur_timeChangeListener(child_key, curBalloonID);
                     }
                 });
             }
@@ -252,6 +253,8 @@ public class P_HomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 int set_time = task.getResult().getValue(Integer.TYPE);
                 setSet_time(set_time);
+
+                Log.e("doowon", "get set time : " + task.getResult().getValue().toString());
             }
         });
     }
@@ -260,28 +263,29 @@ public class P_HomeActivity extends AppCompatActivity {
         this.set_time = set_time;
     }
 
-    private void setBalloonCur_timeChangeListener(String curBalloonID) {
+    private void setBalloonCur_timeChangeListener(String child_key, String curBalloonID) {
         this.curBalloonID = curBalloonID;
-        DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("cur_time");
+        DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
 
-        cur_balloonCur_timeRef.addChildEventListener(new ChildEventListener() {
+        cur_balloonCur_timeRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {}
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    int cur_time = snapshot.getValue(Integer.TYPE);
+                    setCur_time(cur_time);
 
-            @Override
-            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
-                int cur_time = snapshot.getValue(Integer.TYPE);
-                setCur_time(cur_time);
+//                    요기에~~~~~
+
+                    Log.e("doowon", "onChildChange : " + snapshot.getValue().toString());
+                }
+                else {
+                    Log.e("doowon", "Data change listener get null");
+                }
             }
-
             @Override
-            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {}
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
-            @Override
-            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {}
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {}
+            }
         });
     }
 
