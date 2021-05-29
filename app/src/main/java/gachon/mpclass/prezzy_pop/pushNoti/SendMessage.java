@@ -1,66 +1,74 @@
 package gachon.mpclass.prezzy_pop.pushNoti;
 
-import android.os.Handler;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.annotations.NotNull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import gachon.mpclass.prezzy_pop.DB_Reference;
+import gachon.mpclass.prezzy_pop.MainActivity;
 
 public class SendMessage {
     private static final String TAG = "Send Message";
-    List<String> uidList = new ArrayList<>();
-    List<String> tokenList = new ArrayList<>();
-    FirebaseDatabase db;
-    Handler handler= new Handler();
+    List<String> userList = new ArrayList<>();
+    FirebaseAuth auth;
     String title;
     String message;
 
-    public SendMessage(List uidList,String title,String message){
-        this.uidList=uidList;
+    public SendMessage(String title,String message){
         this.title=title;
         this.message=message;
-        store();// store token
+        findChild();// store token
     }
 
-    private void store() {// extract token list to Users
-        /*
-        db=FirebaseDatabase.getInstance();
+    private void findChild() {// extract token list to Users
+        String email=auth.getCurrentUser().getEmail();
+        String parentKey = email.split("@")[0];
 
-        db.collection("Users")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                UserToken userToken = new UserToken(
-                                        doc.getString("uid"),
-                                        doc.getString("token")
-                                );
-                                Log.d(TAG, doc.getId() + " => " + doc.getData());
-                                if(uidList.contains(userToken.getUid())){
-                                    addTokenList(userToken.getToken());
-                                    Log.d(TAG, doc.getId() + " ===> " + userToken.getToken());
-                                }
-                            }
-                            send(); // send to token user
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+        DatabaseReference userRef = DB_Reference.parentRef.child(parentKey);
+        DatabaseReference child_listRef = userRef.child("child_list");
+        child_listRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                HashMap<String, String> child_listMap =  task.getResult().getValue(new GenericTypeIndicator<HashMap<String, String>>() {});
+                ArrayList<String> child_list = new ArrayList<>();
 
-         */
+                for(String child_key_iter : child_listMap.values()) {
+                    child_list.add(child_key_iter);
+                }
+                String child_key = child_list.get(0);      //첫번째 child key 가져오기
+                findToken(child_key);
+            }
+        });
+
+
     }
-    public void send(){
-        Log.d(TAG, "Token List Size = "+tokenList.size());
-        for(int i=0;i<tokenList.size();i++){
-            SendNotification.sendNotification(tokenList.get(i), title, message);
-            Log.d(TAG, "Send to "+tokenList.get(i));
-        }
+    public void findToken(String childKey){
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference tokenRef=rootRef.child("Tokens").child(childKey).child("token");
+        tokenRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                String childToken=task.getResult().getValue().toString();
+                send(childToken);
+            }
+        });
+
     }
+    public void send(String token){
+        SendNotification.sendNotification(token, title, message);
+
+    }
+
     private void addTokenList(String newToken){
-        tokenList.add(newToken);
+        userList.add(newToken);
     }
 }
