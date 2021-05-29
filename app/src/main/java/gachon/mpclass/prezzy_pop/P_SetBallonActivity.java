@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,10 +31,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +44,9 @@ import org.jetbrains.annotations.NotNull;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 public class P_SetBallonActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -56,15 +62,51 @@ public class P_SetBallonActivity extends AppCompatActivity {
     EditText text_presentName;
     int REQUEST_IMAGE_CODE = 101;
 
+    private FirebaseUser cur_user;
+
+    private String string_img;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_p_set_balloon);
+        cur_user = FirebaseAuth.getInstance().getCurrentUser();
 
         initToolbar();
         initBalloonButton();
         initPresentButton();
+
+        btn_set_present = findViewById(R.id.btn_setBalloon);
+
+        btn_set_present.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String cur_email = cur_user.getEmail();
+                String cur_key = cur_email.split("@")[0];
+
+                DatabaseReference userRef = DB_Reference.parentRef.child(cur_key);
+                DatabaseReference child_listRef = userRef.child("child_list");
+
+                child_listRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                        HashMap<String, String> child_listMap =  task.getResult().getValue(new GenericTypeIndicator<HashMap<String, String>>() {});
+                        ArrayList<String> child_list = new ArrayList<>();
+
+                        for(String child_key_iter : child_listMap.values()) {
+                            child_list.add(child_key_iter);
+                        }
+
+                        String child_key = child_list.get(0);      //첫번째 child key 가져오기
+
+                        makeBalloon(cur_key, child_key);
+
+                        startMyActivity(MainActivity.class);
+                    }
+                });
+            }
+        });
 
     }
 
@@ -99,9 +141,12 @@ public class P_SetBallonActivity extends AppCompatActivity {
                     Bitmap img_resized = Bitmap.createScaledBitmap(bitmap_present, 700, 700, false);
                     in.close();
 
-                    imgUpdateToDB(img_resized);
-
                     imgView_present.setImageBitmap(img_resized);//이미지뷰에 사진 보여줌
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    img_resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] reviewImage = stream.toByteArray();
+                    string_img = byteArrayToBinaryString(reviewImage);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -199,31 +244,23 @@ public class P_SetBallonActivity extends AppCompatActivity {
         });
     }
 
-    //DB에 저장하기---------------------------------------------
-    public void imgUpdateToDB(Bitmap bitmap_img) {
-        String string_img = "";
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap_img.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] reviewImage = stream.toByteArray();
-        string_img = byteArrayToBinaryString(reviewImage);
+    private void makeBalloon(String parent_key, String child_key) {
+        Date now = new Date();
+        String strNow = DateString.DateToString(now);
 
-        //DB에 추가하기
+        String achievement = text_presentName.getText().toString();
+        int cur_time = 0;
+        String date = strNow;
+        int set_time = totalRate;
+        String state = "default";
+        String image = string_img;
 
-        DatabaseReference imgRef = DB_Reference.rootRef.child("imgTest");
-        imgRef.setValue(string_img);
+        BalloonStat newBalloon = new BalloonStat(child_key, set_time, achievement, date, parent_key, cur_time, state, image);
 
-        imgRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                String img_btp = task.getResult().getValue(String.class);
-
-                byte[] b = binaryStringToByteArray(img_btp);
-                ByteArrayInputStream is = new ByteArrayInputStream(b);
-                Drawable reviewImage = Drawable.createFromStream(is, "reviewImage");
-                imgview_balloon.setImageDrawable(reviewImage);
-            }
-        });
+        SetBalloon.setCurrentBalloon(child_key, newBalloon);
     }
+
+    //DB에 저장하기---------------------------------------------
 
     // 바이너리 바이트 배열을 스트링으로
     public static String byteArrayToBinaryString(byte[] b) {
@@ -245,46 +282,8 @@ public class P_SetBallonActivity extends AppCompatActivity {
         return sb.toString();
     }
 
-    //DB에서 가져오기------------------------------------------------
-    // 스트링을 바이너리 바이트 배열로
-    public static byte[] binaryStringToByteArray(String s) {
-        int count = s.length() / 8;
-        byte[] b = new byte[count];
-        for (int i = 1; i < count; ++i) {
-            String t = s.substring((i - 1) * 8, i * 8);
-            b[i - 1] = binaryStringToByte(t);
-        }
-        return b;
-    }
-
-    // 스트링을 바이너리 바이트로
-    public static byte binaryStringToByte(String s) {
-        byte ret = 0, total = 0;
-        for (int i = 0; i < 8; ++i) {
-            ret = (s.charAt(7 - i) == '1') ? (byte) (1 << i) : 0;
-            total = (byte) (ret | total);
-        }
-        return total;
-    }
-    public void selectFirebase(int index) {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.getReference("reviews/" + index).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.getKey().equals("image")) {
-                        String image = dataSnapshot.getValue().toString();
-                        byte[] b = binaryStringToByteArray(image);
-                        ByteArrayInputStream is = new ByteArrayInputStream(b);
-                        Drawable reviewImage = Drawable.createFromStream(is, "reviewImage");
-//                        imgview_balloon.setImageDrawable(reviewImage);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+    private void startMyActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivity(intent);
     }
 }
