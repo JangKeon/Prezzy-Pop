@@ -57,7 +57,7 @@ public class ScreenService extends Service {
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("Prezzy Pop")
                     .setContentText("Time Checking...")
-                    .setSmallIcon(R.drawable.ballon)
+                    .setSmallIcon(R.drawable.img_ballon)
                     .setContentIntent(pendingIntent)
                     .build();
 

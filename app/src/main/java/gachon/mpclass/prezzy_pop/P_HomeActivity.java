@@ -1,7 +1,6 @@
 package gachon.mpclass.prezzy_pop;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,7 +31,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -63,6 +62,7 @@ public class P_HomeActivity extends AppCompatActivity {
     Button btn_logout;
     Button btn_setBalloon;
     ImageView imgView_balloon;
+    TextView text_rate;
 
     Animation cloud1_anim;
     Animation cloud2_anim;
@@ -222,22 +222,12 @@ public class P_HomeActivity extends AppCompatActivity {
         });
     }
 
-    // SetTime에 따른 풍선 크기 변경
-    private Bitmap bitmap_resize(Bitmap bitmap, int resizeWidth){
+    // SetTime에 따라 비율유지하면서 풍선 크기 변경
+    private Bitmap bitmap_resize(Bitmap bitmap, double resizeWidth){
         double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
         int targetHeight = (int) (resizeWidth * aspectRatio);
-        Bitmap result = Bitmap.createScaledBitmap(bitmap, resizeWidth, targetHeight, false);
+        Bitmap result = Bitmap.createScaledBitmap(bitmap, (int)resizeWidth, targetHeight, false);
         return result;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.ballon);
-        Log.d("set",Integer.toString(set_time));
-        Log.d("cur",Integer.toString(cur_time));
-//        int resizewidth = 100 + (300 * (cur_time/set_time));
-//        imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
     }
 
         @Override
@@ -266,6 +256,7 @@ public class P_HomeActivity extends AppCompatActivity {
     private void setBalloonCur_timeChangeListener(String child_key, String curBalloonID) {
         this.curBalloonID = curBalloonID;
         DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
+        text_rate = findViewById(R.id.text_rate);
 
         cur_balloonCur_timeRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -274,8 +265,13 @@ public class P_HomeActivity extends AppCompatActivity {
                     int cur_time = snapshot.getValue(Integer.TYPE);
                     setCur_time(cur_time);
 
-//                    요기에~~~~~
-
+                    // 데이터 변화 있을 때마다 풍선크기 resize
+                    Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
+                    double rate=(double)cur_time/set_time;
+                    double resizewidth = 100 + (600 * rate);// 풍선 최소 크기 100, 최대500
+                    imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
+                    String rateText=Integer.toString((int)(rate*100))+"%";
+                    text_rate.setText(rateText);
                     Log.e("doowon", "onChildChange : " + snapshot.getValue().toString());
                 }
                 else {
