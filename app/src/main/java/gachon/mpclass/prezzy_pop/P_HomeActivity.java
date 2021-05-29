@@ -5,7 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -48,6 +51,7 @@ public class P_HomeActivity extends AppCompatActivity {
     Button btn_addMission;
     Button btn_logout;
     Button btn_setBalloon;
+    ImageView imgView_balloon;
 
     Animation cloud1_anim;
     Animation cloud2_anim;
@@ -81,6 +85,7 @@ public class P_HomeActivity extends AppCompatActivity {
         cloud2_view.startAnimation(cloud2_anim);
         cloud3_view.startAnimation(cloud3_anim);
         balloon_view.startAnimation(balloon_anim);
+        imgView_balloon = findViewById(R.id.img_balloon);
 
         edit_mission = findViewById(R.id.edit_mission);
         btn_addMission = findViewById(R.id.btn_addMission);
@@ -89,6 +94,7 @@ public class P_HomeActivity extends AppCompatActivity {
 
         list_mission = new ArrayList<String>();
         list_mission.add("설거지 도와드리기");
+
 
         btn_setBalloon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +170,25 @@ public class P_HomeActivity extends AppCompatActivity {
         });
     }
 
+    // SetTime에 따른 풍선 크기 변경
+    private Bitmap bitmap_resize(Bitmap bitmap, int resizeWidth){
+        double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
+        int targetHeight = (int) (resizeWidth * aspectRatio);
+        Bitmap result = Bitmap.createScaledBitmap(bitmap, resizeWidth, targetHeight, false);
+        return result;
+    }
+
     @Override
+    protected void onResume() {
+        super.onResume();
+        Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.ballon);
+        Log.d("set",Integer.toString(set_time));
+        Log.d("cur",Integer.toString(cur_time));
+//        int resizewidth = 100 + (300 * (cur_time/set_time));
+//        imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
+    }
+
+        @Override
     public void onBackPressed() {
         //super.onBackPressed();
     }
