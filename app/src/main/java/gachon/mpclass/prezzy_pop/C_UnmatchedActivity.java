@@ -23,6 +23,7 @@ public class C_UnmatchedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_c_unmatched);
         findViewById(R.id.btn_logout).setOnClickListener(onClickListener);
+        isMatched();
     }
     View.OnClickListener onClickListener= (v)->{
 
