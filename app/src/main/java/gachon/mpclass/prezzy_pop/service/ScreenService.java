@@ -126,7 +126,7 @@ public class ScreenService extends Service {
     }
 
     public void start_checking(String key) {
-        DatabaseReference childRef = DB_Reference.childRef.child(key).child("Current_Balloon");
+        DatabaseReference childRef = DB_Reference.childRef.child(key).child("current_balloon_id");
 
         childRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
