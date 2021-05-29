@@ -36,16 +36,13 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="133dp"
-            android:layout_marginLeft="133dp"
-            android:layout_marginBottom="8dp"
             android:text="어떤 선물인가요?"
             android:textColor="#4A4A4A"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/imageViewPresentBackground"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="113dp"
+            tools:ignore="MissingConstraints" />
 
         <ImageView
             android:id="@+id/imageViewPresentBackground"
@@ -64,6 +61,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.319"
             app:srcCompat="@drawable/cloud" />
 
         <ImageView
@@ -73,15 +71,13 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="153dp"
-            android:layout_marginLeft="153dp"
-            android:layout_marginTop="112dp"
+            android:layout_marginStart="136dp"
+            android:layout_marginLeft="136dp"
             android:background="@android:color/transparent"
             android:src="@drawable/album_icon"
-            app:layout_constraintEnd_toEndOf="@+id/imageViewPresentBackground"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageViewPresentBackground" />
+            tools:layout_editor_absoluteY="332dp"
+            tools:ignore="MissingConstraints" />
 
         <EditText
             android:id="@+id/edit_presentName"
@@ -92,12 +88,13 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="149dp"
             android:layout_marginLeft="149dp"
+            android:layout_marginBottom="8dp"
             android:hint="선물이름 입력"
             android:textColor="#4A4A4A"
             android:textColorHint="#4A4A4A"
             app:layout_constraintBottom_toBottomOf="@+id/imageViewPresentBackground"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.026"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
