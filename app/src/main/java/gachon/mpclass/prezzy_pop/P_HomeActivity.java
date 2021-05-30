@@ -256,6 +256,7 @@ public class P_HomeActivity extends AppCompatActivity {
         DatabaseReference curBalloonMissionRef = missionRef.child(curBalloonID);
 
         curBalloonMissionRef.push().setValue(missionTxt);
+        SendMessage sendMessage = new SendMessage("미션 도착 알림","\""+missionTxt+"\" 미션이 도착했어요!");
     }
 
     private void deleteMissionToDB(String missionTxt) {
@@ -497,13 +498,12 @@ public class P_HomeActivity extends AppCompatActivity {
         ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                SendMessage sendMessage = new SendMessage("미션 완료 알림","\""+list_mission.get(index).toString()+"\" 미션을 완료했어요!");
                 deleteMissionToDB(list_mission.get(index));
                 list_mission.remove(index);
                 adapter.notifyDataSetChanged();
-
                 int addTime = Integer.parseInt(editTxt_score.getText().toString()) * onePercentTime;
                 addCurTimeByMission(addTime);
-
                 dialog.dismiss();
             }
         });
