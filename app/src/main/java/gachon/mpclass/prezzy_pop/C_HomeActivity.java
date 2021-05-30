@@ -71,6 +71,7 @@ public class C_HomeActivity extends AppCompatActivity {
         cur_user = FirebaseAuth.getInstance().getCurrentUser();
         cur_email = cur_user.getEmail();
         cur_key = cur_email.split("@")[0];
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -98,13 +99,13 @@ public class C_HomeActivity extends AppCompatActivity {
                 else if(id == R.id.logout){
                     FirebaseAuth.getInstance().signOut();
                     startToast("로그아웃 되었습니다");
+                    stopTimeCheck();
                     startMyActivity(LoginActivity.class);
                 }
 
                 return true;
             }
         });
-        findViewById(R.id.btn_logout).setOnClickListener(onClickListener);
         findViewById(R.id.img_balloon).setOnClickListener(onClickListener);
         findViewById(R.id.img_present).setOnClickListener(onClickListener);
         cloud1_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim1);
@@ -139,26 +140,12 @@ public class C_HomeActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        DatabaseReference childBalloonIdRef = DB_Reference.childRef.child(cur_key).child("current_balloon_id");
-
-        childBalloonIdRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                String curBalloonID = task.getResult().getValue(String.class);
-                getSet_timeFromDB(curBalloonID);
-            }
-        });
+        getCurBalloonID();
     }
 
     View.OnClickListener onClickListener = (v) -> {
 
         switch (v.getId()) {
-            case R.id.btn_logout:
-                stopTimeCheck();
-                FirebaseAuth.getInstance().signOut();
-                startToast("로그아웃 되었습니다");
-                startMyActivity(LoginActivity.class);
-                break;
             case R.id.img_balloon:
                 Start_Stop();
                 break;
@@ -169,7 +156,41 @@ public class C_HomeActivity extends AppCompatActivity {
         }
     };
 
-    private void getSet_timeFromDB(String curBalloonID) {
+    private void getCurBalloonID() {
+        DatabaseReference childRef = DB_Reference.childRef.child(this.cur_key);
+        DatabaseReference c_curBalloonRef = childRef.child("current_balloon_id");
+
+        c_curBalloonRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                String curBalloonID = task.getResult().getValue(String.class);
+                setCurBalloonID(curBalloonID);
+
+                getSet_timeFromDB();
+                initMissionList();
+            }
+        });
+    }
+
+    private void setCurBalloonID(String curBalloonID) {
+        this.curBalloonID = curBalloonID;
+    }
+
+    private void initMissionList() {
+        DatabaseReference missionRef = DB_Reference.missionRef.child(cur_key).child(curBalloonID);
+
+        missionRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                for(DataSnapshot snapshot : task.getResult().getChildren()) {
+                    String missionTxt = snapshot.getValue(String.class);
+//                    list_mission.add(missionTxt);
+                }
+            }
+        });
+    }
+
+    private void getSet_timeFromDB() {
         DatabaseReference cur_balloonSet_timeRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("set_time");
 
         cur_balloonSet_timeRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -178,7 +199,7 @@ public class C_HomeActivity extends AppCompatActivity {
                 int set_time = task.getResult().getValue(Integer.TYPE);
                 setSet_time(set_time);
 
-                setBalloonCur_timeChangeListener(curBalloonID);
+                setBalloonCur_timeChangeListener();
             }
         });
     }
@@ -187,7 +208,7 @@ public class C_HomeActivity extends AppCompatActivity {
         this.set_time = set_time;
     }
 
-    private void setBalloonCur_timeChangeListener(String curBalloonID) {
+    private void setBalloonCur_timeChangeListener() {
         this.curBalloonID = curBalloonID;
         DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("cur_time");
         DatabaseReference cur_balloonCur_stateRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("state");

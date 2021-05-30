@@ -59,10 +59,10 @@ public class P_HomeActivity extends AppCompatActivity {
     ArrayList<String> list_mission;
     EditText edit_mission;
     Button btn_addMission;
-    Button btn_logout;
     Button btn_setBalloon;
     ImageView imgView_balloon;
     TextView text_rate;
+    TextView text_setBalloon;
 
     Animation cloud1_anim;
     Animation cloud2_anim;
@@ -120,6 +120,7 @@ public class P_HomeActivity extends AppCompatActivity {
         cloud3_view = findViewById(R.id.cloud3);
         balloon_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
         balloon_view = findViewById(R.id.img_balloon);
+        text_setBalloon=findViewById(R.id.text_setBalloon);
 
 
         cloud1_view.startAnimation(cloud1_anim);
@@ -130,7 +131,6 @@ public class P_HomeActivity extends AppCompatActivity {
 
         edit_mission = findViewById(R.id.edit_mission);
         btn_addMission = findViewById(R.id.btn_addMission);
-        btn_logout = findViewById(R.id.btn_logout);
         btn_setBalloon = findViewById(R.id.btn_setballoon);
 
         list_mission = new ArrayList<String>();
@@ -142,14 +142,6 @@ public class P_HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // 풍선 설정
                 startMyActivity(P_SetBallonActivity.class);
-            }
-        });
-        btn_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startToast("로그아웃 되었습니다");
-                startMyActivity(LoginActivity.class);
             }
         });
         btn_addMission.setOnClickListener(new View.OnClickListener() {
@@ -315,6 +307,7 @@ public class P_HomeActivity extends AppCompatActivity {
 
     private void setBalloonCur_timeChangeListener() {      //cur time listener
         DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
+        DatabaseReference cur_balloonStateRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("state");
         text_rate = findViewById(R.id.text_rate);
 
         cur_balloonCur_timeRef.addValueEventListener(new ValueEventListener() {
@@ -336,9 +329,35 @@ public class P_HomeActivity extends AppCompatActivity {
 
                     if(cur_time>=set_time){ // 목표 달성시
                         text_rate.setText("100%");
-                        btn_setBalloon.setVisibility(View.VISIBLE); // 버튼 활성화
+                        text_setBalloon.setVisibility(View.VISIBLE);
+                        text_setBalloon.setText("자녀가 아직 선물을 열어보지 않았어요");
                     }
 
+                }
+                else {
+                    Log.e(TAG, "Data change listener get null");
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
+        cur_balloonStateRef.addValueEventListener(new ValueEventListener() {//state listener
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    String cur_state = snapshot.getValue(String.class);
+                    if(cur_state.equals("waiting")){
+                        btn_setBalloon.setVisibility(View.VISIBLE); // 버튼 활성화
+                        text_setBalloon.setVisibility(View.VISIBLE);
+                        text_setBalloon.setText("자녀에게 새 풍선을 전달해주세요");
+                    }
+                    else if(cur_state.equals("default")){
+                        btn_setBalloon.setVisibility(View.INVISIBLE); // 버튼 활성화
+                        text_setBalloon.setVisibility(View.INVISIBLE);
+                    }
                 }
                 else {
                     Log.e(TAG, "Data change listener get null");
