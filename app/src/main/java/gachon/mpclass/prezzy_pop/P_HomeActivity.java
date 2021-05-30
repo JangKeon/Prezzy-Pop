@@ -256,7 +256,6 @@ public class P_HomeActivity extends AppCompatActivity {
     private void setBalloonCur_timeChangeListener(String child_key, String curBalloonID) {
         this.curBalloonID = curBalloonID;
         DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
-        DatabaseReference cur_balloonCur_stateRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("state");
         text_rate = findViewById(R.id.text_rate);
 
         cur_balloonCur_timeRef.addValueEventListener(new ValueEventListener() {
@@ -277,7 +276,6 @@ public class P_HomeActivity extends AppCompatActivity {
 
                     if(cur_time>=set_time){ // 목표 달성시
                         text_rate.setText("100%");
-                        //cur_balloonCur_stateRef.setValue("waiting"); // 상태변경
                         btn_setBalloon.setVisibility(View.VISIBLE); // 버튼 활성화
                     }
 

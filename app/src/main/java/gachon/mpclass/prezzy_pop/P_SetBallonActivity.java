@@ -101,7 +101,7 @@ public class P_SetBallonActivity extends AppCompatActivity {
                         String child_key = child_list.get(0);      //첫번째 child key 가져오기
 
                         makeBalloon(cur_key, child_key);
-
+                        startToast("아이에게 풍선이 전달되었습니다");
                         startMyActivity(MainActivity.class);
                     }
                 });
@@ -311,4 +311,8 @@ public class P_SetBallonActivity extends AppCompatActivity {
         Intent intent = new Intent(this, c);
         startActivity(intent);
     }
+    private void startToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
 }
