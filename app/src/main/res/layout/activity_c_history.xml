@@ -126,7 +126,7 @@
             <ImageView
                 android:id="@+id/imgView_history1"
                 android:layout_width="369dp"
-                android:layout_height="245dp"
+                android:layout_height="236dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="120dp"

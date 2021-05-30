@@ -2,9 +2,6 @@ package gachon.mpclass.prezzy_pop;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,8 +14,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.io.ByteArrayOutputStream;
 
 public class TimeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
