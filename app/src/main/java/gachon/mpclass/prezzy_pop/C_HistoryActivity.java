@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,7 +65,8 @@ public class C_HistoryActivity extends AppCompatActivity {
         }
 
         for(int i = 0; i < initIndex.size(); ++i) {
-            historyList.remove(initIndex.get(i));
+            int removeIndex = initIndex.get(i);
+            historyList.remove(removeIndex);
         }
 
         for(int i = 1; i <= historyList.size(); ++i) {
