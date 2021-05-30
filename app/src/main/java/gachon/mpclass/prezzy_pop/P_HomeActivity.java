@@ -1,11 +1,13 @@
 package gachon.mpclass.prezzy_pop;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +17,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,6 +41,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -73,6 +79,11 @@ public class P_HomeActivity extends AppCompatActivity {
     ImageView cloud2_view;
     ImageView cloud3_view;
     ImageView balloon_view;
+    ImageView pointLeft_view;
+    ImageView pointRight_view;
+    SlidingUpPanelLayout slidePanel;
+    TextView mission_text;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,9 +145,16 @@ public class P_HomeActivity extends AppCompatActivity {
         btn_logout = findViewById(R.id.btn_logout);
         btn_setBalloon = findViewById(R.id.btn_setballoon);
 
+        pointLeft_view = findViewById(R.id.img_p_pointup_left);
+        pointRight_view = findViewById(R.id.img_p_pointup_right);
+        slidePanel = findViewById(R.id.sliding_panel);
+        mission_text = findViewById(R.id.mission_text);
+
+        // 하단 포인트, 미션 깜빡거림 & 슬라이드업 시 로테이트 애니메이션
+        ImageAnimation();
+
         list_mission = new ArrayList<String>();
         list_mission.add("설거지 도와드리기");
-
 
         btn_setBalloon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,5 +321,61 @@ public class P_HomeActivity extends AppCompatActivity {
 
     private void startToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void ImageAnimation(){
+
+        float beforeDegree = 0;
+        float afterDegree = 180;
+
+        RotateAnimation rotateAnim = new RotateAnimation(
+                beforeDegree,
+                afterDegree,
+                Animation.RELATIVE_TO_SELF,0.5f,
+                Animation.RELATIVE_TO_SELF,0.5f);
+        RotateAnimation rotateAnimReverse = new RotateAnimation(
+                afterDegree,
+                beforeDegree,
+                Animation.RELATIVE_TO_SELF,0.5f,
+                Animation.RELATIVE_TO_SELF,0.5f);
+
+        rotateAnimReverse.setDuration(500);
+        rotateAnimReverse.setFillAfter(true);
+        rotateAnim.setDuration(500);
+        rotateAnim.setFillAfter(true);
+
+        AlphaAnimation AlphaAnim = new AlphaAnimation(0, 1);
+        AlphaAnim.setDuration(500);        // 에니메이션 동작 주기
+        AlphaAnim.setRepeatCount(-1);    // 에니메이션 반복 회수
+        AlphaAnim.setRepeatMode(Animation.REVERSE);// 반복하는 방법
+
+        AnimationSet animSet = new AnimationSet(true);
+        animSet.addAnimation(rotateAnim);
+        animSet.addAnimation(AlphaAnim);
+
+        AnimationSet animSetReverse = new AnimationSet(true);
+        animSetReverse.addAnimation(rotateAnimReverse);
+        animSetReverse.addAnimation(AlphaAnim);
+
+        pointLeft_view.startAnimation(AlphaAnim);
+        pointRight_view.startAnimation(AlphaAnim);
+
+        slidePanel.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                Log.d("state", String.valueOf(slidePanel.getPanelState()));
+                if(newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    pointLeft_view.startAnimation(animSet);
+                    pointRight_view.startAnimation(animSet);
+                }else if(newState == SlidingUpPanelLayout.PanelState.COLLAPSED){
+                    pointLeft_view.startAnimation(animSetReverse);
+                    pointRight_view.startAnimation(animSetReverse);
+                }
+            }
+        });
     }
 }

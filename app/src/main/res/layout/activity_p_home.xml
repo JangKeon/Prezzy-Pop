@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
+        android:id="@+id/sliding_panel"
         app:umanoDragView="@+id/drawer"
         app:umanoOverlay="false"
         app:umanoPanelHeight="60dp"
