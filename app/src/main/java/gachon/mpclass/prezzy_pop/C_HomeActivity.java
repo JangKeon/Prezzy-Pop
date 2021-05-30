@@ -52,6 +52,7 @@ public class C_HomeActivity extends AppCompatActivity {
     private int set_time;
     private DrawerLayout mDrawerLayout;
     private Context context = this;
+
     Animation cloud1_anim;
     Animation cloud2_anim;
     Animation cloud3_anim;
