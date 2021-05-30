@@ -34,20 +34,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class P_HomeActivity extends AppCompatActivity {
     static final String TAG = "P_HomeActivity";
     private FirebaseUser cur_user;
-    private String cur_email;
-    private String cur_key;
+    private String parent_email;
+    private String parent_key;
     private String curBalloonID;
+    private String child_key;
 
     private DrawerLayout mDrawerLayout;
     private Context context = this;
@@ -110,8 +109,8 @@ public class P_HomeActivity extends AppCompatActivity {
             }
         });
         cur_user = FirebaseAuth.getInstance().getCurrentUser();
-        cur_email = cur_user.getEmail();
-        cur_key = cur_email.split("@")[0];
+        parent_email = cur_user.getEmail();
+        parent_key = parent_email.split("@")[0];
 
         cloud1_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim1);
         cloud1_view = findViewById(R.id.cloud1);
@@ -156,10 +155,12 @@ public class P_HomeActivity extends AppCompatActivity {
         btn_addMission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                list_mission.add(edit_mission.getText().toString());
+                String missionTxt = edit_mission.getText().toString();
+                list_mission.add(missionTxt);
                 adapter.notifyDataSetChanged();
                 edit_mission.setText("");
+
+                setMissionToDB(missionTxt);
             }
         });
 
@@ -173,6 +174,7 @@ public class P_HomeActivity extends AppCompatActivity {
                 // 자녀가 임무 성공시 아이템 클릭하면 팝업창으로 자녀가 임무를 수행했나요? 예/아니요
                 // -> 자녀에게 풍선커짐 알림, 풍선스탯 키우고, 자녀 화면에서 V 표시(성공표시)
 
+                deleteMissionToDB(list_mission.get(0));
                 list_mission.remove(i);
                 adapter.notifyDataSetChanged();
             }
@@ -192,34 +194,8 @@ public class P_HomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        DatabaseReference parentRef = DB_Reference.parentRef.child(cur_key);
 
-        DatabaseReference child_listRef = parentRef.child("child_list");
-
-        child_listRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {      //child key 받아오기
-            @Override
-            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                HashMap<String, String> child_listMap =  task.getResult().getValue(new GenericTypeIndicator<HashMap<String, String>>() {});
-                ArrayList<String> child_list = new ArrayList<>();
-
-                for(String child_key_iter : child_listMap.values()) {
-                    child_list.add(child_key_iter);
-                }
-
-                String child_key = child_list.get(0);
-
-                DatabaseReference childBalloonIdRef = DB_Reference.childRef.child(child_key).child("current_balloon_id");
-
-                childBalloonIdRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                        String curBalloonID = task.getResult().getValue(String.class);
-
-                        getSet_timeFromDB(child_key ,curBalloonID);
-                    }
-                });
-            }
-        });
+        getChild_list();
     }
 
     // SetTime에 따라 비율유지하면서 풍선 크기 변경
@@ -230,12 +206,96 @@ public class P_HomeActivity extends AppCompatActivity {
         return result;
     }
 
+    private void getChild_list() {
+        FirebaseUser cur_user = FirebaseAuth.getInstance().getCurrentUser();
+        String parent_email = cur_user.getEmail();
+        String parent_key = parent_email.split("@")[0];
+
+        DatabaseReference parentRef = DB_Reference.parentRef.child(parent_key);
+        DatabaseReference p_child_listRef = parentRef.child("child_list");
+
+        p_child_listRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                ArrayList<String> child_list = new ArrayList<>();
+                for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                    String childID = snapshot.getValue(String.class);
+                    child_list.add(childID);
+                }
+                setChild_key(child_list.get(0));
+                getCurBalloonID();
+            }
+        });
+    }
+
+    private void setChild_key(String child_key) {
+        this.child_key = child_key;
+    }
+
+    private void getCurBalloonID() {
+        DatabaseReference childRef = DB_Reference.childRef.child(this.child_key);
+        DatabaseReference c_curBalloonRef = childRef.child("current_balloon_id");
+
+        c_curBalloonRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                String curBalloonID = task.getResult().getValue(String.class);
+                setCurBalloonID(curBalloonID);
+
+                getSet_timeFromDB();
+                initMissionList();
+            }
+        });
+    }
+
+    private void setCurBalloonID(String curBalloonID) {
+        this.curBalloonID = curBalloonID;
+    }
+
+    private void setMissionToDB(String missionTxt) {
+        DatabaseReference missionRef = DB_Reference.missionRef.child(child_key);
+        DatabaseReference curBalloonMissionRef = missionRef.child(curBalloonID);
+
+        curBalloonMissionRef.push().setValue(missionTxt);
+    }
+
+    private void deleteMissionToDB(String missionTxt) {
+        DatabaseReference missionRef = DB_Reference.missionRef.child(child_key);
+        DatabaseReference curBalloonMissionRef = missionRef.child(curBalloonID);
+
+        curBalloonMissionRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                for(DataSnapshot snapshot : task.getResult().getChildren()) {
+                    if(snapshot.getValue(String.class).equals(missionTxt)) {
+                        snapshot.getRef().setValue(null);
+                    }
+                }
+            }
+        });
+    }
+
+
         @Override
     public void onBackPressed() {
         //super.onBackPressed();
     }
 
-    private void getSet_timeFromDB(String child_key, String curBalloonID) {
+    private void initMissionList() {
+        DatabaseReference missionRef = DB_Reference.missionRef.child(child_key).child(curBalloonID);
+
+        missionRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                for(DataSnapshot snapshot : task.getResult().getChildren()) {
+                    String missionTxt = snapshot.getValue(String.class);
+                    list_mission.add(missionTxt);
+                }
+            }
+        });
+    }
+
+    private void getSet_timeFromDB() {
         DatabaseReference cur_balloonSet_timeRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("set_time");
 
         cur_balloonSet_timeRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -244,7 +304,7 @@ public class P_HomeActivity extends AppCompatActivity {
                 int set_time = task.getResult().getValue(Integer.TYPE);
                 setSet_time(set_time);
 
-                setBalloonCur_timeChangeListener(child_key, curBalloonID);
+                setBalloonCur_timeChangeListener();
             }
         });
     }
@@ -253,8 +313,7 @@ public class P_HomeActivity extends AppCompatActivity {
         this.set_time = set_time;
     }
 
-    private void setBalloonCur_timeChangeListener(String child_key, String curBalloonID) {      //cur time listener
-        this.curBalloonID = curBalloonID;
+    private void setBalloonCur_timeChangeListener() {      //cur time listener
         DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
         text_rate = findViewById(R.id.text_rate);
 

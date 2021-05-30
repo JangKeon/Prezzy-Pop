@@ -142,7 +142,6 @@ public class C_HomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 String curBalloonID = task.getResult().getValue(String.class);
                 getSet_timeFromDB(curBalloonID);
-                setBalloonCur_timeChangeListener(curBalloonID);
             }
         });
     }
@@ -173,6 +172,8 @@ public class C_HomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 int set_time = task.getResult().getValue(Integer.TYPE);
                 setSet_time(set_time);
+
+                setBalloonCur_timeChangeListener(curBalloonID);
             }
         });
     }
