@@ -149,9 +149,6 @@ public class C_HomeActivity extends AppCompatActivity {
         ImageAnimation();
 
         list_mission = new ArrayList<String>();
-        list_mission.add("설거지 도와드리기");
-        list_mission.add("빨래");
-
     }
 
     @Override
