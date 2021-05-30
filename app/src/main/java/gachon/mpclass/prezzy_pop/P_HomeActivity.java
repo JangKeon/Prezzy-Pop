@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class P_HomeActivity extends AppCompatActivity {
+    static final String TAG = "P_HomeActivity";
     private FirebaseUser cur_user;
     private String cur_email;
     private String cur_key;
@@ -195,7 +196,7 @@ public class P_HomeActivity extends AppCompatActivity {
 
         DatabaseReference child_listRef = parentRef.child("child_list");
 
-        child_listRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        child_listRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {      //child key 받아오기
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 HashMap<String, String> child_listMap =  task.getResult().getValue(new GenericTypeIndicator<HashMap<String, String>>() {});
@@ -215,7 +216,6 @@ public class P_HomeActivity extends AppCompatActivity {
                         String curBalloonID = task.getResult().getValue(String.class);
 
                         getSet_timeFromDB(child_key ,curBalloonID);
-                        setBalloonCur_timeChangeListener(child_key, curBalloonID);
                     }
                 });
             }
@@ -244,7 +244,7 @@ public class P_HomeActivity extends AppCompatActivity {
                 int set_time = task.getResult().getValue(Integer.TYPE);
                 setSet_time(set_time);
 
-                Log.e("doowon", "get set time : " + task.getResult().getValue().toString());
+                setBalloonCur_timeChangeListener(child_key, curBalloonID);
             }
         });
     }
@@ -253,7 +253,7 @@ public class P_HomeActivity extends AppCompatActivity {
         this.set_time = set_time;
     }
 
-    private void setBalloonCur_timeChangeListener(String child_key, String curBalloonID) {
+    private void setBalloonCur_timeChangeListener(String child_key, String curBalloonID) {      //cur time listener
         this.curBalloonID = curBalloonID;
         DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
         text_rate = findViewById(R.id.text_rate);
@@ -272,6 +272,7 @@ public class P_HomeActivity extends AppCompatActivity {
                     imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
                     String rateText=Integer.toString((int)(rate*100))+"%";
                     text_rate.setText(rateText);
+
                     Log.e("doowon", "onChildChange : " + snapshot.getValue().toString());
 
                     if(cur_time>=set_time){ // 목표 달성시
@@ -281,7 +282,7 @@ public class P_HomeActivity extends AppCompatActivity {
 
                 }
                 else {
-                    Log.e("doowon", "Data change listener get null");
+                    Log.e(TAG, "Data change listener get null");
                 }
             }
             @Override
