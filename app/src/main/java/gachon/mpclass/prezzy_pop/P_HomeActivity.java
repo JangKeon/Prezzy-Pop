@@ -3,6 +3,7 @@ package gachon.mpclass.prezzy_pop;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -10,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -45,6 +47,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+
+import gachon.mpclass.prezzy_pop.pushNoti.SendMessage;
 
 public class P_HomeActivity extends AppCompatActivity {
     static final String TAG = "P_HomeActivity";
@@ -174,22 +178,6 @@ public class P_HomeActivity extends AppCompatActivity {
                 setMissionToDB(missionTxt);
             }
         });
-
-        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list_mission);
-        listView_mission = findViewById(R.id.listView_mission);
-        listView_mission.setAdapter(adapter);
-        listView_mission.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                // 자녀가 임무 성공시 아이템 클릭하면 팝업창으로 자녀가 임무를 수행했나요? 예/아니요
-                // -> 자녀에게 풍선커짐 알림, 풍선스탯 키우고, 자녀 화면에서 V 표시(성공표시)
-
-                deleteMissionToDB(list_mission.get(0));
-                list_mission.remove(i);
-                adapter.notifyDataSetChanged();
-            }
-        });
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -278,6 +266,7 @@ public class P_HomeActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 for(DataSnapshot snapshot : task.getResult().getChildren()) {
+                    Log.e("ddoowon", snapshot.getValue(String.class));
                     if(snapshot.getValue(String.class).equals(missionTxt)) {
                         snapshot.getRef().setValue(null);
                     }
@@ -302,6 +291,27 @@ public class P_HomeActivity extends AppCompatActivity {
                     String missionTxt = snapshot.getValue(String.class);
                     list_mission.add(missionTxt);
                 }
+                adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list_mission);
+                listView_mission = findViewById(R.id.listView_mission);
+                listView_mission.setAdapter(adapter);
+
+                listView_mission.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                        // 자녀가 임무 성공시 아이템 클릭하면 팝업창으로 자녀가 임무를 수행했나요? 예/아니요
+                        // -> 자녀에게 풍선커짐 알림, 풍선스탯 키우고, 자녀 화면에서 V 표시(성공표시)
+                        DatabaseReference balloonRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID);
+
+                        balloonRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                BalloonStat curBalloon = task.getResult().getValue(BalloonStat.class);
+                                showPopUp(i, curBalloon);
+                            }
+                        });
+                    }
+                });
             }
         });
     }
@@ -463,4 +473,55 @@ public class P_HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void showPopUp(int index, BalloonStat curBalloon) {
+        EditText editTxt_score = new EditText(P_HomeActivity.this);
+
+        int curPercent = (int)((double)curBalloon.getCur_time() / curBalloon.getSet_time() * 100);
+
+        int onePercentTime = (int)(curBalloon.getSet_time() /100.0);
+
+        AlertDialog.Builder ad = new AlertDialog.Builder(P_HomeActivity.this);
+        ad.setIcon(R.mipmap.ic_launcher);
+        ad.setTitle("미션 확인");
+        ad.setMessage("점수를 입력해주세요.(" + list_mission.get(index) +")\n현재 진행률(" + curPercent + "%)"  );
+        ad.setView(editTxt_score);
+        ad.setCancelable(false);
+
+        ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteMissionToDB(list_mission.get(index));
+                list_mission.remove(index);
+                adapter.notifyDataSetChanged();
+
+                int addTime = Integer.parseInt(editTxt_score.getText().toString()) * onePercentTime;
+                addCurTimeByMission(addTime);
+
+                dialog.dismiss();
+            }
+        });
+        ad.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        ad.show();
+    }
+
+    private void addCurTimeByMission(int addTime) {
+        DatabaseReference balloonRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
+
+        balloonRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                int new_cur_time = task.getResult().getValue(Integer.TYPE) + addTime;
+
+                task.getResult().getRef().setValue(new_cur_time);
+            }
+        });
+    }
+
+
 }
