@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -50,9 +49,9 @@ public class PresentActivity extends AppCompatActivity {
                     Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.logout){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
                     FirebaseAuth.getInstance().signOut();
-                    startToast("로그아웃되었습니다");
+                    startToast("로그아웃 되었습니다");
+                    startMyActivity(LoginActivity.class);
                 }
 
                 return true;
@@ -77,5 +76,9 @@ public class PresentActivity extends AppCompatActivity {
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
 
+    private void startMyActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivity(intent);
+    }
 
 }

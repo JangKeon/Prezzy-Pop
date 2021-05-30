@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,9 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 
 import gachon.mpclass.prezzy_pop.pushNoti.SendMessage;
 

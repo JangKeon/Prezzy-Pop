@@ -51,13 +51,15 @@ public class C_UnmatchedActivity extends AppCompatActivity {
                 String title = menuItem.getTitle().toString();
 
                 if(id == R.id.account){
-                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "아직은 History 를 열람할 수 없습니다.", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.setting){
                     Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.logout){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    startToast("로그아웃 되었습니다");
+                    startMyActivity(LoginActivity.class);
                 }
 
                 return true;

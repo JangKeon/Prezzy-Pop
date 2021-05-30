@@ -98,13 +98,15 @@ public class P_HomeActivity extends AppCompatActivity {
                 String title = menuItem.getTitle().toString();
 
                 if(id == R.id.account){
-                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, title + "History를 확인합니다.", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.setting){
                     Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.logout){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    startToast("로그아웃 되었습니다");
+                    startMyActivity(LoginActivity.class);
                 }
                 return true;
             }
