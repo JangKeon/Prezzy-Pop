@@ -184,7 +184,6 @@
                 android:src="@drawable/pointup"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-<<<<<<< HEAD
 
 
             <ListView
@@ -193,7 +192,6 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/mission_text_c"></ListView>
 
-=======
 
             <EditText
                 android:id="@+id/edit_mission_c"
@@ -225,7 +223,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/edit_mission_c"></ListView>
 
->>>>>>> dev
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
