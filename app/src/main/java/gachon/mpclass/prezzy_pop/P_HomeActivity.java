@@ -147,7 +147,7 @@ public class P_HomeActivity extends AppCompatActivity {
 
         edit_mission = findViewById(R.id.edit_mission);
         btn_addMission = findViewById(R.id.btn_addMission);
-        btn_setBalloon = findViewById(R.id.btn_setballoon);
+        btn_setBalloon = findViewById(R.id.btn_setBalloon);
 
         pointLeft_view = findViewById(R.id.img_p_pointup_left);
         pointRight_view = findViewById(R.id.img_p_pointup_right);
