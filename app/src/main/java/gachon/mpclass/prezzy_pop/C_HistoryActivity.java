@@ -65,7 +65,7 @@ public class C_HistoryActivity extends AppCompatActivity {
             TextView txtView = findViewById(txtViewID);
 
             setImgView(imgView, historyList.get(i-1).getImage());
-            setTxtView(txtView, historyList.get(i-1).getAchievement());
+            setTxtView(txtView, historyList.get(i-1).getAchievement() + "(" + historyList.get(i-1).getSet_time() + ")");
         }
     }
 
