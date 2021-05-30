@@ -8,4 +8,5 @@ public class DB_Reference {
     public static DatabaseReference childRef = rootRef.child("Users").child("Children");
     public static DatabaseReference parentRef = rootRef.child("Users").child("Parent");
     public static DatabaseReference balloonRef = rootRef.child("Balloons");
+    public static DatabaseReference missionRef = rootRef.child("Missions");
 }

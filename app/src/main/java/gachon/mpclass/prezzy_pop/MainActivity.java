@@ -37,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
             startMyActivity(LoginActivity.class);
         } else {
             refreshToken();
-//            isMatched();
-            startMyActivity(C_HistoryActivity.class);
+            isMatched();
         }
 
 
