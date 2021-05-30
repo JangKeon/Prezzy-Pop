@@ -209,7 +209,8 @@ public class P_SetBallonActivity extends AppCompatActivity {
                 }
                 else if(id == R.id.logout){
                     FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(context, title + ": 로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
+                    startToast("로그아웃 되었습니다");
+                    startMyActivity(LoginActivity.class);
                 }
 
                 return true;
