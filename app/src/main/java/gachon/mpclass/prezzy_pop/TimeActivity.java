@@ -42,11 +42,8 @@ public class TimeActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if (id == R.id.account) {
+                if (id == R.id.history) {
                     Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                } else if (id == R.id.setting) {
-                    Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-
                 }
                 else if(id == R.id.logout){
                     FirebaseAuth.getInstance().signOut();

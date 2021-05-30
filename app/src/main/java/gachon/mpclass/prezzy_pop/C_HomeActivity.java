@@ -91,23 +91,21 @@ public class C_HomeActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if(id == R.id.account){
+                if(id == R.id.history){
                     Toast.makeText(context, "History를 확인합니다.", Toast.LENGTH_SHORT).show();
                     startMyActivity(C_HistoryActivity.class);
                 }
-                else if(id == R.id.setting){
-                    Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                }
+
                 else if(id == R.id.logout){
                     FirebaseAuth.getInstance().signOut();
                     startToast("로그아웃 되었습니다");
+                    stopTimeCheck();
                     startMyActivity(LoginActivity.class);
                 }
 
                 return true;
             }
         });
-        findViewById(R.id.btn_logout).setOnClickListener(onClickListener);
         findViewById(R.id.img_balloon).setOnClickListener(onClickListener);
         findViewById(R.id.img_present).setOnClickListener(onClickListener);
         cloud1_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim1);
@@ -148,12 +146,6 @@ public class C_HomeActivity extends AppCompatActivity {
     View.OnClickListener onClickListener = (v) -> {
 
         switch (v.getId()) {
-            case R.id.btn_logout:
-                stopTimeCheck();
-                FirebaseAuth.getInstance().signOut();
-                startToast("로그아웃 되었습니다");
-                startMyActivity(LoginActivity.class);
-                break;
             case R.id.img_balloon:
                 Start_Stop();
                 break;
