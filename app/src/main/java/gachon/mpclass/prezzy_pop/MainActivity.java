@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
             startMyActivity(LoginActivity.class);
         } else {
             refreshToken();
-            isMatched();
+//            isMatched();
+            startMyActivity(C_HistoryActivity.class);
         }
 
 
