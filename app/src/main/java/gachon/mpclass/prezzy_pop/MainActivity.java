@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             refreshToken();
             isMatched();
-//            startMyActivity(C_HistoryActivity.class);
         }
 
 
