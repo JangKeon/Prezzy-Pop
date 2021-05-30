@@ -55,7 +55,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.126"
-                app:srcCompat="@drawable/cloud3" />
+                app:srcCompat="@drawable/move_cloud" />
 
             <ImageView
                 android:id="@+id/cloud2"
@@ -72,7 +72,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.353"
-                app:srcCompat="@drawable/cloud3" />
+                app:srcCompat="@drawable/move_cloud" />
 
             <ImageView
                 android:id="@+id/cloud3"
@@ -88,7 +88,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.601"
-                app:srcCompat="@drawable/cloud3" />
+                app:srcCompat="@drawable/move_cloud" />
 
             <ImageView
                 android:id="@+id/cloud4"
@@ -105,7 +105,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.803"
-                app:srcCompat="@drawable/cloud3" />
+                app:srcCompat="@drawable/move_cloud" />
 
             <TextView
                 android:id="@+id/textView9"
