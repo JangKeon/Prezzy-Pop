@@ -108,6 +108,7 @@ public class C_HomeActivity extends AppCompatActivity {
         });
         findViewById(R.id.img_balloon).setOnClickListener(onClickListener);
         findViewById(R.id.img_present).setOnClickListener(onClickListener);
+        findViewById(R.id.img_present).setOnClickListener(onClickListener);
         cloud1_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim1);
         cloud1_view = findViewById(R.id.cloud1);
         cloud2_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim2);
@@ -152,6 +153,7 @@ public class C_HomeActivity extends AppCompatActivity {
             case R.id.img_present:
                 openPresent();
                 break;
+
 
         }
     };
@@ -281,6 +283,7 @@ public class C_HomeActivity extends AppCompatActivity {
     }
     private void openPresent(){
 
+        startMyActivity(OpenPresentActivity.class);
     }
     // CurTime에 따라 비율유지하면서 풍선 크기 변경
     private Bitmap bitmap_resize(Bitmap bitmap, double resizeWidth){
