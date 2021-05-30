@@ -246,6 +246,7 @@ public class C_HomeActivity extends AppCompatActivity {
 
 
                 if(cur_time>=set_time){ // 목표 달성시
+                    stopTimeCheck();
                     cur_time=set_time;
                     textView.setText("선물이 도착했어요!\n선물을 클릭해 열어보세요");
                     present_view.setVisibility(View.VISIBLE); // 선물 버튼 활성화
