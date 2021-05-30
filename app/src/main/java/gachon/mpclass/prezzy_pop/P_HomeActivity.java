@@ -374,12 +374,14 @@ public class P_HomeActivity extends AppCompatActivity {
                         text_setBalloon.setText("자녀에게 새 풍선을 전달해주세요");
                         text_rate.setVisibility(View.INVISIBLE);
                         text_ach.setVisibility(View.INVISIBLE);
+                        imgView_balloon.setVisibility(View.INVISIBLE);
                     }
                     else if(cur_state.equals("default")){
-                        btn_setBalloon.setVisibility(View.INVISIBLE); // 버튼 활성화
+                        btn_setBalloon.setVisibility(View.INVISIBLE);
                         text_setBalloon.setVisibility(View.INVISIBLE);
                         text_rate.setVisibility(View.VISIBLE);
                         text_ach.setVisibility(View.VISIBLE);
+                        imgView_balloon.setVisibility(View.VISIBLE);
                     }
                 }
                 else {
