@@ -55,7 +55,7 @@ public class P_UnmatchedActivity extends AppCompatActivity {
                 return true;
             }
         });
-        findViewById(R.id.btn_logout).setOnClickListener(onClickListener);
+
         findViewById(R.id.btn_match).setOnClickListener(onClickListener);
     }
     @Override
@@ -72,11 +72,6 @@ public class P_UnmatchedActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.btn_logout:
-                    FirebaseAuth.getInstance().signOut();
-                    startToast("로그아웃 되었습니다");
-                    startMyActivity(LoginActivity.class);
-                    break;
                 case R.id.btn_match:
                     startMyActivity(Matching.class);
                     break;

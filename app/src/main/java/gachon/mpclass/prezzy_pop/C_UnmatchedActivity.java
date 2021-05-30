@@ -71,19 +71,9 @@ public class C_UnmatchedActivity extends AppCompatActivity {
                 return true;
             }
         });
-        findViewById(R.id.btn_logout).setOnClickListener(onClickListener);
+
         isMatched();
     }
-    View.OnClickListener onClickListener= (v)->{
-
-        switch(v.getId()){
-            case R.id.btn_logout:
-                FirebaseAuth.getInstance().signOut();
-                startToast("로그아웃 되었습니다");
-                startMyActivity(LoginActivity.class);
-                break;
-        }
-    };
 
     private void isMatched() {                                                  // user가 매칭된 상태인지 파악
         FirebaseUser cur_user = FirebaseAuth.getInstance().getCurrentUser();
