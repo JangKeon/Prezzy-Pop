@@ -184,7 +184,6 @@ public class P_HomeActivity extends AppCompatActivity {
 
                 // 자녀가 임무 성공시 아이템 클릭하면 팝업창으로 자녀가 임무를 수행했나요? 예/아니요
                 // -> 자녀에게 풍선커짐 알림, 풍선스탯 키우고, 자녀 화면에서 V 표시(성공표시)
-
                 deleteMissionToDB(list_mission.get(0));
                 list_mission.remove(i);
                 adapter.notifyDataSetChanged();
