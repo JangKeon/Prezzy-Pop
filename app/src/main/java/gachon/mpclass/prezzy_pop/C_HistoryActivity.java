@@ -57,6 +57,18 @@ public class C_HistoryActivity extends AppCompatActivity {
     private void setHistory(ArrayList<BalloonStat> historyList) {
         ArrayList<ImageView> viewList = new ArrayList<>();
 
+        ArrayList<Integer> initIndex = new ArrayList<>();
+
+        for(int i = 0; i < historyList.size(); ++i) {
+            if(historyList.get(i).getState().equals("init")) {
+                initIndex.add(i);
+            }
+        }
+
+        for(int i = 0; i < initIndex.size(); ++i) {
+            historyList.remove(initIndex.get(i));
+        }
+
         for(int i = 1; i <= historyList.size(); ++i) {
             int imgViewID = getResources().getIdentifier("imgView_history" + i, "id", getPackageName());
             int txtViewID = getResources().getIdentifier("txtView_history" + i, "id", getPackageName());
@@ -64,8 +76,8 @@ public class C_HistoryActivity extends AppCompatActivity {
             ImageView imgView = findViewById(imgViewID);
             TextView txtView = findViewById(txtViewID);
 
-            setImgView(imgView, historyList.get(i-1).getImage());
-            setTxtView(txtView, historyList.get(i-1).getAchievement() + "(" + historyList.get(i-1).getSet_time() + ")");
+            setImgView(imgView, historyList.get(i).getImage());
+            setTxtView(txtView, historyList.get(i).getAchievement() + "(" + historyList.get(i-1).getSet_time() + ")");
         }
     }
 
