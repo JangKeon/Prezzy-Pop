@@ -331,6 +331,14 @@ public class P_HomeActivity extends AppCompatActivity {
                     imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
                     String rateText=Integer.toString((int)(rate*100))+"%";
                     text_rate.setText(rateText);
+
+                    Log.e("doowon", "onChildChange : " + snapshot.getValue().toString());
+
+                    if(cur_time>=set_time){ // 목표 달성시
+                        text_rate.setText("100%");
+                        btn_setBalloon.setVisibility(View.VISIBLE); // 버튼 활성화
+                    }
+
                 }
                 else {
                     Log.e(TAG, "Data change listener get null");
