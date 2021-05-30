@@ -50,8 +50,8 @@ public class TimeActivity extends AppCompatActivity {
                 }
                 else if(id == R.id.logout){
                     FirebaseAuth.getInstance().signOut();
-                    startToast("로그아웃되었습니다");
-
+                    startToast("로그아웃 되었습니다");
+                    startMyActivity(LoginActivity.class);
                 }
 
                 return true;
@@ -79,5 +79,9 @@ public class TimeActivity extends AppCompatActivity {
     private void startToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
+    }
+    private void startMyActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivity(intent);
     }
 }

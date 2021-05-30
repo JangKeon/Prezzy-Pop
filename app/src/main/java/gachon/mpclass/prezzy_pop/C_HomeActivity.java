@@ -91,14 +91,16 @@ public class C_HomeActivity extends AppCompatActivity {
                 String title = menuItem.getTitle().toString();
 
                 if(id == R.id.account){
-                    startMyActivity(C_HistoryActivity.class);
                     Toast.makeText(context, "History를 확인합니다.", Toast.LENGTH_SHORT).show();
+                    startMyActivity(C_HistoryActivity.class);
                 }
                 else if(id == R.id.setting){
                     Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.logout){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    startToast("로그아웃 되었습니다");
+                    startMyActivity(LoginActivity.class);
                 }
 
                 return true;
