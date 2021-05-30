@@ -195,7 +195,7 @@ public class Matching extends AppCompatActivity {
                         else {                      //새로 매칭된 자녀이면
                             //기본 풍선 만들기(child)
 //                            String child_key, int set_time, String achievement, String date, String parent_key, int cur_time, String state, String image
-                            BalloonStat newBalloon = new BalloonStat(child_key, 600, "풍선을 만들어 보아요", strNow, parent_key, 300, "init", "");
+                            BalloonStat newBalloon = new BalloonStat(child_key, 100, "기본 풍선", strNow, parent_key, 0, "init", "");
 
                             SetBalloon.setCurrentBalloon(child_key, newBalloon);
                             Log.d("doowon", "click" );

@@ -61,6 +61,7 @@ public class P_HomeActivity extends AppCompatActivity {
     Button btn_addMission;
     Button btn_setBalloon;
     ImageView imgView_balloon;
+    TextView text_ach;
     TextView text_rate;
     TextView text_setBalloon;
 
@@ -121,7 +122,7 @@ public class P_HomeActivity extends AppCompatActivity {
         balloon_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
         balloon_view = findViewById(R.id.img_balloon);
         text_setBalloon=findViewById(R.id.text_setBalloon);
-
+        text_ach=findViewById(R.id.text_ach);
 
         cloud1_view.startAnimation(cloud1_anim);
         cloud2_view.startAnimation(cloud2_anim);
@@ -349,14 +350,18 @@ public class P_HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
                     String cur_state = snapshot.getValue(String.class);
-                    if(cur_state.equals("waiting")){
+                    if(cur_state.equals("waiting")||cur_state.equals("init")){
                         btn_setBalloon.setVisibility(View.VISIBLE); // 버튼 활성화
                         text_setBalloon.setVisibility(View.VISIBLE);
                         text_setBalloon.setText("자녀에게 새 풍선을 전달해주세요");
+                        text_rate.setVisibility(View.INVISIBLE);
+                        text_ach.setVisibility(View.INVISIBLE);
                     }
                     else if(cur_state.equals("default")){
                         btn_setBalloon.setVisibility(View.INVISIBLE); // 버튼 활성화
                         text_setBalloon.setVisibility(View.INVISIBLE);
+                        text_rate.setVisibility(View.VISIBLE);
+                        text_ach.setVisibility(View.VISIBLE);
                     }
                 }
                 else {
