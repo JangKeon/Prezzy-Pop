@@ -55,7 +55,17 @@ public class C_HistoryActivity extends AppCompatActivity {
     }
 
     private void setHistory(ArrayList<BalloonStat> historyList) {
-        ArrayList<ImageView> viewList = new ArrayList<>();
+        ArrayList<Integer> initIndex = new ArrayList<>();
+
+        for(int i = 0; i < historyList.size(); ++i) {
+            if(historyList.get(i).getState().equals("init")) {
+                initIndex.add(i);
+            }
+        }
+
+        for(int i = 0; i < initIndex.size(); ++i) {
+            historyList.remove(initIndex.get(i));
+        }
 
         for(int i = 1; i <= historyList.size(); ++i) {
             int imgViewID = getResources().getIdentifier("imgView_history" + i, "id", getPackageName());
