@@ -18,9 +18,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +40,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 
 import gachon.mpclass.prezzy_pop.service.ScreenService;
 
@@ -53,6 +61,9 @@ public class C_HomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
 
+    ListView listView_mission;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> list_mission;
     Animation cloud1_anim;
     Animation cloud2_anim;
     Animation cloud3_anim;
@@ -63,6 +74,10 @@ public class C_HomeActivity extends AppCompatActivity {
     ImageView balloon_view;
     ImageView present_view;
     TextView textView;
+    ImageView pointLeft_view;
+    ImageView pointRight_view;
+    SlidingUpPanelLayout slidePanel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +107,10 @@ public class C_HomeActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if(id == R.id.history){
+                if (id == R.id.history) {
                     Toast.makeText(context, "History를 확인합니다.", Toast.LENGTH_SHORT).show();
                     startMyActivity(C_HistoryActivity.class);
-                }
-
-                else if(id == R.id.logout){
+                } else if (id == R.id.logout) {
                     FirebaseAuth.getInstance().signOut();
                     startToast("로그아웃 되었습니다");
                     stopTimeCheck();
@@ -118,26 +131,35 @@ public class C_HomeActivity extends AppCompatActivity {
         cloud3_view = findViewById(R.id.cloud3);
         balloon_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
         balloon_view = findViewById(R.id.img_balloon);
-        textView=findViewById(R.id.textView);
-        present_view=findViewById(R.id.img_present);
+        textView = findViewById(R.id.textView);
+        present_view = findViewById(R.id.img_present);
 
         cloud1_view.startAnimation(cloud1_anim);
         cloud2_view.startAnimation(cloud2_anim);
         cloud3_view.startAnimation(cloud3_anim);
         balloon_view.startAnimation(balloon_anim);
 
+        pointLeft_view = findViewById(R.id.img_pointup_left_c);
+        pointRight_view = findViewById(R.id.img_pointup_right_c);
+        slidePanel = findViewById(R.id.sliding_panel_c);
 
+        // 하단 포인트, 미션 깜빡거림 & 슬라이드업 시 로테이트 애니메이션
+        ImageAnimation();
+
+    
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{
+        switch (item.getItemId()) {
+            case android.R.id.home: {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             }
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -185,7 +207,7 @@ public class C_HomeActivity extends AppCompatActivity {
         missionRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                for(DataSnapshot snapshot : task.getResult().getChildren()) {
+                for (DataSnapshot snapshot : task.getResult().getChildren()) {
                     String missionTxt = snapshot.getValue(String.class);
 //                    list_mission.add(missionTxt);
                 }
@@ -222,6 +244,7 @@ public class C_HomeActivity extends AppCompatActivity {
                 int cur_time = snapshot.getValue(Integer.TYPE);
                 setCur_time(cur_time);
 
+
                 if(cur_time>=set_time){ // 목표 달성시
                     cur_time=set_time;
                     textView.setText("선물이 도착했어요!\n선물을 클릭해 열어보세요");
@@ -231,10 +254,11 @@ public class C_HomeActivity extends AppCompatActivity {
 
                 }
 
-                Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
-                double resizewidth = 100 + (600 * ((double)cur_time/set_time));// 풍선 최소 크기 100, 최대300
-                balloon_view.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
+                Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(), R.drawable.img_ballon);
+                double resizewidth = 100 + (600 * ((double) cur_time / set_time));// 풍선 최소 크기 100, 최대300
+                balloon_view.setImageBitmap(bitmap_resize(bitmap_balloon, resizewidth));
             }
+
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
@@ -281,9 +305,9 @@ public class C_HomeActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(this, ScreenService.class);
         serviceIntent.putExtra("state", "on");
 
-        SharedPreferences sharedPreferences=getSharedPreferences("Child",MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putBoolean("isStarted",true);
+        SharedPreferences sharedPreferences = getSharedPreferences("Child", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isStarted", true);
         editor.commit();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -293,37 +317,41 @@ public class C_HomeActivity extends AppCompatActivity {
         textView.setText("풍선을 다시 누르면 멈출 수 있어요");
 
     }
+
     private void stopTimeCheck() {
         Intent serviceIntent = new Intent(this, ScreenService.class);
 
-        SharedPreferences sharedPreferences=getSharedPreferences("Child",MODE_PRIVATE);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putBoolean("isStarted",false);
+        SharedPreferences sharedPreferences = getSharedPreferences("Child", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isStarted", false);
         editor.commit();
         getApplicationContext().stopService(serviceIntent); // stop service
         textView.setText("풍선을 눌러 풍선을 키워보세요!");
     }
 
-    private void Start_Stop(){
-        SharedPreferences sharedPreferences=getSharedPreferences("Child",MODE_PRIVATE);
-        boolean isStart = sharedPreferences.getBoolean("isStarted",false);
-        if(isStart){
+    private void Start_Stop() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Child", MODE_PRIVATE);
+        boolean isStart = sharedPreferences.getBoolean("isStarted", false);
+        if (isStart) {
             stopTimeCheck();
-        }else{
+        } else {
             startTimeCheck();
         }
 
     }
+
     private void openPresent(){
         startMyActivity(OpenPresentActivity.class);
         DatabaseReference cur_balloonCur_stateRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("state");
         cur_balloonCur_stateRef.setValue("waiting"); // 상태변경
+
     }
+
     // CurTime에 따라 비율유지하면서 풍선 크기 변경
-    private Bitmap bitmap_resize(Bitmap bitmap, double resizeWidth){
+    private Bitmap bitmap_resize(Bitmap bitmap, double resizeWidth) {
         double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
         int targetHeight = (int) (resizeWidth * aspectRatio);
-        Bitmap result = Bitmap.createScaledBitmap(bitmap, (int)resizeWidth, targetHeight, false);
+        Bitmap result = Bitmap.createScaledBitmap(bitmap, (int) resizeWidth, targetHeight, false);
         return result;
     }
 
@@ -384,5 +412,60 @@ public class C_HomeActivity extends AppCompatActivity {
 
     private void startToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void ImageAnimation() {
+        float beforeDegree = 0;
+        float afterDegree = 180;
+
+        RotateAnimation rotateAnim = new RotateAnimation(
+                beforeDegree,
+                afterDegree,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        RotateAnimation rotateAnimReverse = new RotateAnimation(
+                afterDegree,
+                beforeDegree,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+
+        rotateAnimReverse.setDuration(500);
+        rotateAnimReverse.setFillAfter(true);
+        rotateAnim.setDuration(500);
+        rotateAnim.setFillAfter(true);
+
+        AlphaAnimation AlphaAnim = new AlphaAnimation(0, 1);
+        AlphaAnim.setDuration(500);        // 에니메이션 동작 주기
+        AlphaAnim.setRepeatCount(-1);    // 에니메이션 반복 회수
+        AlphaAnim.setRepeatMode(Animation.REVERSE);// 반복하는 방법
+
+        AnimationSet animSet = new AnimationSet(true);
+        animSet.addAnimation(rotateAnim);
+        animSet.addAnimation(AlphaAnim);
+
+        AnimationSet animSetReverse = new AnimationSet(true);
+        animSetReverse.addAnimation(rotateAnimReverse);
+        animSetReverse.addAnimation(AlphaAnim);
+
+        pointLeft_view.startAnimation(AlphaAnim);
+        pointRight_view.startAnimation(AlphaAnim);
+
+        slidePanel.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    pointLeft_view.startAnimation(animSet);
+                    pointRight_view.startAnimation(animSet);
+                } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    pointLeft_view.startAnimation(animSetReverse);
+                    pointRight_view.startAnimation(animSetReverse);
+                }
+            }
+        });
+
     }
 }
