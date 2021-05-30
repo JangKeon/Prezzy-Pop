@@ -80,19 +80,6 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/imageView"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="82dp"
-            android:layout_marginEnd="161dp"
-            android:layout_marginRight="161dp"
-            android:layout_marginBottom="178dp"
-            android:text="Logout" />
-
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
