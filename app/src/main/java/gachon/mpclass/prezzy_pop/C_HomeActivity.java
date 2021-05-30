@@ -146,7 +146,12 @@ public class C_HomeActivity extends AppCompatActivity {
         // 하단 포인트, 미션 깜빡거림 & 슬라이드업 시 로테이트 애니메이션
         ImageAnimation();
 
-    
+        list_mission = new ArrayList<String>();
+        list_mission.add("설거지 도와드리기");
+        list_mission.add("빨래");
+        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list_mission);
+        listView_mission = findViewById(R.id.listView_mission_c);
+        listView_mission.setAdapter(adapter);
     }
 
     @Override
