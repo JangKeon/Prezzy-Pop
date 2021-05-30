@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,6 +63,8 @@ public class C_HomeActivity extends AppCompatActivity {
     ImageView cloud2_view;
     ImageView cloud3_view;
     ImageView balloon_view;
+    ImageView present_view;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +107,8 @@ public class C_HomeActivity extends AppCompatActivity {
             }
         });
         findViewById(R.id.btn_logout).setOnClickListener(onClickListener);
-        findViewById(R.id.btn_start).setOnClickListener(onClickListener);
-        findViewById(R.id.btn_stop).setOnClickListener(onClickListener);
+        findViewById(R.id.img_balloon).setOnClickListener(onClickListener);
+        findViewById(R.id.img_present).setOnClickListener(onClickListener);
         cloud1_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim1);
         cloud1_view = findViewById(R.id.cloud1);
         cloud2_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim2);
@@ -113,6 +117,8 @@ public class C_HomeActivity extends AppCompatActivity {
         cloud3_view = findViewById(R.id.cloud3);
         balloon_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
         balloon_view = findViewById(R.id.img_balloon);
+        textView=findViewById(R.id.textView);
+        present_view=findViewById(R.id.img_present);
 
         cloud1_view.startAnimation(cloud1_anim);
         cloud2_view.startAnimation(cloud2_anim);
@@ -142,7 +148,6 @@ public class C_HomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 String curBalloonID = task.getResult().getValue(String.class);
                 getSet_timeFromDB(curBalloonID);
-                setBalloonCur_timeChangeListener(curBalloonID);
             }
         });
     }
@@ -156,12 +161,13 @@ public class C_HomeActivity extends AppCompatActivity {
                 startToast("로그아웃 되었습니다");
                 startMyActivity(LoginActivity.class);
                 break;
-            case R.id.btn_start:
-                startTimeCheck();
+            case R.id.img_balloon:
+                Start_Stop();
                 break;
-            case R.id.btn_stop:
-                stopTimeCheck();
+            case R.id.img_present:
+                openPresent();
                 break;
+
         }
     };
 
@@ -173,6 +179,8 @@ public class C_HomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 int set_time = task.getResult().getValue(Integer.TYPE);
                 setSet_time(set_time);
+
+                setBalloonCur_timeChangeListener(curBalloonID);
             }
         });
     }
@@ -184,12 +192,21 @@ public class C_HomeActivity extends AppCompatActivity {
     private void setBalloonCur_timeChangeListener(String curBalloonID) {
         this.curBalloonID = curBalloonID;
         DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("cur_time");
+        DatabaseReference cur_balloonCur_stateRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("state");
 
         cur_balloonCur_timeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 int cur_time = snapshot.getValue(Integer.TYPE);
                 setCur_time(cur_time);
+
+                if(cur_time>=set_time){ // 목표 달성시
+                    cur_time=set_time;
+                    cur_balloonCur_stateRef.setValue("waiting"); // 상태변경
+                    present_view.setVisibility(View.VISIBLE); // 선물 버튼 활성화
+                    balloon_view.setVisibility(View.GONE); // 풍선 비활성화
+                    textView.setText("선물이 도착했어요!\n선물을 클릭해 열어보세요");
+                }
 
                 Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
                 double resizewidth = 100 + (600 * ((double)cur_time/set_time));// 풍선 최소 크기 100, 최대300
@@ -209,18 +226,43 @@ public class C_HomeActivity extends AppCompatActivity {
     private void startTimeCheck() {
         Intent serviceIntent = new Intent(this, ScreenService.class);
         serviceIntent.putExtra("state", "on");
+
+        SharedPreferences sharedPreferences=getSharedPreferences("Child",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("isStarted",true);
+        editor.commit();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startForegroundService(serviceIntent);
         else
             startService(serviceIntent);
-        //finish();
-    }
+        textView.setText("풍선을 다시 누르면 멈출 수 있어요");
 
+    }
     private void stopTimeCheck() {
         Intent serviceIntent = new Intent(this, ScreenService.class);
+
+        SharedPreferences sharedPreferences=getSharedPreferences("Child",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("isStarted",false);
+        editor.commit();
         getApplicationContext().stopService(serviceIntent); // stop service
+        textView.setText("풍선을 눌러 풍선을 키워보세요!");
     }
 
+    private void Start_Stop(){
+        SharedPreferences sharedPreferences=getSharedPreferences("Child",MODE_PRIVATE);
+        boolean isStart = sharedPreferences.getBoolean("isStarted",false);
+        if(isStart){
+            stopTimeCheck();
+        }else{
+            startTimeCheck();
+        }
+
+    }
+    private void openPresent(){
+
+    }
     // CurTime에 따라 비율유지하면서 풍선 크기 변경
     private Bitmap bitmap_resize(Bitmap bitmap, double resizeWidth){
         double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
