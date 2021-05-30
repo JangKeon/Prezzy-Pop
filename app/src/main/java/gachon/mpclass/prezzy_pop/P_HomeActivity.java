@@ -59,7 +59,6 @@ public class P_HomeActivity extends AppCompatActivity {
     ArrayList<String> list_mission;
     EditText edit_mission;
     Button btn_addMission;
-    Button btn_logout;
     Button btn_setBalloon;
     ImageView imgView_balloon;
     TextView text_rate;
@@ -97,12 +96,10 @@ public class P_HomeActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if(id == R.id.account){
-                    Toast.makeText(context, title + "History를 확인합니다.", Toast.LENGTH_SHORT).show();
+                if(id == R.id.history){
+                    Toast.makeText(context,"부모는 History를 확인할 수 없습니다.", Toast.LENGTH_SHORT).show();
                 }
-                else if(id == R.id.setting){
-                    Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                }
+
                 else if(id == R.id.logout){
                     FirebaseAuth.getInstance().signOut();
                     startToast("로그아웃 되었습니다");
@@ -134,7 +131,6 @@ public class P_HomeActivity extends AppCompatActivity {
 
         edit_mission = findViewById(R.id.edit_mission);
         btn_addMission = findViewById(R.id.btn_addMission);
-        btn_logout = findViewById(R.id.btn_logout);
         btn_setBalloon = findViewById(R.id.btn_setballoon);
 
         list_mission = new ArrayList<String>();
@@ -146,14 +142,6 @@ public class P_HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // 풍선 설정
                 startMyActivity(P_SetBallonActivity.class);
-            }
-        });
-        btn_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startToast("로그아웃 되었습니다");
-                startMyActivity(LoginActivity.class);
             }
         });
         btn_addMission.setOnClickListener(new View.OnClickListener() {
