@@ -1,6 +1,7 @@
 package gachon.mpclass.prezzy_pop;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,6 +10,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,8 +23,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 public class C_UnmatchedActivity extends AppCompatActivity {
     DatabaseReference childRef = DB_Reference.childRef;
@@ -82,26 +90,34 @@ public class C_UnmatchedActivity extends AppCompatActivity {
         String user_email = cur_user.getEmail();
         String user_key = user_email.split("@")[0];
 
-        this.childRef.child(user_key).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        DatabaseReference cur_balloonCur_timeRef = DB_Reference.balloonRef.child(user_key);
+        cur_balloonCur_timeRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("doowon", "Error getting data", task.getException());
-                } else {
-                    if (task.getResult().exists()) {
-                        Log.d("DB", "User identity (자식)");
-                        Child child = task.getResult().getValue(Child.class);
-                        if(child.getCurrent_balloon_id() == null) {
-                            // do nothing
-                        }
-                        else {
-                            Log.d("DB", "has parent");
-                            startMyActivity(C_HomeActivity.class);
-                        }
-                    }
-                }
+            public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+                startMyActivity(MainActivity.class);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
             }
         });
+
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

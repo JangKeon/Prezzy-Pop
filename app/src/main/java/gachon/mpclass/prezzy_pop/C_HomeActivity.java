@@ -15,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -108,6 +109,7 @@ public class C_HomeActivity extends AppCompatActivity {
         });
         findViewById(R.id.img_balloon).setOnClickListener(onClickListener);
         findViewById(R.id.img_present).setOnClickListener(onClickListener);
+        findViewById(R.id.img_present).setOnClickListener(onClickListener);
         cloud1_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim1);
         cloud1_view = findViewById(R.id.cloud1);
         cloud2_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.cloudanim2);
@@ -152,6 +154,7 @@ public class C_HomeActivity extends AppCompatActivity {
             case R.id.img_present:
                 openPresent();
                 break;
+
 
         }
     };
@@ -221,15 +224,47 @@ public class C_HomeActivity extends AppCompatActivity {
 
                 if(cur_time>=set_time){ // 목표 달성시
                     cur_time=set_time;
-                    cur_balloonCur_stateRef.setValue("waiting"); // 상태변경
-                    present_view.setVisibility(View.VISIBLE); // 선물 버튼 활성화
-                    balloon_view.setVisibility(View.GONE); // 풍선 비활성화
                     textView.setText("선물이 도착했어요!\n선물을 클릭해 열어보세요");
+                    present_view.setVisibility(View.VISIBLE); // 선물 버튼 활성화
+                    balloon_view.clearAnimation();
+                    balloon_view.setVisibility(View.GONE); // 풍선 비활성화
+
                 }
 
                 Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
                 double resizewidth = 100 + (600 * ((double)cur_time/set_time));// 풍선 최소 크기 100, 최대300
                 balloon_view.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
+            }
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        cur_balloonCur_stateRef.addValueEventListener(new ValueEventListener() {//state listener
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    String cur_state = snapshot.getValue(String.class);
+                    if(cur_state.equals("waiting")){
+                        balloon_view.clearAnimation();
+                        balloon_view.setVisibility(View.GONE); // 풍선 비활성화
+                        present_view.setVisibility(View.INVISIBLE); // 선물 버튼 비활성화
+                        textView.setText("새로운 풍선을 기다리는 중이에요");
+                    }
+                    else if(cur_state.equals("init")){
+                        textView.setText("첫 풍선을 기다리는 중이에요");
+                        balloon_view.clearAnimation();
+                        balloon_view.setVisibility(View.GONE); // 풍선 비활성화
+                    }
+                    else if(cur_state.equals("default")){
+                        balloon_view.startAnimation(balloon_anim);
+                        balloon_view.setVisibility(View.VISIBLE); // 풍선 활성화
+                        textView.setText("풍선을 눌러 풍선을 키워보세요!");
+                    }
+                }
+                else {
+                    Log.e("C_Home", "Data change listener get null");
+                }
             }
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
@@ -280,7 +315,9 @@ public class C_HomeActivity extends AppCompatActivity {
 
     }
     private void openPresent(){
-
+        startMyActivity(OpenPresentActivity.class);
+        DatabaseReference cur_balloonCur_stateRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("state");
+        cur_balloonCur_stateRef.setValue("waiting"); // 상태변경
     }
     // CurTime에 따라 비율유지하면서 풍선 크기 변경
     private Bitmap bitmap_resize(Bitmap bitmap, double resizeWidth){

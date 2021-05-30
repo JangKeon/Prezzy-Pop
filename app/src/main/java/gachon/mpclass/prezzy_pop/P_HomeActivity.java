@@ -1,13 +1,17 @@
 package gachon.mpclass.prezzy_pop;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,8 +19,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,10 +42,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+
+import gachon.mpclass.prezzy_pop.pushNoti.SendMessage;
 
 public class P_HomeActivity extends AppCompatActivity {
     static final String TAG = "P_HomeActivity";
@@ -61,6 +71,7 @@ public class P_HomeActivity extends AppCompatActivity {
     Button btn_addMission;
     Button btn_setBalloon;
     ImageView imgView_balloon;
+    TextView text_ach;
     TextView text_rate;
     TextView text_setBalloon;
 
@@ -72,6 +83,11 @@ public class P_HomeActivity extends AppCompatActivity {
     ImageView cloud2_view;
     ImageView cloud3_view;
     ImageView balloon_view;
+    ImageView pointLeft_view;
+    ImageView pointRight_view;
+    SlidingUpPanelLayout slidePanel;
+    TextView mission_text;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +137,7 @@ public class P_HomeActivity extends AppCompatActivity {
         balloon_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
         balloon_view = findViewById(R.id.img_balloon);
         text_setBalloon=findViewById(R.id.text_setBalloon);
-
+        text_ach=findViewById(R.id.text_ach);
 
         cloud1_view.startAnimation(cloud1_anim);
         cloud2_view.startAnimation(cloud2_anim);
@@ -131,11 +147,18 @@ public class P_HomeActivity extends AppCompatActivity {
 
         edit_mission = findViewById(R.id.edit_mission);
         btn_addMission = findViewById(R.id.btn_addMission);
-        btn_setBalloon = findViewById(R.id.btn_setballoon);
+        btn_setBalloon = findViewById(R.id.btn_setBalloon);
+
+        pointLeft_view = findViewById(R.id.img_p_pointup_left);
+        pointRight_view = findViewById(R.id.img_p_pointup_right);
+        slidePanel = findViewById(R.id.sliding_panel);
+        mission_text = findViewById(R.id.mission_text);
+
+        // 하단 포인트, 미션 깜빡거림 & 슬라이드업 시 로테이트 애니메이션
+        ImageAnimation();
 
         list_mission = new ArrayList<String>();
         list_mission.add("설거지 도와드리기");
-
 
         btn_setBalloon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +178,6 @@ public class P_HomeActivity extends AppCompatActivity {
                 setMissionToDB(missionTxt);
             }
         });
-
         adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list_mission);
         listView_mission = findViewById(R.id.listView_mission);
         listView_mission.setAdapter(adapter);
@@ -165,7 +187,6 @@ public class P_HomeActivity extends AppCompatActivity {
 
                 // 자녀가 임무 성공시 아이템 클릭하면 팝업창으로 자녀가 임무를 수행했나요? 예/아니요
                 // -> 자녀에게 풍선커짐 알림, 풍선스탯 키우고, 자녀 화면에서 V 표시(성공표시)
-
                 deleteMissionToDB(list_mission.get(0));
                 list_mission.remove(i);
                 adapter.notifyDataSetChanged();
@@ -259,6 +280,7 @@ public class P_HomeActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 for(DataSnapshot snapshot : task.getResult().getChildren()) {
+                    Log.e("ddoowon", snapshot.getValue(String.class));
                     if(snapshot.getValue(String.class).equals(missionTxt)) {
                         snapshot.getRef().setValue(null);
                     }
@@ -283,6 +305,27 @@ public class P_HomeActivity extends AppCompatActivity {
                     String missionTxt = snapshot.getValue(String.class);
                     list_mission.add(missionTxt);
                 }
+                adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list_mission);
+                listView_mission = findViewById(R.id.listView_mission);
+                listView_mission.setAdapter(adapter);
+
+                listView_mission.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                        // 자녀가 임무 성공시 아이템 클릭하면 팝업창으로 자녀가 임무를 수행했나요? 예/아니요
+                        // -> 자녀에게 풍선커짐 알림, 풍선스탯 키우고, 자녀 화면에서 V 표시(성공표시)
+                        DatabaseReference balloonRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID);
+
+                        balloonRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                BalloonStat curBalloon = task.getResult().getValue(BalloonStat.class);
+                                showPopUp(i, curBalloon);
+                            }
+                        });
+                    }
+                });
             }
         });
     }
@@ -349,14 +392,20 @@ public class P_HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
                     String cur_state = snapshot.getValue(String.class);
-                    if(cur_state.equals("waiting")){
+                    if(cur_state.equals("waiting")||cur_state.equals("init")){
                         btn_setBalloon.setVisibility(View.VISIBLE); // 버튼 활성화
                         text_setBalloon.setVisibility(View.VISIBLE);
                         text_setBalloon.setText("자녀에게 새 풍선을 전달해주세요");
+                        text_rate.setVisibility(View.INVISIBLE);
+                        text_ach.setVisibility(View.INVISIBLE);
+                        imgView_balloon.setVisibility(View.INVISIBLE);
                     }
                     else if(cur_state.equals("default")){
-                        btn_setBalloon.setVisibility(View.INVISIBLE); // 버튼 활성화
+                        btn_setBalloon.setVisibility(View.INVISIBLE);
                         text_setBalloon.setVisibility(View.INVISIBLE);
+                        text_rate.setVisibility(View.VISIBLE);
+                        text_ach.setVisibility(View.VISIBLE);
+                        imgView_balloon.setVisibility(View.VISIBLE);
                     }
                 }
                 else {
@@ -382,4 +431,111 @@ public class P_HomeActivity extends AppCompatActivity {
     private void startToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+
+    private void ImageAnimation(){
+
+        float beforeDegree = 0;
+        float afterDegree = 180;
+
+        RotateAnimation rotateAnim = new RotateAnimation(
+                beforeDegree,
+                afterDegree,
+                Animation.RELATIVE_TO_SELF,0.5f,
+                Animation.RELATIVE_TO_SELF,0.5f);
+        RotateAnimation rotateAnimReverse = new RotateAnimation(
+                afterDegree,
+                beforeDegree,
+                Animation.RELATIVE_TO_SELF,0.5f,
+                Animation.RELATIVE_TO_SELF,0.5f);
+
+        rotateAnimReverse.setDuration(500);
+        rotateAnimReverse.setFillAfter(true);
+        rotateAnim.setDuration(500);
+        rotateAnim.setFillAfter(true);
+
+        AlphaAnimation AlphaAnim = new AlphaAnimation(0, 1);
+        AlphaAnim.setDuration(500);        // 에니메이션 동작 주기
+        AlphaAnim.setRepeatCount(-1);    // 에니메이션 반복 회수
+        AlphaAnim.setRepeatMode(Animation.REVERSE);// 반복하는 방법
+
+        AnimationSet animSet = new AnimationSet(true);
+        animSet.addAnimation(rotateAnim);
+        animSet.addAnimation(AlphaAnim);
+
+        AnimationSet animSetReverse = new AnimationSet(true);
+        animSetReverse.addAnimation(rotateAnimReverse);
+        animSetReverse.addAnimation(AlphaAnim);
+
+        pointLeft_view.startAnimation(AlphaAnim);
+        pointRight_view.startAnimation(AlphaAnim);
+
+        slidePanel.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                Log.d("state", String.valueOf(slidePanel.getPanelState()));
+                if(newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    pointLeft_view.startAnimation(animSet);
+                    pointRight_view.startAnimation(animSet);
+                }else if(newState == SlidingUpPanelLayout.PanelState.COLLAPSED){
+                    pointLeft_view.startAnimation(animSetReverse);
+                    pointRight_view.startAnimation(animSetReverse);
+                }
+            }
+        });
+    }
+
+    private void showPopUp(int index, BalloonStat curBalloon) {
+        EditText editTxt_score = new EditText(P_HomeActivity.this);
+
+        int curPercent = (int)((double)curBalloon.getCur_time() / curBalloon.getSet_time() * 100);
+
+        int onePercentTime = (int)(curBalloon.getSet_time() /100.0);
+
+        AlertDialog.Builder ad = new AlertDialog.Builder(P_HomeActivity.this);
+        ad.setIcon(R.mipmap.ic_launcher);
+        ad.setTitle("미션 확인");
+        ad.setMessage("점수를 입력해주세요.(" + list_mission.get(index) +")\n현재 진행률(" + curPercent + "%)"  );
+        ad.setView(editTxt_score);
+        ad.setCancelable(false);
+
+        ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteMissionToDB(list_mission.get(index));
+                list_mission.remove(index);
+                adapter.notifyDataSetChanged();
+
+                int addTime = Integer.parseInt(editTxt_score.getText().toString()) * onePercentTime;
+                addCurTimeByMission(addTime);
+
+                dialog.dismiss();
+            }
+        });
+        ad.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        ad.show();
+    }
+
+    private void addCurTimeByMission(int addTime) {
+        DatabaseReference balloonRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
+
+        balloonRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                int new_cur_time = task.getResult().getValue(Integer.TYPE) + addTime;
+
+                task.getResult().getRef().setValue(new_cur_time);
+            }
+        });
+    }
+
+
 }

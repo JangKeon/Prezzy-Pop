@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
+        android:id="@+id/sliding_panel"
         app:umanoDragView="@+id/drawer"
         app:umanoOverlay="false"
         app:umanoPanelHeight="60dp"
@@ -167,12 +168,14 @@
 
 
             <Button
-                android:id="@+id/btn_setballoon"
+                android:id="@+id/btn_setBalloon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Set Balloon"
+                android:layout_marginTop="100dp"
+                android:text="풍선 만들기"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.51"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_balloon" />
         </androidx.constraintlayout.widget.ConstraintLayout>
