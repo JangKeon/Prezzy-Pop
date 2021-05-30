@@ -59,7 +59,6 @@ public class P_HomeActivity extends AppCompatActivity {
     ArrayList<String> list_mission;
     EditText edit_mission;
     Button btn_addMission;
-    Button btn_logout;
     Button btn_setBalloon;
     ImageView imgView_balloon;
     TextView text_rate;
@@ -134,7 +133,6 @@ public class P_HomeActivity extends AppCompatActivity {
 
         edit_mission = findViewById(R.id.edit_mission);
         btn_addMission = findViewById(R.id.btn_addMission);
-        btn_logout = findViewById(R.id.btn_logout);
         btn_setBalloon = findViewById(R.id.btn_setballoon);
 
         list_mission = new ArrayList<String>();
@@ -146,14 +144,6 @@ public class P_HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // 풍선 설정
                 startMyActivity(P_SetBallonActivity.class);
-            }
-        });
-        btn_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startToast("로그아웃 되었습니다");
-                startMyActivity(LoginActivity.class);
             }
         });
         btn_addMission.setOnClickListener(new View.OnClickListener() {
