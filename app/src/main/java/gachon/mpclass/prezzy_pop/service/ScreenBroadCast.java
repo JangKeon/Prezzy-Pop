@@ -46,7 +46,7 @@ public class ScreenBroadCast extends BroadcastReceiver {
             int score = new TimeAlgorithm(sec).getPenaltyTime();
             time+=score;
 
-            printTime(score,context);
+            printTime(sec,context);
 
             DatabaseReference childRef = DB_Reference.childRef.child(key).child("current_balloon_id");
 
@@ -76,23 +76,25 @@ public class ScreenBroadCast extends BroadcastReceiver {
     public void printTime(long sec,Context context){
         long minutes = sec/60;
         long hours = minutes/60;
-        String msg="Recent save time: ";
+        String msg;
         if (hours > 0) {
+            msg="우와! 대단해요\n";
             sec = sec%60;
             minutes = minutes%60;
-            Toast.makeText(context, msg+hours+"hour "+minutes+"min "+sec+"sec", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, msg+hours+"시간 "+minutes+"분 "+sec+"초 집중했어요", Toast.LENGTH_LONG).show();
         }
         else if (minutes > 0) {
+            msg="잘했어요!\n";
             sec = sec%60;
-            Toast.makeText(context, msg+minutes+"min "+sec+"sec", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, msg+minutes+"분 "+sec+"초 집중했어요", Toast.LENGTH_LONG).show();
         }
         else {
+            msg="좀 더 노력해봐요\n";
             if (sec!=0)
-                Toast.makeText(context, msg+sec + "sec", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, msg+sec + "초 집중했어요", Toast.LENGTH_LONG).show();
             else
-                Toast.makeText(context, msg+"0 sec", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, msg+"집중을 안했어요!", Toast.LENGTH_LONG).show();
         }
-        Toast.makeText(context, "Cumulative save time : "+time+"sec", Toast.LENGTH_LONG).show();
     }
 
     public int getTime(){

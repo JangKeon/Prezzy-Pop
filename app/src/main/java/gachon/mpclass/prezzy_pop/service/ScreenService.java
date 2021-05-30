@@ -41,7 +41,7 @@ public class ScreenService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(this, "Start Checking", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "풍선 키우기를 시작해요!", Toast.LENGTH_LONG).show();
         if (Build.VERSION.SDK_INT >= 26) {
             String CHANNEL_ID = "Screen Monitoring";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
@@ -56,7 +56,7 @@ public class ScreenService extends Service {
 
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("Prezzy Pop")
-                    .setContentText("Time Checking...")
+                    .setContentText("핸드폰을 안볼 때 풍선이 커지고있어요!")
                     .setSmallIcon(R.drawable.img_ballon)
                     .setContentIntent(pendingIntent)
                     .build();
@@ -95,7 +95,7 @@ public class ScreenService extends Service {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Toast.makeText(this, "Stop Checking", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "풍선 키우기를 그만해요", Toast.LENGTH_LONG).show();
         int time=this.currentReceiver.getTime();
         printTime(time,this);
     }
@@ -107,21 +107,24 @@ public class ScreenService extends Service {
     public void printTime(int sec,Context context){
         int minutes = sec/60;
         int hours = minutes/60;
-        String msg="Good job!\nYou save ";
+        String msg;
         if (hours > 0) {
             sec = sec%60;
             minutes = minutes%60;
-            Toast.makeText(context, msg+hours+"hour "+minutes+"min "+sec+"sec", Toast.LENGTH_LONG).show();
+            msg="우와! 대단해요\n총 ";
+            Toast.makeText(context, msg+hours+"시간 "+minutes+"분 "+sec+"초 집중했어요", Toast.LENGTH_LONG).show();
         }
         else if (minutes > 0) {
             sec = sec%60;
-            Toast.makeText(context, msg+minutes+"min "+sec+"sec", Toast.LENGTH_LONG).show();
+            msg="잘했어요!\n총 ";
+            Toast.makeText(context, msg+minutes+"분 "+sec+"초 집중했어요", Toast.LENGTH_LONG).show();
         }
         else {
+            msg="다음엔 좀 더 노력해봐요\n총 ";
             if (sec!=0)
-                Toast.makeText(context, msg+sec + "sec", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, msg+sec + "초 집중했어요", Toast.LENGTH_LONG).show();
             else
-                Toast.makeText(context, msg+"0 sec", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, msg+"집중을 안했어요", Toast.LENGTH_LONG).show();
         }
     }
 
