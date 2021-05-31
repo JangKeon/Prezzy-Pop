@@ -264,7 +264,9 @@ public class C_HomeActivity extends AppCompatActivity {
 //            list_mission.add(missionTxt);
 //        }
 
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, list_mission);
+        adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.listview_item, list_mission);
+        list_mission.add("· 설거지 도와드리기");
+        list_mission.add("· 설거지 도와드리기");
         listView_mission = findViewById(R.id.listView_mission_c);
         listView_mission.setAdapter(adapter);
     }

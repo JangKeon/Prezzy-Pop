@@ -45,6 +45,7 @@
                 android:layout_marginTop="60dp"
                 android:gravity="center_horizontal"
                 android:text="풍선의 크기를 정해주세요"
+                android:fontFamily="@font/gmarketlight"
                 android:textColor="#4A4A4A"
                 android:textSize="20sp"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar"
@@ -86,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="0"
+                android:fontFamily="@font/gmarketmedium"
                 android:textColor="@color/black"
                 android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -107,6 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="220dp"
                 android:gravity="center_horizontal"
+                android:fontFamily="@font/gmarketlight"
                 android:text="어떤 선물인가요?"
                 android:textColor="#4A4A4A"
                 android:textSize="20sp"
@@ -140,6 +143,7 @@
                 android:layout_marginTop="40dp"
                 android:gravity="center_horizontal"
                 android:hint="선물이름 입력"
+                android:fontFamily="@font/gmarketlight"
                 android:textColor="#4A4A4A"
                 android:textColorHint="#4A4A4A"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -149,16 +153,19 @@
 
             <Button
                 android:id="@+id/btn_setBalloon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginRight="40dp"
                 android:layout_marginBottom="40dp"
                 android:text="완료"
+                android:fontFamily="@font/gmarketmedium"
+                android:background="@drawable/signbtn_bg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageViewPresentBackground"
                 app:layout_constraintVertical_bias="0.0" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
