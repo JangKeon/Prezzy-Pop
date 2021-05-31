@@ -59,7 +59,7 @@ public class FCMservice extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        String channelId = "Test";
+        String channelId = "Push";
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
@@ -69,14 +69,15 @@ public class FCMservice extends FirebaseMessagingService {
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent)
-                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .setPriority(NotificationCompat.PRIORITY_MAX);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("Test",
+            NotificationChannel channel = new NotificationChannel("Push",
                     "fcm_default_channel",
                     NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);

@@ -52,7 +52,7 @@ public class ScreenService extends Service {
                     .setContentText("풍선이 커지고있어요!")
                     .setSmallIcon(R.drawable.img_ballon)
                     .setContentIntent(pendingIntent)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
                     .build();
 
@@ -113,16 +113,16 @@ public class ScreenService extends Service {
         if (hours > 0) {
             sec = sec%60;
             minutes = minutes%60;
-            msg="우와! 대단해요\n총 ";
+            msg="지금까지 ";
             Toast.makeText(context, msg+hours+"시간 "+minutes+"분 "+sec+"초 집중했어요", Toast.LENGTH_LONG).show();
         }
         else if (minutes > 0) {
             sec = sec%60;
-            msg="잘했어요!\n총 ";
+            msg="지금까지 ";
             Toast.makeText(context, msg+minutes+"분 "+sec+"초 집중했어요", Toast.LENGTH_LONG).show();
         }
         else {
-            msg="다음엔 좀 더 노력해봐요\n총 ";
+            msg="지금까지 ";
             if (sec!=0)
                 Toast.makeText(context, msg+sec + "초 집중했어요", Toast.LENGTH_LONG).show();
             else
