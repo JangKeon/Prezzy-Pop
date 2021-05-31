@@ -519,7 +519,6 @@ public class P_HomeActivity extends AppCompatActivity {
         dilaog01.findViewById(R.id.yesBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 dilaog01.dismiss();
             }
 
