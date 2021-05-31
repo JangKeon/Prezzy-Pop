@@ -1,6 +1,7 @@
 package gachon.mpclass.prezzy_pop;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -35,6 +36,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -146,7 +148,7 @@ public class C_HomeActivity extends AppCompatActivity {
         // 하단 포인트, 미션 깜빡거림 & 슬라이드업 시 로테이트 애니메이션
         ImageAnimation();
 
-    
+        list_mission = new ArrayList<String>();
     }
 
     @Override
@@ -176,8 +178,6 @@ public class C_HomeActivity extends AppCompatActivity {
             case R.id.img_present:
                 openPresent();
                 break;
-
-
         }
     };
 
@@ -207,12 +207,53 @@ public class C_HomeActivity extends AppCompatActivity {
         missionRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                for (DataSnapshot snapshot : task.getResult().getChildren()) {
-                    String missionTxt = snapshot.getValue(String.class);
-//                    list_mission.add(missionTxt);
-                }
+                Log.d("doowon", "init mission!");
+                setAdapter(task.getResult());
+
+                missionRef.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+                        String addedMission = snapshot.getValue(String.class);
+                        list_mission.add(addedMission);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
+                        String removedMission = snapshot.getValue(String.class);
+                        int removedMissionIndex = list_mission.indexOf(removedMission);
+                        list_mission.remove(removedMissionIndex);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                    }
+                });
             }
         });
+
+    }
+
+    private void setAdapter(DataSnapshot snapshot) {
+//        for (DataSnapshot snapshotIter : snapshot.getChildren()) {
+//            String missionTxt = snapshotIter.getValue(String.class);
+//            list_mission.add(missionTxt);
+//        }
+
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, list_mission);
+        listView_mission = findViewById(R.id.listView_mission_c);
+        listView_mission.setAdapter(adapter);
     }
 
     private void getSet_timeFromDB() {
@@ -246,6 +287,7 @@ public class C_HomeActivity extends AppCompatActivity {
 
 
                 if(cur_time>=set_time){ // 목표 달성시
+                    stopTimeCheck();
                     cur_time=set_time;
                     textView.setText("선물이 도착했어요!\n선물을 클릭해 열어보세요");
                     present_view.setVisibility(View.VISIBLE); // 선물 버튼 활성화

@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import gachon.mpclass.prezzy_pop.pushNoti.SendMessage;
+
 public class P_SetBallonActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
@@ -103,6 +105,7 @@ public class P_SetBallonActivity extends AppCompatActivity {
                         makeBalloon(cur_key, child_key);
                         startToast("아이에게 풍선이 전달되었습니다");
                         startMyActivity(MainActivity.class);
+                        SendMessage sendMessage = new SendMessage("새 풍선이 도착했어요","이번 풍선에는 뭐가 있을까요?\n어서 풍선을 키워봐요!");
                     }
                 });
             }

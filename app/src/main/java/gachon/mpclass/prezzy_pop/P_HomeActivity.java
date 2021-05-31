@@ -256,6 +256,7 @@ public class P_HomeActivity extends AppCompatActivity {
         DatabaseReference curBalloonMissionRef = missionRef.child(curBalloonID);
 
         curBalloonMissionRef.push().setValue(missionTxt);
+        SendMessage sendMessage = new SendMessage("미션 도착 알림","\""+missionTxt+"\" 미션이 도착했어요!");
     }
 
     private void deleteMissionToDB(String missionTxt) {
@@ -342,25 +343,31 @@ public class P_HomeActivity extends AppCompatActivity {
         cur_balloonCur_timeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                int cur_time = snapshot.getValue(Integer.TYPE);
                 if (snapshot.getValue() != null) {
-                    int cur_time = snapshot.getValue(Integer.TYPE);
-                    setCur_time(cur_time);
-
-                    // 데이터 변화 있을 때마다 풍선크기 resize
-                    Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(),R.drawable.img_ballon);
-                    double rate=(double)cur_time/set_time;
-                    double resizewidth = 100 + (600 * rate);// 풍선 최소 크기 100, 최대500
-                    imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon,resizewidth));
-                    String rateText=Integer.toString((int)(rate*100))+"%";
-                    text_rate.setText(rateText);
-
-                    Log.e("doowon", "onChildChange : " + snapshot.getValue().toString());
-
                     if(cur_time>=set_time){ // 목표 달성시
+                        cur_time=set_time;
+                        setCur_time(cur_time);
                         text_rate.setText("100%");
                         text_setBalloon.setVisibility(View.VISIBLE);
                         text_setBalloon.setText("자녀가 아직 선물을 열어보지 않았어요");
                     }
+                    else {
+
+                        setCur_time(cur_time);
+
+                        // 데이터 변화 있을 때마다 풍선크기 resize
+                        Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(), R.drawable.img_ballon);
+                        double rate = (double) cur_time / set_time;
+                        double resizewidth = 100 + (600 * rate);// 풍선 최소 크기 100, 최대500
+                        imgView_balloon.setImageBitmap(bitmap_resize(bitmap_balloon, resizewidth));
+                        String rateText = Integer.toString((int) (rate * 100)) + "%";
+                        text_rate.setText(rateText);
+
+                        Log.e("doowon", "onChildChange : " + snapshot.getValue().toString());
+                    }
+
+
 
                 }
                 else {
@@ -491,13 +498,12 @@ public class P_HomeActivity extends AppCompatActivity {
         ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                SendMessage sendMessage = new SendMessage("미션 완료 알림","\""+list_mission.get(index).toString()+"\" 미션을 완료했어요!");
                 deleteMissionToDB(list_mission.get(index));
                 list_mission.remove(index);
                 adapter.notifyDataSetChanged();
-
                 int addTime = Integer.parseInt(editTxt_score.getText().toString()) * onePercentTime;
                 addCurTimeByMission(addTime);
-
                 dialog.dismiss();
             }
         });
