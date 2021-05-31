@@ -45,6 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
+        android:textColor="@color/black"
         android:hint="1~100"
         android:textAlignment="center"
         android:textColorHint="#8C8A8A"

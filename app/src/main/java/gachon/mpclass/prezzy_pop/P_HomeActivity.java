@@ -493,16 +493,25 @@ public class P_HomeActivity extends AppCompatActivity {
     }
 
     public void showDialog01(int index, BalloonStat curBalloon){
-        EditText editTxt_score = findViewById(R.id.dialogeditText);
+        EditText editTxt_score = dilaog01.findViewById(R.id.dialogeditText);
 
         int curPercent = (int)((double)curBalloon.getCur_time() / curBalloon.getSet_time() * 100);
 
         int onePercentTime = (int)(curBalloon.getSet_time() /100.0);
 
         dilaog01.show(); // 다이얼로그 띄우기
-        // 아니오 버튼
+        // 취소 버튼
         Button noBtn = dilaog01.findViewById(R.id.noBtn);
         noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dilaog01.dismiss();
+            }
+
+        });
+        // 확인 버튼
+        Button yesBtn = dilaog01.findViewById(R.id.yesBtn);
+        yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SendMessage sendMessage = new SendMessage("미션 완료 알림","\""+list_mission.get(index).toString()+"\" 미션을 완료했어요!");
@@ -511,15 +520,6 @@ public class P_HomeActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 int addTime = Integer.parseInt(editTxt_score.getText().toString()) * onePercentTime;
                 addCurTimeByMission(addTime);
-                dilaog01.dismiss();
-            }
-
-        });
-        // 네 버튼
-        dilaog01.findViewById(R.id.yesBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
                 dilaog01.dismiss();
             }
 
