@@ -158,7 +158,6 @@ public class P_HomeActivity extends AppCompatActivity {
         ImageAnimation();
 
         list_mission = new ArrayList<String>();
-        list_mission.add("설거지 도와드리기");
 
         btn_setBalloon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,9 +289,11 @@ public class P_HomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 for(DataSnapshot snapshot : task.getResult().getChildren()) {
                     String missionTxt = snapshot.getValue(String.class);
-                    list_mission.add(missionTxt);
+                    list_mission.add("· " + missionTxt);
                 }
-                adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list_mission);
+                adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_item, list_mission);
+                list_mission.add("· 설거지 도와드리기");
+                list_mission.add("· 빨래하기");
                 listView_mission = findViewById(R.id.listView_mission);
                 listView_mission.setAdapter(adapter);
 
@@ -491,7 +492,7 @@ public class P_HomeActivity extends AppCompatActivity {
         AlertDialog.Builder ad = new AlertDialog.Builder(P_HomeActivity.this);
         ad.setIcon(R.mipmap.ic_launcher);
         ad.setTitle("미션 확인");
-        ad.setMessage("점수를 입력해주세요.(" + list_mission.get(index) +")\n현재 진행률(" + curPercent + "%)"  );
+        ad.setMessage(list_mission.get(index) + "\n위 미션에 대한 점수를 입력해주세요" + " \n(현재 자녀의 달성률은 " + curPercent + "% 입니다)"  );
         ad.setView(editTxt_score);
         ad.setCancelable(false);
 

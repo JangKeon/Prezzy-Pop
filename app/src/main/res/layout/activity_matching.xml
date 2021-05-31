@@ -8,12 +8,12 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     >
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,71 +29,69 @@
 
         <ImageView
             android:id="@+id/thresh2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="62dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="55dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.054"
+            app:layout_constraintVertical_bias="0.062"
             app:srcCompat="@drawable/timebar" />
 
         <TextView
-        android:id="@+id/textView5"
-        android:layout_width="230dp"
-        android:layout_height="63dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginRight="60dp"
-        android:text="Matching"
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="63dp"
+            android:fontFamily="@font/gmarketmedium"
+            android:text="Matching"
+            android:textColor="#595959"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/thresh2"
+            app:layout_constraintTop_toTopOf="@id/thresh2" />
 
-        android:textColor="#595959"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.121" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="69dp"
+            android:layout_height="45dp"
+            android:background="@color/material_on_primary_disabled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/Email_matching"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.296"
+            app:srcCompat="@drawable/search_icon" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="69dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="312dp"
-        android:layout_marginRight="312dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.296"
-        app:srcCompat="@drawable/search" />
+        <EditText
+            android:id="@+id/Email_matching"
+            android:layout_width="276dp"
+            android:layout_height="51dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="자녀의 아이디를 입력하세요"
+            android:fontFamily="@font/gmarketlight"
+            android:textColor="@color/black"
+            android:textColorHint="#5C5C5C"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.295" />
 
-    <EditText
-        android:id="@+id/Email_matching"
-        android:layout_width="276dp"
-        android:layout_height="51dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="아이디를 입력하세요."
-        android:textColor="@color/black"
-        android:textColorHint="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.295" />
-
-    <Button
-        android:id="@+id/Matching"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="160dp"
-        android:layout_marginRight="160dp"
-        android:text="완료"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.415" />
+        <Button
+            android:id="@+id/Matching"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:background="@drawable/signbtn_bg"
+            android:fontFamily="@font/duru_sans"
+            android:text="완료"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.43" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

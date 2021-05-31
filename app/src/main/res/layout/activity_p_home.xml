@@ -116,45 +116,33 @@
                 android:id="@+id/text_ach"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginBottom="104dp"
+                android:layout_marginLeft="90dp"
+                android:layout_marginTop="65dp"
+                android:fontFamily="@font/gmarketlight"
                 android:text="현재자녀의 달성률 : "
                 android:textColor="#4A4A4A"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.355"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.1" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/text_rate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-
+                android:layout_width="35dp"
+                android:layout_height="19dp"
+                android:fontFamily="@font/gmarketmedium"
                 android:text="0%"
                 android:textColor="#4A4A4A"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.732"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.087" />
+                android:layout_marginTop="65dp"
+                android:layout_marginLeft="2dp"
+                app:layout_constraintStart_toEndOf="@+id/text_ach"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/text_setBalloon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
+                android:fontFamily="@font/gmarketlight"
                 android:text="자녀에게 새 풍선을 전달해주세요"
                 android:textColor="#4A4A4A"
                 android:textSize="20sp"
@@ -166,18 +154,24 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.655" />
 
-
             <Button
                 android:id="@+id/btn_setBalloon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:background="@drawable/signbtn_bg"
+                android:fontFamily="@font/gmarketmedium"
                 android:text="풍선 만들기"
+                android:textSize="18sp"
                 android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.51"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_balloon" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -200,6 +194,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:fontFamily="@font/gmarketlight"
                 android:text="MISSION"
                 android:textColor="#4A4A4A"
                 android:textSize="20sp"
@@ -222,12 +217,14 @@
                 android:id="@+id/edit_mission"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="28dp"
-                android:layout_marginTop="32dp"
-                android:ems="12"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="34dp"
+                android:fontFamily="@font/gmarketlight"
+                android:ems="15"
                 android:hint="자녀에게 미션을 주세요"
                 android:textColor="@color/black"
-                android:textColorHint="#4A4A4A"
+                android:textColorHint="#808080"
+                android:textSize="17sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mission_text" />
 
@@ -235,9 +232,9 @@
                 android:id="@+id/btn_addMission"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="34dp"
-                android:background="#EDDF66"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/signbtn_bg"
+                android:fontFamily="@font/gmarketmedium"
                 android:text="추가"
                 app:layout_constraintStart_toEndOf="@+id/edit_mission"
                 app:layout_constraintTop_toBottomOf="@+id/mission_text" />
@@ -246,7 +243,10 @@
                 android:id="@+id/listView_mission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/edit_mission"></ListView>
+                android:layout_margin="20dp"
+                android:dividerHeight="6dp"
+                app:layout_constraintTop_toBottomOf="@id/edit_mission">
+            </ListView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
