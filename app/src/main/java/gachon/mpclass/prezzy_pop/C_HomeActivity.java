@@ -342,7 +342,7 @@ public class C_HomeActivity extends AppCompatActivity {
                         } else if (cur_state.equals("default")) {
                             balloon_view.startAnimation(balloon_anim);
                             balloon_view.setVisibility(View.VISIBLE); // 풍선 활성화
-                            textView.setText("풍선을 눌러 풍선을 키워보세요!");
+
                         }
                     }
                 }
