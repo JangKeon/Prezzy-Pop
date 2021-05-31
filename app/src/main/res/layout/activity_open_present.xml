@@ -7,11 +7,6 @@
     tools:context=".OpenPresentActivity"
     android:background="@color/white">
 
-    <nl.dionsegijn.konfetti.KonfettiView
-        android:id="@+id/viewKonfetti"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <ImageView
         android:id="@+id/imageViewBalloonBackground"
         android:layout_width="match_parent"
@@ -23,18 +18,21 @@
 
     <ImageView
         android:id="@+id/imageViewPresent"
-        android:layout_width="600dp"
-        android:layout_height="400dp"
+        android:layout_width="300dp"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toBottomOf="@id/imageViewBalloonBackground"
         app:layout_constraintEnd_toEndOf="@+id/imageViewBalloonBackground"
         app:layout_constraintStart_toStartOf="@id/imageViewBalloonBackground"
         app:layout_constraintTop_toTopOf="@+id/imageViewBalloonBackground" />
 
+
     <TextView
         android:id="@+id/txtViewPresent"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/gmarketmedium"
+        android:textSize="30dp"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@id/imageViewPresent"
         app:layout_constraintStart_toStartOf="@id/imageViewPresent"
@@ -55,5 +53,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.813" />
+
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/viewKonfetti"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
