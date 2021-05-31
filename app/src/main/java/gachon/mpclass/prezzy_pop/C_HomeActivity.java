@@ -311,21 +311,24 @@ public class C_HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
                     String cur_state = snapshot.getValue(String.class);
-                    if(cur_state.equals("waiting")){
+
+                    if (cur_state.equals("waiting")) {
                         balloon_view.clearAnimation();
                         balloon_view.setVisibility(View.GONE); // 풍선 비활성화
                         present_view.setVisibility(View.INVISIBLE); // 선물 버튼 비활성화
                         textView.setText("새로운 풍선을 기다리는 중이에요");
                     }
-                    else if(cur_state.equals("init")){
-                        textView.setText("첫 풍선을 기다리는 중이에요");
-                        balloon_view.clearAnimation();
-                        balloon_view.setVisibility(View.GONE); // 풍선 비활성화
-                    }
-                    else if(cur_state.equals("default")){
-                        balloon_view.startAnimation(balloon_anim);
-                        balloon_view.setVisibility(View.VISIBLE); // 풍선 활성화
-                        textView.setText("풍선을 눌러 풍선을 키워보세요!");
+
+                    if(cur_time < set_time) {
+                        if (cur_state.equals("init")) {
+                            textView.setText("첫 풍선을 기다리는 중이에요");
+                            balloon_view.clearAnimation();
+                            balloon_view.setVisibility(View.GONE); // 풍선 비활성화
+                        } else if (cur_state.equals("default")) {
+                            balloon_view.startAnimation(balloon_anim);
+                            balloon_view.setVisibility(View.VISIBLE); // 풍선 활성화
+                            textView.setText("풍선을 눌러 풍선을 키워보세요!");
+                        }
                     }
                 }
                 else {
@@ -386,7 +389,6 @@ public class C_HomeActivity extends AppCompatActivity {
         startMyActivity(OpenPresentActivity.class);
         DatabaseReference cur_balloonCur_stateRef = DB_Reference.balloonRef.child(cur_key).child(curBalloonID).child("state");
         cur_balloonCur_stateRef.setValue("waiting"); // 상태변경
-
     }
 
     // CurTime에 따라 비율유지하면서 풍선 크기 변경

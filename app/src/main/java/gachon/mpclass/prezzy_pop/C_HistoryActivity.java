@@ -59,12 +59,12 @@ public class C_HistoryActivity extends AppCompatActivity {
         ArrayList<Integer> initIndex = new ArrayList<>();
 
         for(int i = 0; i < historyList.size(); ++i) {
-            if(historyList.get(i).getState().equals("init")) {
+            if(historyList.get(i).getState().equals("init") || historyList.get(i).getState().equals("default")) {
                 initIndex.add(i);
             }
         }
 
-        for(int i = 0; i < initIndex.size(); ++i) {
+        for(int i = initIndex.size()-1; 0 <= i; --i) {
             int removeIndex = initIndex.get(i);
             historyList.remove(removeIndex);
         }
