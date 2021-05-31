@@ -222,12 +222,13 @@ public class C_HomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 Log.d("doowon", "init mission!");
                 setAdapter(task.getResult());
-
                 missionRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
                         String addedMission = snapshot.getValue(String.class);
-                        list_mission.add(addedMission);
+                        if(!list_mission.contains(addedMission)) {
+                            list_mission.add(addedMission);
+                        }
                         adapter.notifyDataSetChanged();
                     }
 
@@ -259,14 +260,7 @@ public class C_HomeActivity extends AppCompatActivity {
     }
 
     private void setAdapter(DataSnapshot snapshot) {
-//        for (DataSnapshot snapshotIter : snapshot.getChildren()) {
-//            String missionTxt = snapshotIter.getValue(String.class);
-//            list_mission.add(missionTxt);
-//        }
-
         adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.listview_item, list_mission);
-        list_mission.add("· 설거지 도와드리기");
-        list_mission.add("· 설거지 도와드리기");
         listView_mission = findViewById(R.id.listView_mission_c);
         listView_mission.setAdapter(adapter);
     }
