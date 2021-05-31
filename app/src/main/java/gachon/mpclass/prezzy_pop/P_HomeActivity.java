@@ -10,6 +10,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -122,11 +123,9 @@ public class P_HomeActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if(id == R.id.history){
-                    Toast.makeText(context,"부모는 History를 확인할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                }
-
-                else if(id == R.id.logout){
+                if (id == R.id.history) {
+                    Toast.makeText(context, "부모는 History를 확인할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                } else if (id == R.id.logout) {
                     FirebaseAuth.getInstance().signOut();
                     startToast("로그아웃 되었습니다");
                     startMyActivity(LoginActivity.class);
@@ -146,8 +145,8 @@ public class P_HomeActivity extends AppCompatActivity {
         cloud3_view = findViewById(R.id.cloud3);
         balloon_anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
         balloon_view = findViewById(R.id.img_balloon);
-        text_setBalloon=findViewById(R.id.text_setBalloon);
-        text_ach=findViewById(R.id.text_ach);
+        text_setBalloon = findViewById(R.id.text_setBalloon);
+        text_ach = findViewById(R.id.text_ach);
 
         cloud1_view.startAnimation(cloud1_anim);
         cloud2_view.startAnimation(cloud2_anim);
@@ -180,7 +179,7 @@ public class P_HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String missionTxt = edit_mission.getText().toString();
-                list_mission.add(missionTxt);
+                list_mission.add(". " + missionTxt);
                 adapter.notifyDataSetChanged();
                 edit_mission.setText("");
 
@@ -188,10 +187,11 @@ public class P_HomeActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{
+        switch (item.getItemId()) {
+            case android.R.id.home: {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             }
@@ -207,10 +207,10 @@ public class P_HomeActivity extends AppCompatActivity {
     }
 
     // SetTime에 따라 비율유지하면서 풍선 크기 변경
-    private Bitmap bitmap_resize(Bitmap bitmap, double resizeWidth){
+    private Bitmap bitmap_resize(Bitmap bitmap, double resizeWidth) {
         double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
         int targetHeight = (int) (resizeWidth * aspectRatio);
-        Bitmap result = Bitmap.createScaledBitmap(bitmap, (int)resizeWidth, targetHeight, false);
+        Bitmap result = Bitmap.createScaledBitmap(bitmap, (int) resizeWidth, targetHeight, false);
         return result;
     }
 
@@ -265,7 +265,7 @@ public class P_HomeActivity extends AppCompatActivity {
         DatabaseReference curBalloonMissionRef = missionRef.child(curBalloonID);
 
         curBalloonMissionRef.push().setValue(missionTxt);
-        SendMessage sendMessage = new SendMessage("미션 도착 알림","\""+missionTxt+"\" 미션이 도착했어요!");
+        SendMessage sendMessage = new SendMessage("미션 도착 알림", "\"" + missionTxt + "\" 미션이 도착했어요!");
     }
 
     private void deleteMissionToDB(String missionTxt) {
@@ -275,9 +275,8 @@ public class P_HomeActivity extends AppCompatActivity {
         curBalloonMissionRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                for(DataSnapshot snapshot : task.getResult().getChildren()) {
-                    Log.e("ddoowon", snapshot.getValue(String.class));
-                    if(snapshot.getValue(String.class).equals(missionTxt)) {
+                for (DataSnapshot snapshot : task.getResult().getChildren()) {
+                    if (snapshot.getValue(String.class).equals(missionTxt.split(" ")[1])) {
                         snapshot.getRef().setValue(null);
                     }
                 }
@@ -286,7 +285,7 @@ public class P_HomeActivity extends AppCompatActivity {
     }
 
 
-        @Override
+    @Override
     public void onBackPressed() {
         //super.onBackPressed();
     }
@@ -297,13 +296,16 @@ public class P_HomeActivity extends AppCompatActivity {
         missionRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
-                for(DataSnapshot snapshot : task.getResult().getChildren()) {
+                for (DataSnapshot snapshot : task.getResult().getChildren()) {
                     String missionTxt = snapshot.getValue(String.class);
-                    list_mission.add("· " + missionTxt);
+                    String viewMissionTxt = "· " + missionTxt;
+
+                    if(!list_mission.contains(viewMissionTxt)) {
+                        list_mission.add(viewMissionTxt);
+                    }
                 }
+
                 adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.listview_item, list_mission);
-                list_mission.add("· 설거지 도와드리기");
-                list_mission.add("· 빨래하기");
                 listView_mission = findViewById(R.id.listView_mission);
                 listView_mission.setAdapter(adapter);
 
@@ -356,14 +358,16 @@ public class P_HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 int cur_time = snapshot.getValue(Integer.TYPE);
                 if (snapshot.getValue() != null) {
-                    if(cur_time>=set_time){ // 목표 달성시
-                        cur_time=set_time;
+                    if (cur_time >= set_time) { // 목표 달성시
+                        cur_time = set_time;
                         setCur_time(cur_time);
                         text_rate.setText("100%");
                         text_setBalloon.setVisibility(View.VISIBLE);
                         text_setBalloon.setText("자녀가 아직 선물을 열어보지 않았어요");
-                    }
-                    else {
+
+                        imgView_balloon.setVisibility(View.INVISIBLE);
+                        Log.e("doowon", "자녀가 목표치를 달성하였습니다.");
+                    } else {
 
                         setCur_time(cur_time);
 
@@ -378,13 +382,11 @@ public class P_HomeActivity extends AppCompatActivity {
                         Log.e("doowon", "onChildChange : " + snapshot.getValue().toString());
                     }
 
-
-
-                }
-                else {
+                } else {
                     Log.e(TAG, "Data change listener get null");
                 }
             }
+
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
@@ -396,26 +398,28 @@ public class P_HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
                     String cur_state = snapshot.getValue(String.class);
-                    if(cur_state.equals("waiting")||cur_state.equals("init")){
+
+                    if (cur_state.equals("waiting") || cur_state.equals("init")) {
                         btn_setBalloon.setVisibility(View.VISIBLE); // 버튼 활성화
                         text_setBalloon.setVisibility(View.VISIBLE);
                         text_setBalloon.setText("자녀에게 새 풍선을 전달해주세요");
                         text_rate.setVisibility(View.INVISIBLE);
                         text_ach.setVisibility(View.INVISIBLE);
                         imgView_balloon.setVisibility(View.INVISIBLE);
+                    } else if (cur_state.equals("default")) {
+                        if (cur_time < set_time) {
+                            btn_setBalloon.setVisibility(View.INVISIBLE);
+                            text_setBalloon.setVisibility(View.INVISIBLE);
+                            text_rate.setVisibility(View.VISIBLE);
+                            text_ach.setVisibility(View.VISIBLE);
+                            imgView_balloon.setVisibility(View.VISIBLE);
+                        }
                     }
-                    else if(cur_state.equals("default")){
-                        btn_setBalloon.setVisibility(View.INVISIBLE);
-                        text_setBalloon.setVisibility(View.INVISIBLE);
-                        text_rate.setVisibility(View.VISIBLE);
-                        text_ach.setVisibility(View.VISIBLE);
-                        imgView_balloon.setVisibility(View.VISIBLE);
-                    }
-                }
-                else {
+                } else {
                     Log.e(TAG, "Data change listener get null");
                 }
             }
+
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError error) {
 
@@ -436,7 +440,7 @@ public class P_HomeActivity extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    private void ImageAnimation(){
+    private void ImageAnimation() {
 
         float beforeDegree = 0;
         float afterDegree = 180;
@@ -444,13 +448,13 @@ public class P_HomeActivity extends AppCompatActivity {
         RotateAnimation rotateAnim = new RotateAnimation(
                 beforeDegree,
                 afterDegree,
-                Animation.RELATIVE_TO_SELF,0.5f,
-                Animation.RELATIVE_TO_SELF,0.5f);
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
         RotateAnimation rotateAnimReverse = new RotateAnimation(
                 afterDegree,
                 beforeDegree,
-                Animation.RELATIVE_TO_SELF,0.5f,
-                Animation.RELATIVE_TO_SELF,0.5f);
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
 
         rotateAnimReverse.setDuration(500);
         rotateAnimReverse.setFillAfter(true);
@@ -481,10 +485,10 @@ public class P_HomeActivity extends AppCompatActivity {
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
                 Log.d("state", String.valueOf(slidePanel.getPanelState()));
-                if(newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     pointLeft_view.startAnimation(animSet);
                     pointRight_view.startAnimation(animSet);
-                }else if(newState == SlidingUpPanelLayout.PanelState.COLLAPSED){
+                } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                     pointLeft_view.startAnimation(animSetReverse);
                     pointRight_view.startAnimation(animSetReverse);
                 }
@@ -492,12 +496,18 @@ public class P_HomeActivity extends AppCompatActivity {
         });
     }
 
-    public void showDialog01(int index, BalloonStat curBalloon){
+    @SuppressLint("SetTextI18n")
+    public void showDialog01(int index, BalloonStat curBalloon) {
         EditText editTxt_score = dilaog01.findViewById(R.id.dialogeditText);
 
-        int curPercent = (int)((double)curBalloon.getCur_time() / curBalloon.getSet_time() * 100);
+        int curPercent = (int) ((double) curBalloon.getCur_time() / curBalloon.getSet_time() * 100);
 
-        int onePercentTime = (int)(curBalloon.getSet_time() /100.0);
+        int onePercentTime = (int) (curBalloon.getSet_time() / 100.0);
+
+        TextView txtView_dialog = (TextView) dilaog01.findViewById(R.id.txtView_dialog);
+
+//        txtView_dialog.setText("점수를 입력해주세요. \n현재(" + curPercent + "%)");
+
 
         dilaog01.show(); // 다이얼로그 띄우기
         // 취소 버튼
@@ -514,12 +524,22 @@ public class P_HomeActivity extends AppCompatActivity {
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendMessage sendMessage = new SendMessage("미션 완료 알림","\""+list_mission.get(index).toString()+"\" 미션을 완료했어요!");
-                deleteMissionToDB(list_mission.get(index));
-                list_mission.remove(index);
-                adapter.notifyDataSetChanged();
-                int addTime = Integer.parseInt(editTxt_score.getText().toString()) * onePercentTime;
-                addCurTimeByMission(addTime);
+                try {
+                    int getPercent = Integer.parseInt(editTxt_score.getText().toString());
+
+                    if (0 <= getPercent && getPercent <= 100) {
+                        SendMessage sendMessage = new SendMessage("미션 완료 알림", "\"" + list_mission.get(index).toString() + "\" 미션을 완료했어요!");
+                        deleteMissionToDB(list_mission.get(index));
+                        list_mission.remove(index);
+                        adapter.notifyDataSetChanged();
+                        int addTime = getPercent * onePercentTime;
+                        addCurTimeByMission(addTime);
+                    } else {
+                        startToast("0~100 사이의 숫자를 입력해주세요.");
+                    }
+                }catch (NumberFormatException e) {
+                    startToast("숫자만 입력해주세요.");
+                }
                 dilaog01.dismiss();
             }
 
@@ -527,28 +547,27 @@ public class P_HomeActivity extends AppCompatActivity {
     }
 
 
-
     private void showPopUp(int index, BalloonStat curBalloon) {
 
 
         EditText editTxt_score = new EditText(P_HomeActivity.this);
 
-        int curPercent = (int)((double)curBalloon.getCur_time() / curBalloon.getSet_time() * 100);
+        int curPercent = (int) ((double) curBalloon.getCur_time() / curBalloon.getSet_time() * 100);
 
-        int onePercentTime = (int)(curBalloon.getSet_time() /100.0);
+        int onePercentTime = (int) (curBalloon.getSet_time() / 100.0);
 
 
         AlertDialog.Builder ad = new AlertDialog.Builder(P_HomeActivity.this);
         ad.setIcon(R.mipmap.ic_launcher);
         ad.setTitle("미션 주기");
-        ad.setMessage(list_mission.get(index) + "\n위 미션에 대한 점수를 입력해주세요!" + " \n(현재 자녀의 달성률은 " + curPercent + "% 입니다.)"  );
+        ad.setMessage(list_mission.get(index) + "\n위 미션에 대한 점수를 입력해주세요!" + " \n(현재 자녀의 달성률은 " + curPercent + "% 입니다.)");
         ad.setView(editTxt_score);
         ad.setCancelable(false);
 
         ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SendMessage sendMessage = new SendMessage("미션 완료 알림","\""+list_mission.get(index).toString()+"\" 미션을 완료했어요!");
+                SendMessage sendMessage = new SendMessage("미션 완료 알림", "\"" + list_mission.get(index).toString() + "\" 미션을 완료했어요!");
                 deleteMissionToDB(list_mission.get(index));
                 list_mission.remove(index);
                 adapter.notifyDataSetChanged();
@@ -579,7 +598,6 @@ public class P_HomeActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
 }

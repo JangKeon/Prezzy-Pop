@@ -226,8 +226,9 @@ public class C_HomeActivity extends AppCompatActivity {
                     @Override
                     public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
                         String addedMission = snapshot.getValue(String.class);
-                        if(!list_mission.contains(addedMission)) {
-                            list_mission.add(addedMission);
+                        String viewAddedMission = "· " + addedMission;
+                        if(!list_mission.contains(viewAddedMission)) {
+                            list_mission.add(viewAddedMission);
                         }
                         adapter.notifyDataSetChanged();
                     }
@@ -239,7 +240,8 @@ public class C_HomeActivity extends AppCompatActivity {
                     @Override
                     public void onChildRemoved(@NonNull @NotNull DataSnapshot snapshot) {
                         String removedMission = snapshot.getValue(String.class);
-                        int removedMissionIndex = list_mission.indexOf(removedMission);
+                        String viewRemovedMission = "· " + removedMission;
+                        int removedMissionIndex = list_mission.indexOf(viewRemovedMission);
                         list_mission.remove(removedMissionIndex);
                         adapter.notifyDataSetChanged();
                     }
@@ -294,7 +296,6 @@ public class C_HomeActivity extends AppCompatActivity {
                 int cur_time = snapshot.getValue(Integer.TYPE);
                 setCur_time(cur_time);
 
-
                 if(cur_time>=set_time){ // 목표 달성시
                     stopTimeCheck();
                     cur_time=set_time;
@@ -302,7 +303,6 @@ public class C_HomeActivity extends AppCompatActivity {
                     present_view.setVisibility(View.VISIBLE); // 선물 버튼 활성화
                     balloon_view.clearAnimation();
                     balloon_view.setVisibility(View.GONE); // 풍선 비활성화
-
                 }
 
                 Bitmap bitmap_balloon = BitmapFactory.decodeResource(getResources(), R.drawable.img_ballon);
@@ -391,7 +391,6 @@ public class C_HomeActivity extends AppCompatActivity {
         } else {
             startTimeCheck();
         }
-
     }
 
     private void openPresent(){
@@ -412,7 +411,6 @@ public class C_HomeActivity extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
     }
-
 
     //DB에서 가져오기------------------------------------------------
     // 스트링을 바이너리 바이트 배열로
