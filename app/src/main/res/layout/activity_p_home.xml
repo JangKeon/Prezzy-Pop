@@ -122,6 +122,7 @@
                 android:text="현재자녀의 달성률 : "
                 android:textColor="#4A4A4A"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -198,6 +199,7 @@
                 android:text="MISSION"
                 android:textColor="#4A4A4A"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -225,6 +227,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="#808080"
                 android:textSize="17sp"
+                android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mission_text" />
 

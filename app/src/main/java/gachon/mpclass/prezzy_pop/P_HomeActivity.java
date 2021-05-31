@@ -10,15 +10,19 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -64,6 +68,8 @@ public class P_HomeActivity extends AppCompatActivity {
     private int cur_time;
     private int set_time;
 
+    Dialog dilaog01;
+
     ListView listView_mission;
     ArrayAdapter<String> adapter;
     ArrayList<String> list_mission;
@@ -99,6 +105,10 @@ public class P_HomeActivity extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
         actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
         actionBar.setHomeAsUpIndicator(R.drawable.drawer_menu); //뒤로가기 버튼 이미지 지정
+
+        dilaog01 = new Dialog(P_HomeActivity.this);
+        dilaog01.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // 투명 배경
+        dilaog01.setContentView(R.layout.dialog01);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -309,7 +319,7 @@ public class P_HomeActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                                 BalloonStat curBalloon = task.getResult().getValue(BalloonStat.class);
-                                showPopUp(i, curBalloon);
+                                showDialog01(i, curBalloon);
                             }
                         });
                     }
@@ -482,17 +492,56 @@ public class P_HomeActivity extends AppCompatActivity {
         });
     }
 
+    public void showDialog01(int index, BalloonStat curBalloon){
+        EditText editTxt_score = findViewById(R.id.dialogeditText);
+
+        int curPercent = (int)((double)curBalloon.getCur_time() / curBalloon.getSet_time() * 100);
+
+        int onePercentTime = (int)(curBalloon.getSet_time() /100.0);
+
+        dilaog01.show(); // 다이얼로그 띄우기
+        // 아니오 버튼
+        Button noBtn = dilaog01.findViewById(R.id.noBtn);
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendMessage sendMessage = new SendMessage("미션 완료 알림","\""+list_mission.get(index).toString()+"\" 미션을 완료했어요!");
+                deleteMissionToDB(list_mission.get(index));
+                list_mission.remove(index);
+                adapter.notifyDataSetChanged();
+                int addTime = Integer.parseInt(editTxt_score.getText().toString()) * onePercentTime;
+                addCurTimeByMission(addTime);
+                dilaog01.dismiss();
+            }
+
+        });
+        // 네 버튼
+        dilaog01.findViewById(R.id.yesBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dilaog01.dismiss();
+            }
+
+        });
+    }
+
+
+
     private void showPopUp(int index, BalloonStat curBalloon) {
+
+
         EditText editTxt_score = new EditText(P_HomeActivity.this);
 
         int curPercent = (int)((double)curBalloon.getCur_time() / curBalloon.getSet_time() * 100);
 
         int onePercentTime = (int)(curBalloon.getSet_time() /100.0);
 
+
         AlertDialog.Builder ad = new AlertDialog.Builder(P_HomeActivity.this);
         ad.setIcon(R.mipmap.ic_launcher);
-        ad.setTitle("미션 확인");
-        ad.setMessage(list_mission.get(index) + "\n위 미션에 대한 점수를 입력해주세요" + " \n(현재 자녀의 달성률은 " + curPercent + "% 입니다)"  );
+        ad.setTitle("미션 주기");
+        ad.setMessage(list_mission.get(index) + "\n위 미션에 대한 점수를 입력해주세요!" + " \n(현재 자녀의 달성률은 " + curPercent + "% 입니다.)"  );
         ad.setView(editTxt_score);
         ad.setCancelable(false);
 
@@ -517,6 +566,7 @@ public class P_HomeActivity extends AppCompatActivity {
         ad.show();
     }
 
+
     private void addCurTimeByMission(int addTime) {
         DatabaseReference balloonRef = DB_Reference.balloonRef.child(child_key).child(curBalloonID).child("cur_time");
 
@@ -529,6 +579,7 @@ public class P_HomeActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 }
