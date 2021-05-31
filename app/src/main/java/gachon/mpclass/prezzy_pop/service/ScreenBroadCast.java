@@ -46,7 +46,7 @@ public class ScreenBroadCast extends BroadcastReceiver {
             int score = new TimeAlgorithm(sec).getPenaltyTime();
             time+=score;
 
-            printTime(sec,context);
+            printTime(score,context);
 
             DatabaseReference childRef = DB_Reference.childRef.child(key).child("current_balloon_id");
 

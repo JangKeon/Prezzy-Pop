@@ -149,6 +149,8 @@ public class C_HomeActivity extends AppCompatActivity {
         ImageAnimation();
 
         list_mission = new ArrayList<String>();
+
+
     }
 
     @Override
@@ -165,8 +167,19 @@ public class C_HomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         getCurBalloonID();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getSharedPreferences("Child", MODE_PRIVATE);
+        boolean isStart = sharedPreferences.getBoolean("isStarted", false);
+        if (isStart) {
+            textView.setText("풍선을 다시 누르면 멈출 수 있어요");
+        } else {
+            textView.setText("풍선을 눌러 풍선을 키워보세요!");
+        }
     }
 
     View.OnClickListener onClickListener = (v) -> {
@@ -209,12 +222,13 @@ public class C_HomeActivity extends AppCompatActivity {
             public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
                 Log.d("doowon", "init mission!");
                 setAdapter(task.getResult());
-
                 missionRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull @NotNull DataSnapshot snapshot, @Nullable @org.jetbrains.annotations.Nullable String previousChildName) {
                         String addedMission = snapshot.getValue(String.class);
-                        list_mission.add(addedMission);
+                        if(!list_mission.contains(addedMission)) {
+                            list_mission.add(addedMission);
+                        }
                         adapter.notifyDataSetChanged();
                     }
 
@@ -246,12 +260,7 @@ public class C_HomeActivity extends AppCompatActivity {
     }
 
     private void setAdapter(DataSnapshot snapshot) {
-//        for (DataSnapshot snapshotIter : snapshot.getChildren()) {
-//            String missionTxt = snapshotIter.getValue(String.class);
-//            list_mission.add(missionTxt);
-//        }
-
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, list_mission);
+        adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.listview_item, list_mission);
         listView_mission = findViewById(R.id.listView_mission_c);
         listView_mission.setAdapter(adapter);
     }
@@ -327,7 +336,7 @@ public class C_HomeActivity extends AppCompatActivity {
                         } else if (cur_state.equals("default")) {
                             balloon_view.startAnimation(balloon_anim);
                             balloon_view.setVisibility(View.VISIBLE); // 풍선 활성화
-                            textView.setText("풍선을 눌러 풍선을 키워보세요!");
+
                         }
                     }
                 }
