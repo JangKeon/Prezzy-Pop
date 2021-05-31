@@ -135,8 +135,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="152dp"
-            android:fontFamily="@font/duru_sans"
             android:gravity='center'
+            android:fontFamily="@font/gmarketlight"
             android:text="풍선을 눌러 풍선을 키워보세요!"
             android:textColor="#5C5C5C"
             android:textSize="20sp"
