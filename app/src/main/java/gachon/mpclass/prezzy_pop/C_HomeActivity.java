@@ -149,6 +149,8 @@ public class C_HomeActivity extends AppCompatActivity {
         ImageAnimation();
 
         list_mission = new ArrayList<String>();
+
+
     }
 
     @Override
@@ -165,8 +167,19 @@ public class C_HomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         getCurBalloonID();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getSharedPreferences("Child", MODE_PRIVATE);
+        boolean isStart = sharedPreferences.getBoolean("isStarted", false);
+        if (isStart) {
+            textView.setText("풍선을 다시 누르면 멈출 수 있어요");
+        } else {
+            textView.setText("풍선을 눌러 풍선을 키워보세요!");
+        }
     }
 
     View.OnClickListener onClickListener = (v) -> {
