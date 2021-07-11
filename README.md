@@ -15,10 +15,6 @@
 - 스마트폰 비사용외에도 부모는 자녀에게 미션을 주어 풍선이 커지는 보상을 줄 수 있다.
 > 이 모든 과정은 실시간으로 DB에 반영된다.<br>
 > 따라서 풍선이 커지는 것은 부모와 자녀 모두 실시간으로 확인 할 수 있다.
-## 기술 스택
-![image](https://user-images.githubusercontent.com/75887645/125086338-7ee62f00-e106-11eb-8c72-591a57a9512f.png)
-![image](https://user-images.githubusercontent.com/75887645/125086359-84dc1000-e106-11eb-8162-ad41caf637b1.png)
-![image](https://user-images.githubusercontent.com/75887645/125086612-c1a80700-e106-11eb-922a-d687d490c46a.png)
 
 ## 주요 기능
 ### 로그인 / 회원가입 / 비밀번호 찾기
@@ -32,7 +28,6 @@
 ![image](https://user-images.githubusercontent.com/75887645/125088158-2021b500-e108-11eb-8f38-c49d02e46565.png)
 ![image](https://user-images.githubusercontent.com/75887645/125088179-257eff80-e108-11eb-8174-e6e803ade397.png)
 ![image](https://user-images.githubusercontent.com/75887645/125088186-29128680-e108-11eb-8eb6-8091d856dc41.png)
-![image](https://user-images.githubusercontent.com/75887645/125088190-2b74e080-e108-11eb-8a39-10d057df938e.png)
 #### 풍선 만들기
 ![image](https://user-images.githubusercontent.com/75887645/125087900-dcc74680-e107-11eb-8141-aa358602e807.png)
 ![image](https://user-images.githubusercontent.com/75887645/125088025-ff595f80-e107-11eb-9a54-8e3527aa87cf.png)
@@ -50,19 +45,12 @@
 
 ---
 ### 자녀 화면
-#### 부모 매칭 전
 ![image](https://user-images.githubusercontent.com/75887645/125089078-03d24800-e109-11eb-9934-fc3635602a90.png)
-#### 매칭 푸시 알림
-![image](https://user-images.githubusercontent.com/75887645/125181392-37af8980-e23f-11eb-89f1-a1829724a933.png)
-#### 풍선 도착 전
 ![image](https://user-images.githubusercontent.com/75887645/125181450-cd4b1900-e23f-11eb-8256-567b62399075.png)
-#### 새 풍선 도착 알림
-![image](https://user-images.githubusercontent.com/75887645/125181404-4f870d80-e23f-11eb-9376-d4b41eeaf991.png)
 ![image](https://user-images.githubusercontent.com/75887645/125181405-51e96780-e23f-11eb-95b7-96d91ebece65.png)
 #### 풍선 키우기(터치)
-![image](https://user-images.githubusercontent.com/75887645/125181415-80ffd900-e23f-11eb-92fc-ca1667d442eb.png)
-![image](https://user-images.githubusercontent.com/75887645/125181433-a7257900-e23f-11eb-90f2-1d412e5919ec.png)
 ![image](https://user-images.githubusercontent.com/75887645/125181426-9412a900-e23f-11eb-90a7-14118ece48d5.png)
+![image](https://user-images.githubusercontent.com/75887645/125181433-a7257900-e23f-11eb-90f2-1d412e5919ec.png)
 #### 풍선 터트리기
 ![image](https://user-images.githubusercontent.com/75887645/125181439-bf959380-e23f-11eb-9e1d-439d11be9fc3.png)
 ![image](https://user-images.githubusercontent.com/75887645/125181442-c3291a80-e23f-11eb-9bda-ed45f472b4ba.png)
@@ -71,23 +59,4 @@
 ![image](https://user-images.githubusercontent.com/75887645/125181452-d805ae00-e23f-11eb-8235-98f20c0def80.png)
 ![image](https://user-images.githubusercontent.com/75887645/125181454-da680800-e23f-11eb-8407-108c1bc51df6.png)
 
----
-### 사용 기술
-#### DB Structure (Firebase Realtime Database)
-![image](https://user-images.githubusercontent.com/75887645/125181483-231fc100-e240-11eb-8541-de68a8d54433.png)
-![image](https://user-images.githubusercontent.com/75887645/125181484-24e98480-e240-11eb-82f7-849a94c8589f.png)
-![image](https://user-images.githubusercontent.com/75887645/125181488-26b34800-e240-11eb-91df-b4d12005f35c.png)
-#### Account management (Firebase Authentication, E-mail Verification)
-![image](https://user-images.githubusercontent.com/75887645/125181519-87428500-e240-11eb-875e-cb57abd58db6.png)
-![image](https://user-images.githubusercontent.com/75887645/125181520-8a3d7580-e240-11eb-8edb-69958b879608.png)
-#### Animated UI
-![image](https://user-images.githubusercontent.com/75887645/125181526-9de8dc00-e240-11eb-9d47-4114cb771938.png)
-![image](https://user-images.githubusercontent.com/75887645/125181528-9fb29f80-e240-11eb-9907-b547907dbb47.png)
-![image](https://user-images.githubusercontent.com/75887645/125181531-a17c6300-e240-11eb-85ed-e66e8158c5bb.png)
-![image](https://user-images.githubusercontent.com/75887645/125181532-a2ad9000-e240-11eb-9406-32f9f422cba9.png)
-#### Notification and request(Okhttp)
-![image](https://user-images.githubusercontent.com/75887645/125181563-e6a09500-e240-11eb-89b2-055fe04ed0d0.png)
-![image](https://user-images.githubusercontent.com/75887645/125181566-edc7a300-e240-11eb-9673-184b559e2f8e.png)
-#### Screen time check (ScreenBroadCast)
-![image](https://user-images.githubusercontent.com/75887645/125181592-20719b80-e241-11eb-8510-a89b9c5905cc.png)
 
