@@ -1,11 +1,6 @@
 # Prezzy-Pop
 > 바람직한 스마트폰 습관 만들기 어플리케이션
 
-![gif image](https://user-images.githubusercontent.com/75887645/122049245-2bd9ce80-ce1d-11eb-9e38-1e7fa6aa2fc6.gif)
-
-### 데모 영상(하단 이미지 클릭)
-[![PrezzyPop 데모영상](http://img.youtube.com/vi/3kw0t3HqxAE/0.jpg)](https://youtu.be/3kw0t3HqxAE) 
-
 ## 목표
 자율적인 스마트폰 습관 형성으로 아이들의 스마트폰 중독 예방
 - 자녀의 스마트폰이 꺼진 시간동안 자녀의 풍선이 커진다.
@@ -15,6 +10,12 @@
 - 스마트폰 비사용외에도 부모는 자녀에게 미션을 주어 풍선이 커지는 보상을 줄 수 있다.
 > 이 모든 과정은 실시간으로 DB에 반영된다.<br>
 > 따라서 풍선이 커지는 것은 부모와 자녀 모두 실시간으로 확인 할 수 있다.
+
+![gif image](https://user-images.githubusercontent.com/75887645/122049245-2bd9ce80-ce1d-11eb-9e38-1e7fa6aa2fc6.gif)
+
+### 데모 영상(하단 이미지 클릭)
+[![PrezzyPop 데모영상](http://img.youtube.com/vi/3kw0t3HqxAE/0.jpg)](https://youtu.be/3kw0t3HqxAE) 
+
 
 ## 주요 기능
 ### 로그인 / 회원가입 / 비밀번호 찾기
